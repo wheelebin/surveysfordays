@@ -13,3 +13,68 @@ datasource db {
 model Example {
     id String @id @default(cuid())
 }
+
+model Survey {
+    id          String   @id @default(cuid())
+    name        String
+    title       String
+    description String
+    createdAt   DateTime @default(now())
+    startsAt    DateTime
+    endsAt      DateTime
+    //user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Page {
+    id         String   @id @default(cuid())
+    surveyId   String
+    pageNumber Int
+    createdAt  DateTime @default(now())
+}
+
+model Section {
+    id            String   @id @default(cuid())
+    pageId        String
+    sectionNumber Int
+    createdAt     DateTime @default(now())
+}
+
+model Text {
+    id        String   @id @default(cuid())
+    sectionId String
+    text      String
+    createdAt DateTime @default(now())
+}
+
+model Image {
+    id        String   @id @default(cuid())
+    sectionId String
+    url       String
+    createdAt DateTime @default(now())
+}
+
+model Question {
+    id        String   @id @default(cuid())
+    surveyId  String
+    sectionId String
+    text      String
+    createdAt DateTime @default(now())
+}
+
+model QuestionOption {
+    id         String   @id @default(cuid())
+    questionId String
+    type       String // RADIO, TEXT, NUMBER, DATE, TIME, CHECKBOX
+    text       String
+    createdAt  DateTime @default(now())
+}
+
+model Answer {
+    questionId       String
+    questionOptionId String
+    userId           String
+    text             String?
+    createdAt        DateTime @default(now())
+
+    @@unique([questionId, questionOptionId, userId])
+}
