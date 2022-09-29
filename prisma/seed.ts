@@ -81,11 +81,12 @@ export const initMock = () => {
   const questionOptions: QuestionOption[] = [];
   questions.forEach((question) =>
     questionOptions.push(
-      ...duplicate<QuestionOption>(() => ({
+      ...duplicate<QuestionOption>((index: number) => ({
         id: getUUID(),
         questionId: question.id,
         type: "TEXT",
         text: "Blue",
+        orderNumber: index + 1,
         createdAt: new Date(),
       }))
     )

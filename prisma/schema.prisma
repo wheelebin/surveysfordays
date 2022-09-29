@@ -62,11 +62,12 @@ model Question {
 }
 
 model QuestionOption {
-    id         String   @id @default(cuid())
-    questionId String
-    type       String // RADIO, TEXT, NUMBER, DATE, TIME, CHECKBOX
-    text       String
-    createdAt  DateTime @default(now())
+    id          String   @id @default(cuid())
+    questionId  String
+    type        String // RADIO, TEXT, NUMBER, DATE, TIME, CHECKBOX
+    text        String
+    orderNumber Int
+    createdAt   DateTime @default(now())
 }
 
 model Answer {
