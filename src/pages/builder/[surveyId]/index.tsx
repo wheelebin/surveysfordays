@@ -1,51 +1,37 @@
+import { createContext } from "react";
 import { useRouter } from "next/router";
-import { trpc } from "../../../utils/trpc";
-import AppButton from "../../../components/AppButton";
-import Builder from "../../../components/Builder";
+import { trpc } from "@/utils/trpc";
+import AppButton from "@/components/AppButton";
+import Builder from "@/components/Builder";
+import BuilderPage from "@/components/BuilderPage";
 
-const BuilderPage = () => {
+/* type BuilderContextType = {
+  addingSection: boolean;
+  editingQuestion: string | undefined;
+};
+const BuilderContext = createContext<BuilderContextType | undefined>(undefined);
+const BuilderContextProvider = (props: any) => {
+  const value = {
+    addingSection: false,
+    editingQuestion: undefined,
+  };
+  return <BuilderContext.Provider value={value} {...props} />;
+}; */
+
+// TODO Fix this BuilderPage_, underscore added due to naming duplication with BuilderPage component
+const BuilderPage_ = () => {
   const router = useRouter();
   const { surveyId } = router.query;
 
-  const { data: survey_ } = trpc.useQuery([
+  const { data: survey } = trpc.useQuery([
     "survey.byId",
     { id: surveyId as string },
   ]);
 
-  const survey = {
-    id: "0",
-    name: "Test survey",
-    title: "Test survey",
-    description: "Test survey",
-    startsAt: new Date(),
-    endsAt: new Date(),
-  };
-
-  const page = {
-    id: "0",
-    surveyId: "0",
-    pageNumber: 1,
-  };
-
-  const section = {
-    id: "0",
-    pageId: page.id,
-    sectionNumber: 1,
-  };
-
-  const question = {
-    id: "0",
-    surveyId: survey?.id,
-    sectionId: section.id,
-    text: "What is your name?",
-  };
-
-  const questionOption = {
-    id: "0",
-    questionId: question?.id,
-    type: "TEXT",
-    orderNumber: 1,
-  };
+  const { data: pages } = trpc.useQuery(
+    ["page.getAllBySurveyId", { surveyId: surveyId as string }],
+    { enabled: !!survey?.id }
+  );
 
   return (
     <div className="container mx-auto mt-2">
@@ -57,31 +43,20 @@ const BuilderPage = () => {
             </div>
           </div>
 
-          <div className="border-2 border-slate-100 p-5 my-2">
-            <div id="section">
-              <div id="question">
-                <h1>{question.text}</h1>
-              </div>
-              <div id="questionOptions">
-                <input className="w-full" type="text" />
-              </div>
-            </div>
-
-            <div className="flex justify-center">
-              <AppButton>Add section</AppButton>
-            </div>
-          </div>
+          {pages?.map((page) => (
+            <BuilderPage key={page.id} pageId={page.id} />
+          ))}
 
           <div className="flex justify-center">
             <AppButton>Add page</AppButton>
           </div>
         </div>
         <div className="ml-20 w-1/3">
-          <Builder />
+          <Builder questionId="question-2-0" />
         </div>
       </div>
     </div>
   );
 };
 
-export default BuilderPage;
+export default BuilderPage_;

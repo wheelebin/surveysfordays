@@ -2,44 +2,44 @@ import { createRouter } from "./context";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-export const pageRouter = createRouter()
+export const sectionRouter = createRouter()
   .mutation("add", {
     input: z.object({
-      surveyId: z.string(),
-      pageNumber: z.number(),
+      pageId: z.string(),
+      sectionNumber: z.number(),
     }),
     async resolve({ input, ctx }) {
-      return await ctx.prisma.page.create({
+      return await ctx.prisma.section.create({
         data: input,
       });
     },
   })
-  .mutation("editPageNumber", {
+  .mutation("editSectionNumber", {
     input: z.object({
       id: z.string(),
-      pageNumber: z.number(),
+      sectionNumber: z.number(),
     }),
     async resolve({ input, ctx }) {
-      const page = await ctx.prisma.page.update({
+      const section = await ctx.prisma.section.update({
         where: { id: input.id },
         data: input,
       });
-      if (!page) {
+      if (!section) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: `No page with id ${input.id}`,
+          message: `No section with id ${input.id}`,
         });
       }
-      return page;
+      return section;
     },
   })
-  .query("getAllBySurveyId", {
+  .query("getAllByPageId", {
     input: z.object({
-      surveyId: z.string(),
+      pageId: z.string(),
     }),
     async resolve({ input, ctx }) {
-      return await ctx.prisma.page.findMany({
-        where: { surveyId: input.surveyId },
+      return await ctx.prisma.section.findMany({
+        where: { pageId: input.pageId },
       });
     },
   })
@@ -48,7 +48,7 @@ export const pageRouter = createRouter()
       id: z.string(),
     }),
     async resolve({ input, ctx }) {
-      return await ctx.prisma.page.findUnique({ where: { id: input.id } });
+      return await ctx.prisma.section.findUnique({ where: { id: input.id } });
     },
   })
   .mutation("delete", {
@@ -56,6 +56,6 @@ export const pageRouter = createRouter()
       id: z.string(),
     }),
     async resolve({ input, ctx }) {
-      return await ctx.prisma.page.delete({ where: { id: input.id } });
+      return await ctx.prisma.section.delete({ where: { id: input.id } });
     },
   });

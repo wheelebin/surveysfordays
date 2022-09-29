@@ -1,5 +1,6 @@
-import { trpc } from "../utils/trpc";
-import AppButton from "../components/AppButton";
+import { trpc } from "@/utils/trpc";
+import AppButton from "@/components/AppButton";
+import Link from "next/link";
 
 const Survey = () => {
   const { data: surveys } = trpc.useQuery(["survey.getAll"]);
@@ -12,12 +13,11 @@ const Survey = () => {
       <div className="flex flex-row">
         {surveys &&
           surveys.map((survey, i) => (
-            <div
-              key={survey.id}
-              className="py-5 px-2 w-full mt-2 text-indigo-500 font-semibold"
-            >
-              {survey.name}
-            </div>
+            <Link key={survey.id} href={`/builder/${survey.id}`}>
+              <div className="cursor-pointer py-5 px-2 w-full mt-2 text-indigo-500 font-semibold">
+                {survey.name}
+              </div>
+            </Link>
           ))}
       </div>
     </div>

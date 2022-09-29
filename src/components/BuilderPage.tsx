@@ -1,0 +1,30 @@
+import React from "react";
+import { trpc } from "@/utils/trpc";
+import BuilderSection from "./BuilderSection";
+import AppButton from "./AppButton";
+
+type Props = {
+  pageId: string;
+};
+
+const BuilderPage = ({ pageId }: Props) => {
+  const { data: sections } = trpc.useQuery([
+    "section.getAllByPageId",
+    { pageId },
+  ]);
+
+  return (
+    <div className="border border-red-600">
+      <div>
+        {sections?.map((section) => (
+          <BuilderSection key={section.id} sectionId={section.id} />
+        ))}
+      </div>
+      <div className="flex justify-center">
+        <AppButton>Add section</AppButton>
+      </div>
+    </div>
+  );
+};
+
+export default BuilderPage;
