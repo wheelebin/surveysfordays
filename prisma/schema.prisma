@@ -59,12 +59,13 @@ model Image {
 // Question could be Content and QuestionOptions could be InputElement (examples)
 // TODO Add question number and orderBy sorting for it in QuestionRouter
 model Question {
-    id        String   @id @default(cuid())
-    type      String
-    surveyId  String
-    sectionId String
-    text      String
-    createdAt DateTime @default(now())
+    id          String   @id @default(cuid())
+    type        String
+    surveyId    String
+    sectionId   String
+    text        String
+    orderNumber Int
+    createdAt   DateTime @default(now())
 }
 
 model QuestionOption {

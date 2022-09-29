@@ -55,7 +55,7 @@ export const initMock = () => {
   };
 
   const pages = duplicate<Page>((index: number) => ({
-    pageNumber: index + 1,
+    pageNumber: index,
     id: `page-${index}`,
     surveyId: survey.id,
     createdAt: new Date(),
@@ -67,7 +67,7 @@ export const initMock = () => {
       ...duplicate<Section>((index: number) => ({
         pageId: page.id,
         id: `section-${index}-${pageIndex}`,
-        sectionNumber: index + 1,
+        sectionNumber: index,
         createdAt: new Date(),
       }))
     )
@@ -84,6 +84,7 @@ export const initMock = () => {
         surveyId: survey.id,
         text: "What is your favorite color?",
         type: "RADIO",
+        orderNumber: index,
         createdAt: new Date(),
       }))
     )
@@ -97,7 +98,7 @@ export const initMock = () => {
         questionId: question.id,
         type: "RADIO",
         text: "Blue",
-        orderNumber: index + 1,
+        orderNumber: index,
         createdAt: new Date(),
       }))
     )
