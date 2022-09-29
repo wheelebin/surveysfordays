@@ -36,19 +36,12 @@ const dropDatabase = async () => {
   // Dirty solution for sqlite timeout issue, inspiration from https://github.com/prisma/prisma/issues/2955#issuecomment-1005784033
   // TODO manage this in a better way
   await prisma.questionOption.deleteMany();
-  await pause(100);
   await prisma.question.deleteMany();
-  await pause(100);
   await prisma.text.deleteMany();
-  await pause(100);
   await prisma.image.deleteMany();
-  await pause(100);
   await prisma.section.deleteMany();
-  await pause(100);
   await prisma.page.deleteMany();
-  await pause(100);
   await prisma.survey.deleteMany();
-  await pause(100);
 };
 
 export const initMock = () => {
@@ -80,6 +73,8 @@ export const initMock = () => {
     )
   );
 
+  // TODO Set question and question options based on hardcoded questions
+  // for the different question types
   const questions: Question[] = [];
   sections.forEach((section, sectionIndex) =>
     questions.push(
@@ -88,6 +83,7 @@ export const initMock = () => {
         sectionId: section.id,
         surveyId: survey.id,
         text: "What is your favorite color?",
+        type: "RADIO",
         createdAt: new Date(),
       }))
     )
@@ -99,7 +95,7 @@ export const initMock = () => {
       ...duplicate<QuestionOption>((index: number) => ({
         id: `questionOption-${index}-${questionIndex}`,
         questionId: question.id,
-        type: "TEXT",
+        type: "RADIO",
         text: "Blue",
         orderNumber: index + 1,
         createdAt: new Date(),

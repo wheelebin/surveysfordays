@@ -1,20 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { trpc } from "@/utils/trpc";
-import BuilderQuestionForm from "./BuilderQuestionForm";
+import BuilderElementFormInputs from "./BuilderElementFormInputs";
 import AppSelectField from "./AppSelectField";
+import AppButton from "./AppButton";
 import { ELEMENT_GROUPS } from "@/constants/elements";
+import BuilderElementFormSelections from "./BuilderElementFormSelections";
+import useQuestion from "@/hooks/useQuestion";
+
+import { useBuilder } from "@/hooks/useBuilder";
+import {
+  ELEMENTS_WITH_ADD_MULTIPLE,
+  ELEMENTS_WITH_PLACEHOLDER,
+} from "@/constants/elements";
 
 type Props = {
   children?: React.ReactNode;
   questionId?: string;
 };
 
-const Builder: React.FC<Props> = ({ children, questionId }) => {
-  const [elementType, setElementType] = useState<string | undefined>("");
-
-  const router = useRouter();
-  const { surveyId } = router.query;
+const Builder: React.FC<Props> = ({ children }) => {
+  const {
+    elementType,
+    setElementType,
+    setQuestionId,
+    setQuestionText,
+    questionId,
+  } = useBuilder();
 
   /* const { data: survey } = trpc.useQuery([
     "survey.byId",
@@ -30,13 +42,32 @@ const Builder: React.FC<Props> = ({ children, questionId }) => {
     setElementType(value);
   };
 
-  /*
-    - When click on add section, create section through endpoint
-    - When click on save in builderForm, create questions and etc in there through endpoint
-  */
+  const getFormElement = () => {
+    if (!elementType) {
+      return <>No elem type</>;
+    }
+
+    if (ELEMENTS_WITH_ADD_MULTIPLE.includes(elementType)) {
+      return (
+        <BuilderElementFormSelections
+          key={elementType}
+          type={elementType}
+          questionId={questionId}
+        />
+      );
+    }
+    return (
+      <BuilderElementFormInputs
+        key={elementType}
+        elementType={elementType}
+        questionId={questionId}
+      />
+    );
+  };
 
   // TODO Will create a BuilderImageForm, BuilderTextForm and etc
   // and switch the builder form type out depending on the current elementType
+
   return (
     <div>
       {!questionId && (
@@ -53,13 +84,9 @@ const Builder: React.FC<Props> = ({ children, questionId }) => {
         </div>
       )}
 
-      {(elementType || questionId) && (
-        <BuilderQuestionForm
-          key={elementType}
-          elementType={elementType}
-          questionId={questionId}
-        />
-      )}
+      {getFormElement()}
+
+      <AppButton className="w-full">Save</AppButton>
     </div>
   );
 };

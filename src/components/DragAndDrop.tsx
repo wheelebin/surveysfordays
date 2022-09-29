@@ -32,7 +32,7 @@ const DragAndDrop: React.FC<Props> = ({ children, list, onDragEnd }) => {
 
   return (
     <DragDropContext onDragEnd={handleOnDragEnd}>
-      <Droppable droppableId="droppable">
+      <Droppable droppableId="aDroppableId">
         {(provided, snapshot) => (
           <div {...provided.droppableProps} ref={provided.innerRef}>
             {children}

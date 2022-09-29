@@ -1,82 +1,63 @@
 import React, { useState, useEffect } from "react";
 import { trpc } from "@/utils/trpc";
-import AppRadioGroup from "./AppRadioGroup";
-import AppCheckbox from "./AppCheckbox";
-import AppTextField from "./AppTextField";
+import { useBuilder } from "@/hooks/useBuilder";
+import BuilderInputElement from "./BuilderInputElement";
 
 type Props = {
   contentId: string;
 };
 
 const BuilderSectionContent = ({ contentId }: Props) => {
-  const [type, setType] = useState<string | undefined>(undefined);
+  const { elementType, editing, questionText, inputElements, questionId } =
+    useBuilder();
 
-  const { data: question } = trpc.useQuery([
-    "question.byId",
-    { id: contentId },
-  ]);
+  const { data: question } = trpc.useQuery(
+    ["question.byId", { id: contentId }],
+    { refetchOnWindowFocus: false }
+  );
   const { data: questionOptions } = trpc.useQuery(
     ["questionOption.getAllByQuestionId", { questionId: contentId }],
-    { enabled: !!question?.id }
+    { enabled: !!question?.id, refetchOnWindowFocus: false }
   );
 
-  useEffect(() => {
-    if (questionOptions) {
-      setType(questionOptions[0]?.type);
+  const getInputElements = () => {
+    let elements = inputElements;
+    const currentIsBeingEdited = editing && questionId === contentId;
+
+    if (!currentIsBeingEdited && questionOptions) {
+      elements = questionOptions.map(({ text, type, id }) => {
+        return {
+          label: text,
+          value: text,
+          type,
+          id,
+        };
+      });
     }
-  }, [questionOptions]);
+
+    return elements;
+  };
 
   const renderElements = () => {
-    if (!questionOptions) {
+    const elements = getInputElements();
+    const elemType = elementType || question?.type;
+
+    if (!elemType) {
       return <p>Something went wrong</p>;
     }
 
-    const formattedElements = questionOptions.map(({ text, type, id }) => ({
-      label: text,
-      value: text,
-      type,
-      placeholder: undefined,
-      id,
-    }));
-
-    if (type === "RADIO") {
-      return (
-        <div className="my-2">
-          <AppRadioGroup radioItems={formattedElements} />
-        </div>
-      );
-    }
+    const builderInputElementProps = {
+      value: elements.length === 1 ? elements[0]?.value : undefined,
+      options: elements,
+      label: editing ? questionText : question?.text,
+    };
 
     return (
-      <>
-        {formattedElements.map(({ value, label, id }) => {
-          if (type === "CHECKBOX") {
-            return (
-              <div className="my-2" key={id}>
-                <AppCheckbox value={value} label={label} />
-              </div>
-            );
-          }
-          if (type === "TEXT") {
-            return (
-              <div className="my-2" key={id}>
-                <AppTextField value={value} />
-              </div>
-            );
-          }
-        })}
-      </>
+      <BuilderInputElement type={elemType} {...builderInputElementProps} />
     );
   };
 
-  return (
-    <div>
-      <div className="flex items-center mb-2">
-        <h1 className="text-xl">{question?.text}</h1>
-      </div>
-      {renderElements()}
-    </div>
-  );
+  return <div>{renderElements()}</div>;
 };
 
 export default BuilderSectionContent;
