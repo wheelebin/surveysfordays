@@ -15,6 +15,7 @@ const BuilderPage_ = () => {
     { refetchOnWindowFocus: false }
   );
 
+  // TODO This takes "take" & "skip" now so add pagination
   const { data: pages } = trpc.useQuery(
     ["page.getAllBySurveyId", { surveyId: surveyId as string }],
     { enabled: !!survey?.id, refetchOnWindowFocus: false }

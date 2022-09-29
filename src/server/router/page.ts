@@ -35,10 +35,14 @@ export const pageRouter = createRouter()
   })
   .query("getAllBySurveyId", {
     input: z.object({
+      skip: z.number().optional(),
+      take: z.number().optional(),
       surveyId: z.string(),
     }),
     async resolve({ input, ctx }) {
       return await ctx.prisma.page.findMany({
+        skip: input.skip,
+        take: input.take,
         where: { surveyId: input.surveyId },
         orderBy: [{ pageNumber: "asc" }],
       });

@@ -11,6 +11,7 @@ import {
   contentPlaceholder,
   contentInputElements,
 } from "@/utils/atoms";
+import { Pencil1Icon } from "@radix-ui/react-icons";
 
 type Props = {
   contentId: string;
@@ -124,9 +125,7 @@ const BuilderSectionContent = ({ contentId }: Props) => {
 
   return (
     <div>
-      <div className="z-10">
-        <AppButton onClick={handleOnEdit}>Edit</AppButton>
-      </div>
+      <Pencil1Icon onClick={handleOnEdit} className="ml-2 cursor-pointer" />
       {renderElements()}
     </div>
   );
