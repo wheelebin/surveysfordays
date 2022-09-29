@@ -13,3 +13,12 @@ export const contentText = atom<string>("");
 export const contentSupportingText = atom<string>("");
 export const contentPlaceholder = atom<string>("");
 export const contentInputElements = atom<InputElement[]>([]);
+
+export const clearBuilderContent = atom(null, (_, set) => {
+  set(editingContentId, undefined);
+  set(contentType, undefined);
+  set(contentText, "");
+  set(contentSupportingText, "");
+  set(contentPlaceholder, "");
+  set(contentInputElements, []);
+});

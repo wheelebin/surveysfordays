@@ -1,7 +1,11 @@
 import { Prisma } from "@prisma/client";
 import { trpc } from "@/utils/trpc";
+import { useAtom } from "jotai";
+import { clearBuilderContent } from "@/utils/atoms";
 
 const useBuilder = () => {
+  const [_, clear] = useAtom(clearBuilderContent);
+
   const utils = trpc.useContext();
 
   const addQuestionMutation = trpc.useMutation("question.add");
@@ -42,6 +46,7 @@ const useBuilder = () => {
     if (questionOptions) {
       addQuestionMutation.mutate(question);
     }
+    clear();
   };
 
   const handleOnEditSave = ({
@@ -57,6 +62,7 @@ const useBuilder = () => {
     if (questionOptions) {
       editQuestionOption.mutate(questionOptions);
     }
+    clear();
   };
 
   return { handleOnAddSave, handleOnEditSave };

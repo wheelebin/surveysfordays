@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import BuilderElementFormInputs from "./BuilderElementFormInputs";
 import AppSelectField from "./AppSelectField";
 import AppButton from "./AppButton";
@@ -17,8 +17,14 @@ type Props = {
 };
 
 const Builder: React.FC<Props> = ({ children }) => {
+  const [show, setShow] = useState<boolean>(false);
   const [editingContentId_] = useAtom(editingContentId);
   const [contentType_, setContentType] = useAtom(contentType);
+
+  useEffect(
+    () => setShow(editingContentId_ ? true : false),
+    [editingContentId_]
+  );
 
   const handleOnChange = (value: string) => {
     setContentType(value);
@@ -66,11 +72,13 @@ const Builder: React.FC<Props> = ({ children }) => {
     return <></>;
   };
 
-  return (
+  return show ? (
     <div>
       {getElementSelector()}
       {getFormElement()}
     </div>
+  ) : (
+    <></>
   );
 };
 
