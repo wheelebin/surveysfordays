@@ -20,10 +20,10 @@ export const questionRouter = createRouter()
       });
     },
   })
-  .mutation("editQuestionText", {
+  .mutation("editQuestion", {
     input: z.object({
       id: z.string(),
-      text: z.string(),
+      text: z.string().optional(),
     }),
     async resolve({ input, ctx }) {
       const question = await ctx.prisma.question.update({

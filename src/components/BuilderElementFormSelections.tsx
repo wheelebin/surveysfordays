@@ -17,6 +17,7 @@ import {
   contentPlaceholder,
   contentInputElements,
 } from "@/utils/atoms";
+import useBuilder from "@/hooks/useBuilder";
 
 type inputElement = {
   id: string;
@@ -45,6 +46,8 @@ const BuilderElementFormSelections: React.FC<Props> = ({
   const [contentInputElements_, setContentInputElements] =
     useAtom(contentInputElements);
 
+  const { handleOnEditSave } = useBuilder();
+
   const handleAddInputElement = (label: string) => {
     const newInputElement = {
       id: getDummyId(),
@@ -68,6 +71,23 @@ const BuilderElementFormSelections: React.FC<Props> = ({
 
   const handleOnDragEnd = (list: any) => {
     setContentInputElements(list);
+  };
+
+  const handleOnSave = () => {
+    if (!editingContentId_) {
+      return;
+    }
+
+    handleOnEditSave({
+      question: { id: editingContentId_, text: contentText_ },
+      questionOptions: contentInputElements_.map(({ id, label, type }, i) => ({
+        id,
+        type,
+        questionId: editingContentId_,
+        text: label,
+        orderNumber: i,
+      })),
+    });
   };
 
   return (
@@ -101,6 +121,9 @@ const BuilderElementFormSelections: React.FC<Props> = ({
           </DragAndDropItem>
         ))}
       </DragAndDrop>
+      <AppButton className="w-full" onClick={handleOnSave}>
+        Save
+      </AppButton>
     </div>
   );
 };

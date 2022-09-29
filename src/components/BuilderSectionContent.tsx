@@ -125,7 +125,7 @@ const BuilderSectionContent = ({ contentId }: Props) => {
   return (
     <div>
       <div className="z-10">
-        <AppButton onClick={handleOnEdit}>Save</AppButton>
+        <AppButton onClick={handleOnEdit}>Edit</AppButton>
       </div>
       {renderElements()}
     </div>

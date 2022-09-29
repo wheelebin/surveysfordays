@@ -8,6 +8,9 @@ import { ELEMENTS_WITH_ADD_MULTIPLE } from "@/constants/elements";
 import { useAtom } from "jotai";
 import { editingContentId, contentType } from "@/utils/atoms";
 
+// TODO Will create a BuilderImageForm, BuilderTextForm and etc
+// and switch the builder form type out depending on the current elementType
+
 type Props = {
   children?: React.ReactNode;
   questionId?: string;
@@ -44,12 +47,9 @@ const Builder: React.FC<Props> = ({ children }) => {
     );
   };
 
-  // TODO Will create a BuilderImageForm, BuilderTextForm and etc
-  // and switch the builder form type out depending on the current elementType
-
-  return (
-    <div>
-      {!editingContentId_ && (
+  const getElementSelector = () => {
+    if (!editingContentId_) {
+      return (
         <div>
           <h1 className="text-xl">Choose content type</h1>
 
@@ -61,11 +61,15 @@ const Builder: React.FC<Props> = ({ children }) => {
             />
           </div>
         </div>
-      )}
+      );
+    }
+    return <></>;
+  };
 
+  return (
+    <div>
+      {getElementSelector()}
       {getFormElement()}
-
-      <AppButton className="w-full">Save</AppButton>
     </div>
   );
 };
