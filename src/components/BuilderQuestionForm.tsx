@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import AppButton from "./AppButton";
 import * as Separator from "@radix-ui/react-separator";
+import { PlusCircledIcon } from "@radix-ui/react-icons";
 import { Prisma } from "@prisma/client";
+
+import AppRadioGroup from "./AppRadioGroup";
 
 type Props = {
   children?: React.ReactNode;
@@ -34,7 +37,6 @@ const BuilderQuestionForm: React.FC<Props> = ({ children }) => {
       </div>
       <div>
         <h1>Add question options</h1>
-
         {/* QUESTION OPTION TEST 1*/}
         <div className="flex flex-row items-center">
           <div className="mr-2">
@@ -48,7 +50,8 @@ const BuilderQuestionForm: React.FC<Props> = ({ children }) => {
             <option value="text">Text field</option>
           </select>
         </div>
-
+        1
+        <AppRadioGroup />
         {/* QUESTION OPTION TEST 2 */}
         <div className="flex flex-row items-center">
           <div className="mr-2">
