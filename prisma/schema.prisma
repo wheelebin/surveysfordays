@@ -64,7 +64,7 @@ model Question {
 model QuestionOption {
     id          String   @id @default(cuid())
     questionId  String
-    type        String // RADIO, TEXT, NUMBER, DATE, TIME, CHECKBOX
+    type        String // RADIO, RADIOTEXT, TEXT, NUMBER, DATE, TIME, CHECKBOX
     text        String
     orderNumber Int
     createdAt   DateTime @default(now())
