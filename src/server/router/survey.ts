@@ -59,6 +59,6 @@ export const surveyRouter = createRouter()
       id: z.string(),
     }),
     async resolve({ input, ctx }) {
-      return await ctx.prisma.survey.findUnique({ where: { id: input.id } });
+      return await ctx.prisma.survey.delete({ where: { id: input.id } });
     },
   });
