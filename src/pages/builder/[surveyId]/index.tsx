@@ -3,7 +3,7 @@ import { trpc } from "@/utils/trpc";
 import AppButton from "@/components/AppButton";
 import Builder from "@/components/Builder";
 import BuilderPage from "@/components/BuilderPage";
-import { BuilderContextProvider } from "@/hooks/useBuilder";
+import { Provider } from "jotai";
 
 // TODO Fix this BuilderPage_, underscore added due to naming duplication with BuilderPage component
 const BuilderPage_ = () => {
@@ -21,7 +21,7 @@ const BuilderPage_ = () => {
   );
 
   return (
-    <BuilderContextProvider>
+    <Provider>
       <div className="container mx-auto mt-2">
         <div className="flex justify-center">
           <div className="flex flex-col w-1/2">
@@ -44,7 +44,7 @@ const BuilderPage_ = () => {
           </div>
         </div>
       </div>
-    </BuilderContextProvider>
+    </Provider>
   );
 };
 

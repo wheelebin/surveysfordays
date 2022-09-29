@@ -1,6 +1,11 @@
 import React from "react";
 import AppTextField from "./AppTextField";
-import { useBuilder } from "@/hooks/useBuilder";
+import {
+  contentText,
+  contentSupportingText,
+  contentPlaceholder,
+} from "@/utils/atoms";
+import { useAtom } from "jotai";
 
 type Props = {
   elementType: string;
@@ -11,31 +16,29 @@ const BuilderElementFormInputs: React.FC<Props> = ({
   elementType,
   questionId,
 }) => {
-  const {
-    questionText,
-    setQuestionText,
-    supportingText,
-    setSupportingText,
-    placeholder,
-    setPlaceholder,
-  } = useBuilder();
+  const [contentText_, setContentText] = useAtom(contentText);
+  const [contentSupportingText_, setContentSupportingText] = useAtom(
+    contentSupportingText
+  );
+  const [contentPlaceholder_, setContentPlaceholder] =
+    useAtom(contentPlaceholder);
 
   return (
     <div>
       <AppTextField
         label="Label"
-        onChange={setQuestionText}
-        value={questionText}
+        onChange={setContentText}
+        value={contentText_}
       />
       <AppTextField
         label="Supporting text"
-        onChange={setSupportingText}
-        value={supportingText}
+        onChange={setContentSupportingText}
+        value={contentSupportingText_}
       />
       <AppTextField
         label="Placeholder"
-        onChange={setPlaceholder}
-        value={placeholder}
+        onChange={setContentPlaceholder}
+        value={contentPlaceholder_}
       />
     </div>
   );

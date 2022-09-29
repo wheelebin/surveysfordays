@@ -1,15 +1,22 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { trpc } from "@/utils/trpc";
+import { useAtom } from "jotai";
 import AppButton from "./AppButton";
-import * as Separator from "@radix-ui/react-separator";
 import { DragHandleHorizontalIcon } from "@radix-ui/react-icons";
-import BuilderInputElement from "./BuilderInputElement";
 import AppTextField from "./AppTextField";
 import DragAndDrop from "./DragAndDrop";
 import DragAndDropItem from "./DragAndDropItem";
 
 import getDummyId from "@/utils/id";
-import { useBuilder } from "@/hooks/useBuilder";
+
+import {
+  editingContentId,
+  contentType,
+  contentText,
+  contentSupportingText,
+  contentPlaceholder,
+  contentInputElements,
+} from "@/utils/atoms";
 
 type inputElement = {
   id: string;
@@ -21,76 +28,65 @@ type inputElement = {
 type Props = {
   type: string;
   questionId?: string;
-  options?: { id: string; type: string; label: string; value: string }[];
-  onChange?: (elements: inputElement[]) => void;
 };
 
 const BuilderElementFormSelections: React.FC<Props> = ({
   type,
   questionId,
-  options,
-  onChange,
 }) => {
-  const {
-    questionText,
-    setQuestionText,
-    supportingText,
-    setSupportingText,
-    inputElements,
-    addInputElement,
-    modifyInputElement,
-    setInputElements,
-  } = useBuilder();
+  const [editingContentId_, setEditingContentId] = useAtom(editingContentId);
+  const [contentType_] = useAtom(contentType);
+  const [contentText_, setContentText] = useAtom(contentText);
+  const [contentSupportingText_, setContentSupportingText] = useAtom(
+    contentSupportingText
+  );
+  const [contentPlaceholder_, setContentPlaceholder] =
+    useAtom(contentPlaceholder);
+  const [contentInputElements_, setContentInputElements] =
+    useAtom(contentInputElements);
 
   const handleAddInputElement = (label: string) => {
-    addInputElement({
+    const newInputElement = {
       id: getDummyId(),
       label,
       type,
       value: label,
-    });
+    };
+    setContentInputElements([...contentInputElements_, newInputElement]);
   };
 
   const handleOnChange = (index: number, label: string) => {
-    modifyInputElement(index, "label", label);
+    const updatedElements = contentInputElements_.map((element, i) =>
+      i === index ? { ...element, label } : element
+    );
+    setContentInputElements(updatedElements);
   };
 
   const handleOnAdd = () => {
     handleAddInputElement("Change me :)");
-    //onChange()
   };
 
   const handleOnDragEnd = (list: any) => {
-    setInputElements(list);
-    if (onChange) {
-      onChange(list);
-    }
+    setContentInputElements(list);
   };
-
-  useEffect(() => {
-    // This will be handled elsewhere, in the parent component
-    if (options) {
-      setInputElements(options);
-    }
-  }, [options]);
 
   return (
     <div>
       <AppTextField
         label="Label"
-        onChange={setQuestionText}
-        value={questionText}
+        onChange={setContentText}
+        value={contentText_}
       />
       <AppTextField
         label="Supporting text"
-        onChange={setSupportingText}
-        value={supportingText}
+        onChange={setContentSupportingText}
+        value={contentSupportingText_}
       />
       <AppButton className="w-full" onClick={handleOnAdd}>
         Add option
       </AppButton>
-      <DragAndDrop onDragEnd={handleOnDragEnd} list={inputElements}>
-        {inputElements.map(({ label, id }, i) => (
+      <DragAndDrop onDragEnd={handleOnDragEnd} list={contentInputElements_}>
+        {contentInputElements_.map(({ label, id }, i) => (
           <DragAndDropItem key={id} id={id} index={i}>
             <div className="flex flex-row items-center">
               <div className="mr-2 py-5">

@@ -1,18 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { trpc } from "@/utils/trpc";
+import React from "react";
 import BuilderElementFormInputs from "./BuilderElementFormInputs";
 import AppSelectField from "./AppSelectField";
 import AppButton from "./AppButton";
 import { ELEMENT_GROUPS } from "@/constants/elements";
 import BuilderElementFormSelections from "./BuilderElementFormSelections";
-import useQuestion from "@/hooks/useQuestion";
-
-import { useBuilder } from "@/hooks/useBuilder";
-import {
-  ELEMENTS_WITH_ADD_MULTIPLE,
-  ELEMENTS_WITH_PLACEHOLDER,
-} from "@/constants/elements";
+import { ELEMENTS_WITH_ADD_MULTIPLE } from "@/constants/elements";
+import { useAtom } from "jotai";
+import { editingContentId, contentType } from "@/utils/atoms";
 
 type Props = {
   children?: React.ReactNode;
@@ -20,47 +14,32 @@ type Props = {
 };
 
 const Builder: React.FC<Props> = ({ children }) => {
-  const {
-    elementType,
-    setElementType,
-    setQuestionId,
-    setQuestionText,
-    questionId,
-  } = useBuilder();
-
-  /* const { data: survey } = trpc.useQuery([
-    "survey.byId",
-    { id: surveyId as string },
-  ]);
-
-  const { data: pages } = trpc.useQuery(
-    ["page.getAllBySurveyId", { surveyId: surveyId as string }],
-    { enabled: !!survey?.id }
-  ); */
+  const [editingContentId_] = useAtom(editingContentId);
+  const [contentType_, setContentType] = useAtom(contentType);
 
   const handleOnChange = (value: string) => {
-    setElementType(value);
+    setContentType(value);
   };
 
   const getFormElement = () => {
-    if (!elementType) {
+    if (!contentType_) {
       return <>No elem type</>;
     }
 
-    if (ELEMENTS_WITH_ADD_MULTIPLE.includes(elementType)) {
+    if (ELEMENTS_WITH_ADD_MULTIPLE.includes(contentType_)) {
       return (
         <BuilderElementFormSelections
-          key={elementType}
-          type={elementType}
-          questionId={questionId}
+          key={contentType_}
+          type={contentType_}
+          questionId={editingContentId_}
         />
       );
     }
     return (
       <BuilderElementFormInputs
-        key={elementType}
-        elementType={elementType}
-        questionId={questionId}
+        key={contentType_}
+        elementType={contentType_}
+        questionId={editingContentId_}
       />
     );
   };
@@ -70,7 +49,7 @@ const Builder: React.FC<Props> = ({ children }) => {
 
   return (
     <div>
-      {!questionId && (
+      {!editingContentId_ && (
         <div>
           <h1 className="text-xl">Choose content type</h1>
 
