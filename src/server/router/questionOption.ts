@@ -54,6 +54,7 @@ export const questionOptionRouter = createRouter()
     async resolve({ input, ctx }) {
       return await ctx.prisma.questionOption.findMany({
         where: { questionId: input.questionId },
+        orderBy: [{ orderNumber: "asc" }],
       });
     },
   })

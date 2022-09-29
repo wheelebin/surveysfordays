@@ -40,6 +40,7 @@ export const pageRouter = createRouter()
     async resolve({ input, ctx }) {
       return await ctx.prisma.page.findMany({
         where: { surveyId: input.surveyId },
+        orderBy: [{ pageNumber: "asc" }],
       });
     },
   })

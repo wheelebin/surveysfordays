@@ -40,6 +40,7 @@ export const sectionRouter = createRouter()
     async resolve({ input, ctx }) {
       return await ctx.prisma.section.findMany({
         where: { pageId: input.pageId },
+        orderBy: [{ sectionNumber: "asc" }],
       });
     },
   })
