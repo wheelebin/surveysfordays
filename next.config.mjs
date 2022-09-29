@@ -13,7 +13,7 @@ function defineNextConfig(config) {
 }
 
 export default defineNextConfig({
-  reactStrictMode: true,
+  reactStrictMode: false, // TODO Removed due to error with drag-n-drop and react 18 see: https://github.com/atlassian/react-beautiful-dnd/issues/2396
   swcMinify: true,
   // Next.js i18n docs: https://nextjs.org/docs/advanced-features/i18n-routing
   i18n: {
