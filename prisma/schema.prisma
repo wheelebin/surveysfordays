@@ -57,7 +57,6 @@ model Image {
 // TODO Add supporting text to bellow
 // TODO Reconcider the naming of bellow tables
 // Question could be Content and QuestionOptions could be InputElement (examples)
-// TODO Add question number and orderBy sorting for it in QuestionRouter
 model Question {
     id          String   @id @default(cuid())
     type        String
