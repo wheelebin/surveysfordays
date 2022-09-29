@@ -10,6 +10,7 @@ import {
   ELEMENTS_WITH_ADD_MULTIPLE,
   ELEMENTS_WITH_PLACEHOLDER,
 } from "@/constants/elements";
+import getDummyId from "@/utils/id";
 
 type Props = {
   children?: React.ReactNode;
@@ -31,29 +32,22 @@ const BuilderQuestionForm: React.FC<Props> = ({ children, elementType }) => {
   const [supportingText, setSupportingText] = useState<string>("");
   const [placeholder, setPlaceholder] = useState<string>("");
 
-  const addInputElement = useCallback(
-    (text?: string) =>
-      setInputElements([
-        ...inputElements,
-        {
-          type: elementType,
-          label: text ? text : "",
-          id: Date.now().toString(),
-        },
-      ]),
-    [elementType, inputElements]
-  );
+  const addInputElement = (text?: string) =>
+    setInputElements([
+      ...inputElements,
+      {
+        type: elementType,
+        label: text ? text : "",
+        id: getDummyId(),
+      },
+    ]);
 
   const handleOnChange = (index: number, value: string) => {
-    // TODO This is a mess and needs to be refactored
-    const newOptions = inputElements.map((option, optionIndex) => {
-      if (optionIndex === index) {
-        return { ...option, label: value };
-      }
-      return option;
-    });
+    const updatedElements = inputElements.map((element, i) =>
+      i === index ? { ...element, label: value } : element
+    );
 
-    setInputElements(newOptions);
+    setInputElements(updatedElements);
   };
 
   useEffect(() => {
@@ -70,7 +64,7 @@ const BuilderQuestionForm: React.FC<Props> = ({ children, elementType }) => {
       setInputElements([
         {
           type: elementType,
-          id: Date.now().toString(),
+          id: getDummyId(),
         },
       ]);
     }
