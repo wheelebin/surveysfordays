@@ -12,7 +12,9 @@ export const questionRouter = createRouter()
     input: z.object({
       surveyId: z.string(),
       sectionId: z.string(),
+      type: z.string(),
       text: z.string(),
+      orderNumber: z.number(),
     }),
     async resolve({ input, ctx }) {
       return await ctx.prisma.question.create({

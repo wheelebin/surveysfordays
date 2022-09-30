@@ -31,6 +31,7 @@ const useBuilder = () => {
       sectionId: string;
       surveyId: string;
       type: string;
+      orderNumber: number;
       text: string;
     },
     questionOptions: {
