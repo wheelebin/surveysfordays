@@ -54,7 +54,7 @@ const Builder: React.FC<Props> = ({ children }) => {
   };
 
   const getElementSelector = () => {
-    if (!editingContentId_) {
+    if (editingContentId_ && !contentType_) {
       return (
         <div>
           <h1 className="text-xl">Choose content type</h1>

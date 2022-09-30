@@ -105,7 +105,7 @@ const BuilderSectionContent = ({ contentId }: Props) => {
 
   const renderElements = () => {
     const elements = getInputElements();
-    const elemType = contentType_ || question?.type;
+    const elemType = question?.type || contentType_;
 
     if (!elemType) {
       return <p>Something went wrong</p>;
