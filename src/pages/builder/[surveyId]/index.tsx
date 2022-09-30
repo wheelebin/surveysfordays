@@ -21,11 +21,13 @@ const BuilderPage_ = () => {
     { enabled: !!survey?.id, refetchOnWindowFocus: false }
   );
 
+  // TODO Make builder element fixed at top of page at all times
+
   return (
     <Provider>
-      <div className="container mx-auto mt-2">
-        <div className="flex justify-center">
-          <div className="flex flex-col w-1/2">
+      <div className="container mx-auto">
+        <div className="flex justify-center h-screen">
+          <div className="flex flex-col w-1/2 overflow-y-scroll">
             <div className="flex flex-row justify-between">
               <div className="w-8 h-8 rounded-full bg-indigo-500 text-white flex justify-center items-center">
                 1
