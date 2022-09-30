@@ -18,3 +18,21 @@ A survey form builder
 
 
 - Append revision table ID to answer table so when user completes survey a we keep track of which revision
+
+
+# Things Need To Do
+- TODO Rename some of the tables & change table properties to match between front & backend so I don't need to transform question & question options
+- TODO Implement add new content
+- TODO Implement add new section
+- TODO Implement add new page
+- TODO Implement page pagination view, navigation between pages and a page tracker (Like the 1 above the survey but functional)
+- TODO Implement deletion of pages, sections, content or/and content options
+- TODO Implement dragging of pages, sections & content somehow (Dragging of content options is already available through builder forms)
+- TODO Polish design for existing pages
+- TODO Implement next auth
+- TODO Implement completion of surveys by users outside of our system (answer table and etc)
+- TODO Implement publishing of created surveys so they can be completed by other users
+- TODO Implement a simple results view for the publisher to see the result of the survey
+
+# Things I Want To Do
+- TODO Extract ui components for survey builder into it's own repo & pkg
