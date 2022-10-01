@@ -17,7 +17,7 @@ const AppRadioGroup = ({
     <RadioGroup.Root onValueChange={(value) => onChange && onChange(value)}>
       {radioItems && radioItems.length > 0
         ? radioItems.map(({ id, label, value }) => (
-            <AppRadioGroupItem key={id} label={label} value={value} />
+            <AppRadioGroupItem key={id} label={label} value={id} />
           ))
         : children}
     </RadioGroup.Root>
