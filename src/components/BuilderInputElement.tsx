@@ -4,9 +4,10 @@ import AppCheckbox from "./AppCheckbox";
 import AppTextField from "./AppTextField";
 
 type Props = {
+  id?: string;
   type: string;
   value?: string;
-  options?: { value: string; label: string }[];
+  options?: { id?: string; value: string; label: string }[];
   label?: string;
   placeholder?: string;
   support?: string;
@@ -31,7 +32,7 @@ const BuilderInputElement: React.FC<Props> = ({
       return options ? (
         options.map((option) => (
           <AppCheckbox
-            key={option.value}
+            key={option.id}
             value={option.value}
             label={option.label}
           />
