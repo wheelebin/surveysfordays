@@ -8,8 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate",
-    "seed": "ts-node prisma/seed.ts",
-    "test": "TS_NODE_PROJECT='./tsconfig.common.json' ts-node prisma/seed.ts"
+    "seed": "TS_NODE_PROJECT='./tsconfig.common.json' ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^4.3.1",
