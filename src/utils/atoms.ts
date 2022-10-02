@@ -1,6 +1,6 @@
 import { atom } from "jotai";
 
-type InputElement = {
+export type InputElement = {
   id: string;
   type: string;
   label: string;

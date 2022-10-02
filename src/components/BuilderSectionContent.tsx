@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { trpc } from "@/utils/trpc";
 import BuilderInputElement from "./BuilderInputElement";
-import AppButton from "./AppButton";
 import { useAtom } from "jotai";
 import {
   editingContentId,
@@ -12,13 +11,26 @@ import {
   contentInputElements,
 } from "@/utils/atoms";
 import { Pencil1Icon } from "@radix-ui/react-icons";
+import useElement from "@/hooks/useElement";
 
 type Props = {
   contentId: string;
+  type: string;
+  surveyId: string;
+  sectionId: string;
+  text: string;
+  orderNumber: number;
 };
 
-const BuilderSectionContent = ({ contentId }: Props) => {
-  const [isBeingEdited, setIsBeingEdited] = useState<boolean>(false);
+const BuilderSectionContent = ({
+  contentId,
+  type,
+  surveyId,
+  sectionId,
+  text,
+  orderNumber,
+}: Props) => {
+  const { inputElements, isBeingEdited } = useElement(contentId);
   const [editingContentId_, setEditingContentId] = useAtom(editingContentId);
   const [contentType_, setContentType] = useAtom(contentType);
   const [contentText_, setContentText] = useAtom(contentText);
@@ -30,47 +42,12 @@ const BuilderSectionContent = ({ contentId }: Props) => {
   const [contentInputElements_, setContentInputElements] =
     useAtom(contentInputElements);
 
-  useEffect(() => {
-    if (editingContentId_ === contentId) {
-      setIsBeingEdited(true);
-    } else {
-      setIsBeingEdited(false);
-    }
-  }, [editingContentId_, contentId]);
-
-  const { data: question } = trpc.useQuery(
-    ["question.byId", { id: contentId }],
-    { refetchOnWindowFocus: false }
-  );
-  const { data: questionOptions } = trpc.useQuery(
-    ["questionOption.getAllByQuestionId", { questionId: contentId }],
-    { enabled: !!question?.id, refetchOnWindowFocus: false }
-  );
-
-  const getInputElements = () => {
-    let elements = contentInputElements_;
-    const currentIsBeingEdited = contentId === editingContentId_;
-
-    if (!currentIsBeingEdited && questionOptions) {
-      elements = questionOptions.map(({ text, type, id }) => {
-        return {
-          label: text,
-          value: text,
-          type,
-          id,
-        };
-      });
-    }
-
-    return elements;
-  };
-
   const getContentText = () => {
     if (isBeingEdited) {
       return contentText_;
     }
 
-    return question?.text;
+    return text;
   };
 
   const getSupportText = () => {
@@ -84,17 +61,15 @@ const BuilderSectionContent = ({ contentId }: Props) => {
 
   const handleOnEdit = () => {
     setEditingContentId(contentId);
-    if (question) {
-      setContentText(question.text);
-      setContentType(question.type);
-    }
+    setContentText(text);
+    setContentType(type);
 
-    if (questionOptions) {
+    if (inputElements) {
       setContentInputElements(
-        questionOptions.map(({ text, type, id }) => {
+        inputElements.map(({ label, type, value, id }) => {
           return {
-            label: text,
-            value: text,
+            label,
+            value,
             type,
             id,
           };
@@ -104,8 +79,8 @@ const BuilderSectionContent = ({ contentId }: Props) => {
   };
 
   const renderElements = () => {
-    const elements = getInputElements();
-    const elemType = question?.type || contentType_;
+    const elements = inputElements;
+    const elemType = type || contentType_;
 
     if (!elemType) {
       return <p>Something went wrong</p>;

@@ -1,27 +1,12 @@
-import { useRouter } from "next/router";
-import { trpc } from "@/utils/trpc";
 import AppButton from "@/components/AppButton";
 import Builder from "@/components/Builder";
 import BuilderPage from "@/components/BuilderPage";
 import { Provider } from "jotai";
+import usePage from "@/hooks/usePage";
 
 // TODO Fix this BuilderPage_, underscore added due to naming duplication with BuilderPage component
 const BuilderPage_ = () => {
-  const router = useRouter();
-  const { surveyId } = router.query;
-
-  const { data: survey } = trpc.useQuery(
-    ["survey.byId", { id: surveyId as string }],
-    { refetchOnWindowFocus: false }
-  );
-
-  // TODO This takes "take" & "skip" now so add pagination
-  const { data: pages } = trpc.useQuery(
-    ["page.getAllBySurveyId", { surveyId: surveyId as string }],
-    { enabled: !!survey?.id, refetchOnWindowFocus: false }
-  );
-
-  // TODO Make builder element fixed at top of page at all times
+  const { pages } = usePage();
 
   return (
     <Provider>

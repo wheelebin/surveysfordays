@@ -33,6 +33,7 @@ A survey form builder
 - TODO Implement completion of surveys by users outside of our system (answer table and etc)
 - TODO Implement publishing of created surveys so they can be completed by other users
 - TODO Implement a simple results view for the publisher to see the result of the survey
+- TODO Add skeleton loading to components that need it
 
 # Things I Want To Do
 - TODO Extract ui components for survey builder into it's own repo & pkg

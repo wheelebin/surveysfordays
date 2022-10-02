@@ -1,17 +1,14 @@
 import React from "react";
-import { trpc } from "@/utils/trpc";
 import BuilderSection from "./BuilderSection";
 import AppButton from "./AppButton";
+import useSection from "@/hooks/useSection";
 
 type Props = {
   pageId: string;
 };
 
 const BuilderPage = ({ pageId }: Props) => {
-  const { data: sections } = trpc.useQuery(
-    ["section.getAllByPageId", { pageId }],
-    { refetchOnWindowFocus: false }
-  );
+  const { sections } = useSection(pageId);
 
   return (
     <div className="border border-red-600">
