@@ -1,13 +1,12 @@
 A survey form builder
 
-
-
 # Ideas
 
 - Create table to hold published versions of surveys
-  * json row for holding the structure
-  * is active for keeping track of which revision is published
-  * revision number for keeping track of revisions
+
+  - json row for holding the structure
+  - is active for keeping track of which revision is published
+  - revision number for keeping track of revisions
 
 - On publish get tables and convert into JSON
 - insert into said table with correct revision number
@@ -16,11 +15,10 @@ A survey form builder
 
 - If I disable a survey set currentActive revision to inactive
 
-
 - Append revision table ID to answer table so when user completes survey a we keep track of which revision
 
-
 # Things Need To Do
+
 - TODO Rename some of the tables & change table properties to match between front & backend so I don't need to transform question & question options
 - TODO Implement add new content
 - TODO Implement add new section
@@ -36,4 +34,6 @@ A survey form builder
 - TODO Add skeleton loading to components that need it
 
 # Things I Want To Do
+
 - TODO Extract ui components for survey builder into it's own repo & pkg
+- TODO Look into https://storybook.js.org/docs/react/writing-tests/interaction-testing
