@@ -8,7 +8,6 @@ const useBuilder = () => {
 
   const utils = trpc.useContext();
 
-  const addQuestionMutation = trpc.useMutation("question.add");
   const editQuestionMutation = trpc.useMutation("question.editQuestion", {
     onSuccess(input) {
       utils.invalidateQueries([
@@ -36,6 +35,14 @@ const useBuilder = () => {
           "questionOption.getAllByQuestionId",
           { questionId: questionId },
         ]);
+      }
+    },
+  });
+  const addQuestionMutation = trpc.useMutation("question.add", {
+    onSuccess(input) {
+      const sectionId = input?.sectionId;
+      if (sectionId) {
+        utils.invalidateQueries(["question.getAllBySectionId", { sectionId }]);
       }
     },
   });
@@ -68,7 +75,7 @@ const useBuilder = () => {
     question,
     questionOptions,
   }: {
-    question?: { id: string; text?: string };
+    question?: { id: string; text?: string; type?: string };
     questionOptions?: { id: string; text?: string; orderNumber?: number }[];
   }) => {
     if (question) {

@@ -9,6 +9,7 @@ import DragAndDropItem from "./DragAndDropItem";
 import {
   editingContentId,
   contentText,
+  contentType,
   contentSupportingText,
   contentInputElements,
 } from "@/utils/atoms";
@@ -21,6 +22,7 @@ type Props = {
 const BuilderElementFormSelections: React.FC<Props> = ({ type }) => {
   const [editingContentId_] = useAtom(editingContentId);
   const [contentText_, setContentText] = useAtom(contentText);
+  const [contentType_, setContentType] = useAtom(contentType);
   const [contentSupportingText_, setContentSupportingText] = useAtom(
     contentSupportingText
   );
@@ -71,7 +73,11 @@ const BuilderElementFormSelections: React.FC<Props> = ({ type }) => {
     }
 
     handleOnEditSave({
-      question: { id: editingContentId_, text: contentText_ },
+      question: {
+        id: editingContentId_,
+        text: contentText_,
+        type: contentType_,
+      },
       questionOptions: contentInputElements_.map(({ id, label, type }, i) => ({
         id,
         type,

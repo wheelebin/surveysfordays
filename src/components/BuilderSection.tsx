@@ -8,7 +8,15 @@ type Props = {
 };
 
 const BuilderSection = ({ sectionId }: Props) => {
-  const { questions } = useContent(sectionId);
+  const { questions, addContent } = useContent(sectionId);
+
+  const handleOnAdd = () => {
+    addContent({
+      type: "",
+      text: "Some text",
+      orderNumber: questions.length,
+    });
+  };
 
   return (
     <div className="border border-blue-500 my-5 p-5">
@@ -20,7 +28,7 @@ const BuilderSection = ({ sectionId }: Props) => {
         ))}
       </div>
       <div className="flex justify-center">
-        <AppButton>Add content</AppButton>
+        <AppButton onClick={handleOnAdd}>Add content</AppButton>
       </div>
     </div>
   );

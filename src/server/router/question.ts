@@ -26,6 +26,7 @@ export const questionRouter = createRouter()
     input: z.object({
       id: z.string(),
       text: z.string().optional(),
+      type: z.string().optional(),
     }),
     async resolve({ input, ctx }) {
       const question = await ctx.prisma.question.update({
