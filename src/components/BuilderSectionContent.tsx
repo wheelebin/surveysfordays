@@ -1,15 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { trpc } from "@/utils/trpc";
 import BuilderInputElement from "./BuilderInputElement";
-import { useAtom } from "jotai";
-import {
-  editingContentId,
-  contentType,
-  contentText,
-  contentSupportingText,
-  contentPlaceholder,
-  contentInputElements,
-} from "@/utils/atoms";
+
 import { Pencil1Icon } from "@radix-ui/react-icons";
 import useElement from "@/hooks/useElement";
 

@@ -11,7 +11,10 @@ const useBuilder = () => {
   const addQuestionMutation = trpc.useMutation("question.add");
   const editQuestionMutation = trpc.useMutation("question.editQuestion", {
     onSuccess(input) {
-      utils.invalidateQueries(["question.byId", { id: input.id }]);
+      utils.invalidateQueries([
+        "question.getAllBySectionId",
+        { sectionId: input.sectionId },
+      ]);
     },
   });
   const editQuestionOption = trpc.useMutation("questionOption.edit", {
