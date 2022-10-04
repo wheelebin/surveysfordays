@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { trpc } from "@/utils/trpc";
 import { useAtom } from "jotai";
 import AppButton from "./AppButton";
 import { DragHandleHorizontalIcon } from "@radix-ui/react-icons";
@@ -7,55 +6,52 @@ import AppTextField from "./AppTextField";
 import DragAndDrop from "./DragAndDrop";
 import DragAndDropItem from "./DragAndDropItem";
 
-import getDummyId from "@/utils/id";
-
 import {
   editingContentId,
-  contentType,
   contentText,
   contentSupportingText,
-  contentPlaceholder,
   contentInputElements,
 } from "@/utils/atoms";
 import useBuilder from "@/hooks/useBuilder";
 
-type inputElement = {
-  id: string;
-  type: string;
-  label: string;
-  value: string;
-};
-
 type Props = {
   type: string;
-  questionId?: string;
 };
 
-const BuilderElementFormSelections: React.FC<Props> = ({
-  type,
-  questionId,
-}) => {
-  const [editingContentId_, setEditingContentId] = useAtom(editingContentId);
-  const [contentType_] = useAtom(contentType);
+const BuilderElementFormSelections: React.FC<Props> = ({ type }) => {
+  const [editingContentId_] = useAtom(editingContentId);
   const [contentText_, setContentText] = useAtom(contentText);
   const [contentSupportingText_, setContentSupportingText] = useAtom(
     contentSupportingText
   );
-  const [contentPlaceholder_, setContentPlaceholder] =
-    useAtom(contentPlaceholder);
+
   const [contentInputElements_, setContentInputElements] =
     useAtom(contentInputElements);
 
-  const { handleOnEditSave } = useBuilder();
+  const { handleOnEditSave, handleOnAddQuestionOption } = useBuilder();
 
-  const handleAddInputElement = (label: string) => {
+  const handleOnAdd = async () => {
+    if (!editingContentId_) {
+      return;
+    }
     const newInputElement = {
-      id: getDummyId(),
-      label,
       type,
-      value: label,
+      text: "Change me :)",
+      orderNumber: contentInputElements_.length,
+      questionId: editingContentId_,
     };
-    setContentInputElements([...contentInputElements_, newInputElement]);
+
+    const [questionOption] = await handleOnAddQuestionOption(newInputElement);
+    if (questionOption) {
+      setContentInputElements([
+        ...contentInputElements_,
+        {
+          ...questionOption,
+          value: questionOption.text,
+          label: questionOption.text,
+        },
+      ]);
+    }
   };
 
   const handleOnChange = (index: number, label: string) => {
@@ -63,10 +59,6 @@ const BuilderElementFormSelections: React.FC<Props> = ({
       i === index ? { ...element, label } : element
     );
     setContentInputElements(updatedElements);
-  };
-
-  const handleOnAdd = () => {
-    handleAddInputElement("Change me :)");
   };
 
   const handleOnDragEnd = (list: any) => {

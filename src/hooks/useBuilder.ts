@@ -28,6 +28,17 @@ const useBuilder = () => {
       }
     },
   });
+  const addQuestionOption = trpc.useMutation("questionOption.add", {
+    onSuccess(input) {
+      const questionId = input[0]?.questionId;
+      if (questionId) {
+        utils.invalidateQueries([
+          "questionOption.getAllByQuestionId",
+          { questionId: questionId },
+        ]);
+      }
+    },
+  });
 
   const handleOnAddSave = (
     question: {
@@ -69,7 +80,16 @@ const useBuilder = () => {
     clear();
   };
 
-  return { handleOnAddSave, handleOnEditSave };
+  const handleOnAddQuestionOption = async (questionOption: {
+    questionId: string;
+    type: string;
+    text: string;
+    orderNumber: number;
+  }) => {
+    return await addQuestionOption.mutateAsync([questionOption]);
+  };
+
+  return { handleOnAddSave, handleOnEditSave, handleOnAddQuestionOption };
 };
 
 export default useBuilder;
