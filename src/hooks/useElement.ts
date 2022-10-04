@@ -93,21 +93,6 @@ const useElement = (
   }, [isBeingEdited, questionSupport, contentSupportingText_]);
 
   const handleOnEdit = () => {
-    /// TODO Move this into useElement hook or a combo of useElement & useContent
-    // If a combo make sure that we don't do a bunch of non needed re-renders
-
-    // A potential solution would be to create function this in BuilderSection
-    // add a onEdit prop on this component
-    // handle the setting of contentInputElements here
-    // and the setting of contentText and etc in BuilderSection
-    // Once that's done move logic into relevant hooks (useContent & useElement)
-
-    // Also move supportText & content/question text to be rendered in BuilderSection instead
-    // and get those from the useContent hook
-
-    // Save the label of builder input for a specific label for an input
-    // since the content text is more of a content/BuilderSection area
-
     setEditingContentId(contentId);
     setContentText(questionText);
     setContentType(questionType);
