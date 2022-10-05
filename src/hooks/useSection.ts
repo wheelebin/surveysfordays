@@ -1,6 +1,6 @@
 import { trpc } from "@/utils/trpc";
 
-const usePage = (pageId: string) => {
+const useSection = (pageId: string) => {
   const { data: sections } = trpc.useQuery(
     ["section.getAllByPageId", { pageId }],
     { refetchOnWindowFocus: false }
@@ -16,4 +16,4 @@ const usePage = (pageId: string) => {
   };
 };
 
-export default usePage;
+export default useSection;
