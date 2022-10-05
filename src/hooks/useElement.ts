@@ -15,24 +15,25 @@ import {
 
 const useElement = (
   contentId: string,
+  questionType: string,
   questionText: string,
-  questionSupport: string,
-  questionType: string
+  questionSupportText?: string
 ) => {
   const [isBeingEdited, setIsBeingEdited] = useState<boolean>(false);
   const [inputElements, setInputElements] = useState<InputElement[]>([]);
   const [text, setText] = useState<string>("");
-  const [support, setSupport] = useState<string>("");
+  const [supportText, setSupportText] = useState<string | undefined>(undefined);
+  const [placeholder, setPlaceholder] = useState<string | undefined>(undefined);
   const [type, setType] = useState<string | undefined>("");
   const [editingContentId_, setEditingContentId] = useAtom(editingContentId);
 
   const [contentType_, setContentType] = useAtom(contentType);
   const [contentText_, setContentText] = useAtom(contentText);
+  const [contentPlaceholder_, setContentPlaceholder] =
+    useAtom(contentPlaceholder);
   const [contentSupportingText_, setContentSupportingText] = useAtom(
     contentSupportingText
   );
-  const [contentPlaceholder_, setContentPlaceholder] =
-    useAtom(contentPlaceholder);
   const [contentInputElements_, setContentInputElements] =
     useAtom(contentInputElements);
 
@@ -58,21 +59,10 @@ const useElement = (
   }, [editingContentId_, contentId, contentType_, questionType]);
 
   useEffect(() => {
-    const fetchedElements = data || [];
-
     if (isBeingEdited) {
       setInputElements(contentInputElements_);
-    } else {
-      setInputElements(
-        fetchedElements.map(({ text, type, id }) => {
-          return {
-            label: text,
-            value: text,
-            type,
-            id,
-          };
-        })
-      );
+    } else if (data) {
+      setInputElements(data);
     }
   }, [isBeingEdited, data, contentInputElements_]);
 
@@ -86,15 +76,16 @@ const useElement = (
 
   useEffect(() => {
     if (isBeingEdited) {
-      setSupport(contentSupportingText_);
-    } else {
-      setSupport(questionSupport);
+      setSupportText(contentSupportingText_);
+    } else if (questionSupportText) {
+      setSupportText(questionSupportText);
     }
-  }, [isBeingEdited, questionSupport, contentSupportingText_]);
+  }, [isBeingEdited, questionSupportText, contentSupportingText_]);
 
   const handleOnEdit = () => {
     setEditingContentId(contentId);
     setContentText(questionText);
+    setContentSupportingText(questionSupportText);
     setContentType(questionType);
 
     setContentInputElements(
@@ -116,7 +107,7 @@ const useElement = (
   return {
     type,
     text,
-    support,
+    supportText,
     inputElements,
     isBeingEdited,
     handleOnEdit,

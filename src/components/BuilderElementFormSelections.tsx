@@ -38,21 +38,14 @@ const BuilderElementFormSelections: React.FC<Props> = ({ type }) => {
     }
     const newInputElement = {
       type,
-      text: "Change me :)",
+      label: "Change me :)",
       orderNumber: contentInputElements_.length,
       questionId: editingContentId_,
     };
 
     const [questionOption] = await handleOnAddQuestionOption(newInputElement);
     if (questionOption) {
-      setContentInputElements([
-        ...contentInputElements_,
-        {
-          ...questionOption,
-          value: questionOption.text,
-          label: questionOption.text,
-        },
-      ]);
+      setContentInputElements([...contentInputElements_, questionOption]);
     }
   };
 
@@ -64,7 +57,9 @@ const BuilderElementFormSelections: React.FC<Props> = ({ type }) => {
   };
 
   const handleOnDragEnd = (list: any) => {
-    setContentInputElements(list);
+    // TODO Handle updating orderNumber here and not in hanldeOnEditSave
+    const newList = list.map((item, i) => ({ ...item, orderNumber: i }));
+    setContentInputElements(newList);
   };
 
   const handleOnSave = () => {
@@ -76,15 +71,10 @@ const BuilderElementFormSelections: React.FC<Props> = ({ type }) => {
       question: {
         id: editingContentId_,
         text: contentText_,
+        supportText: contentSupportingText_,
         type: contentType_,
       },
-      questionOptions: contentInputElements_.map(({ id, label, type }, i) => ({
-        id,
-        type,
-        questionId: editingContentId_,
-        text: label,
-        orderNumber: i,
-      })),
+      questionOptions: contentInputElements_,
     });
   };
 

@@ -14,6 +14,7 @@ export const questionRouter = createRouter()
       sectionId: z.string(),
       type: z.string(),
       text: z.string(),
+      supportText: z.string().optional().nullable(),
       orderNumber: z.number(),
     }),
     async resolve({ input, ctx }) {
@@ -26,6 +27,7 @@ export const questionRouter = createRouter()
     input: z.object({
       id: z.string(),
       text: z.string().optional(),
+      supportText: z.string().optional().nullable(),
       type: z.string().optional(),
     }),
     async resolve({ input, ctx }) {

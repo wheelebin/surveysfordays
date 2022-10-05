@@ -23,6 +23,7 @@ const BuilderInputElement: React.FC<Props> = ({
   support,
   onChange,
 }) => {
+  // TODO Label in here is only for on an input element level, actual question text is in BuilderSectionContent
   const getElement = () => {
     if (type === "RADIO") {
       return <AppRadioGroup radioItems={options} />;
@@ -50,7 +51,7 @@ const BuilderInputElement: React.FC<Props> = ({
   return (
     <div>
       <div className="flex items-center mb-2">
-        <h1 className="text-xl">{label}</h1>
+        <h1 className="text-md">{label}</h1>
       </div>
       <div>{getElement()}</div>
       <div className="text-sm">{support}</div>

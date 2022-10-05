@@ -5,6 +5,7 @@ type AppTextFieldProps = {
   value?: string;
   onChange?: (value: string) => void;
   placeholder?: string;
+  supportText?: string;
 };
 
 const AppTextField = ({

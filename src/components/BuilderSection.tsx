@@ -11,11 +11,13 @@ const BuilderSection = ({ sectionId }: Props) => {
   const { questions, addContent } = useContent(sectionId);
 
   const handleOnAdd = () => {
-    addContent({
-      type: "",
-      text: "Some text",
-      orderNumber: questions.length,
-    });
+    if (questions) {
+      addContent({
+        type: "",
+        text: "Some text",
+        orderNumber: questions.length,
+      });
+    }
   };
 
   return (

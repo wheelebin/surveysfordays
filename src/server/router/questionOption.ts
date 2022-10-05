@@ -12,7 +12,9 @@ export const questionOptionRouter = createRouter()
       z.object({
         questionId: z.string(),
         type: z.string(),
-        text: z.string(),
+        label: z.string(),
+        placeholder: z.string().optional(),
+        supportText: z.string().optional(),
         orderNumber: z.number(),
       })
     ),
@@ -31,7 +33,9 @@ export const questionOptionRouter = createRouter()
     input: z.array(
       z.object({
         id: z.string(),
-        text: z.string().optional(),
+        label: z.string().optional(),
+        placeholder: z.string().optional().nullable(),
+        supportText: z.string().optional().nullable(),
         orderNumber: z.number().optional(),
       })
     ),

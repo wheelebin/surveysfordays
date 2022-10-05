@@ -34,10 +34,12 @@ const useContent = (sectionId: string) => {
     text: string;
     orderNumber: number;
   }) => {
+    const newSurveyId = surveyId as string;
+
     const addedQuestion = await addQuestionMutation.mutateAsync({
       ...question,
       sectionId,
-      surveyId,
+      surveyId: newSurveyId,
     });
 
     if (addedQuestion) {

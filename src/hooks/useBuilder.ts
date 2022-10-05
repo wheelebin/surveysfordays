@@ -75,8 +75,19 @@ const useBuilder = () => {
     question,
     questionOptions,
   }: {
-    question?: { id: string; text?: string; type?: string };
-    questionOptions?: { id: string; text?: string; orderNumber?: number }[];
+    question?: {
+      id: string;
+      text?: string;
+      supportText?: string;
+      type?: string;
+    };
+    questionOptions?: {
+      id: string;
+      label?: string;
+      placeholder?: string | null;
+      supportText?: string | null;
+      orderNumber?: number;
+    }[];
   }) => {
     if (question) {
       editQuestionMutation.mutate(question);
@@ -90,7 +101,9 @@ const useBuilder = () => {
   const handleOnAddQuestionOption = async (questionOption: {
     questionId: string;
     type: string;
-    text: string;
+    label: string;
+    placeholder?: string;
+    supportText?: string;
     orderNumber: number;
   }) => {
     return await addQuestionOption.mutateAsync([questionOption]);

@@ -7,6 +7,7 @@ import BuilderElementFormSelections from "./BuilderElementFormSelections";
 import { ELEMENTS_WITH_ADD_MULTIPLE } from "@/constants/elements";
 import { useAtom } from "jotai";
 import { editingContentId, contentType } from "@/utils/atoms";
+import useBuilder from "@/hooks/useBuilder";
 
 // TODO Will create a BuilderImageForm, BuilderTextForm and etc
 // and switch the builder form type out depending on the current elementType
@@ -20,14 +21,25 @@ const Builder: React.FC<Props> = ({ children }) => {
   const [show, setShow] = useState<boolean>(false);
   const [editingContentId_] = useAtom(editingContentId);
   const [contentType_, setContentType] = useAtom(contentType);
+  const { handleOnAddQuestionOption } = useBuilder();
 
   useEffect(
     () => setShow(editingContentId_ ? true : false),
     [editingContentId_]
   );
 
-  const handleOnChange = (value: string) => {
-    setContentType(value);
+  const handleOnChange = (type: string) => {
+    setContentType(type);
+    if (!ELEMENTS_WITH_ADD_MULTIPLE.includes(type) && editingContentId_) {
+      handleOnAddQuestionOption({
+        questionId: editingContentId_,
+        type,
+        label: "Some label",
+        placeholder: "Some placeholder",
+        supportText: "Some supportText",
+        orderNumber: 0,
+      });
+    }
   };
 
   const getFormElement = () => {

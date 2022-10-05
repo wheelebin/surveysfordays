@@ -4,6 +4,7 @@ import {
   contentText,
   contentSupportingText,
   contentPlaceholder,
+  contentInputElements,
 } from "@/utils/atoms";
 import { useAtom } from "jotai";
 
@@ -22,6 +23,20 @@ const BuilderElementFormInputs: React.FC<Props> = ({
   );
   const [contentPlaceholder_, setContentPlaceholder] =
     useAtom(contentPlaceholder);
+  const [contentInputElements_, setContentInputElements] =
+    useAtom(contentInputElements);
+
+  const handleOnChange = (key: string, value: string) => {
+    const [currentElement] = contentInputElements_;
+    if (currentElement) {
+      const newInputElement = {
+        ...currentElement,
+        [key]: value,
+      };
+      setContentInputElements([newInputElement]);
+      setContentPlaceholder(value);
+    }
+  };
 
   return (
     <div>
@@ -37,7 +52,7 @@ const BuilderElementFormInputs: React.FC<Props> = ({
       />
       <AppTextField
         label="Placeholder"
-        onChange={setContentPlaceholder}
+        onChange={(value) => handleOnChange("placeholder", value)}
         value={contentPlaceholder_}
       />
     </div>

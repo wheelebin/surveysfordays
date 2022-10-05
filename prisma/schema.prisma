@@ -63,6 +63,7 @@ model Question {
     surveyId    String
     sectionId   String
     text        String
+    supportText String?
     orderNumber Int
     createdAt   DateTime @default(now())
 }
@@ -71,7 +72,10 @@ model QuestionOption {
     id          String   @id @default(cuid())
     questionId  String
     type        String // RADIO, RADIOTEXT, TEXT, NUMBER, DATE, TIME, CHECKBOX
-    text        String
+    label       String
+    placeholder String?
+    supportText String?
+    value       String   @default(cuid())
     orderNumber Int
     createdAt   DateTime @default(now())
 }
