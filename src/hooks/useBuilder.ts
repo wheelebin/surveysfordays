@@ -7,6 +7,7 @@ const useBuilder = () => {
     isEditing,
     initEditing,
     content,
+    initialContent,
     inputElements,
     setContent,
     setInputElements,
@@ -55,7 +56,7 @@ const useBuilder = () => {
   });
 
   const handleOnAdd = async (type: string) => {
-    const { surveyId, sectionId, orderNumber } = content || {};
+    const { surveyId, sectionId, orderNumber } = initialContent || {};
 
     if (!surveyId || !sectionId || !orderNumber) {
       return;
@@ -90,29 +91,12 @@ const useBuilder = () => {
     }
   };
 
-  const handleOnEditSave = ({
-    question,
-    questionOptions,
-  }: {
-    question?: {
-      id: string;
-      text?: string;
-      supportText?: string;
-      type?: string;
-    };
-    questionOptions?: {
-      id: string;
-      label?: string;
-      placeholder?: string | null;
-      supportText?: string | null;
-      orderNumber?: number;
-    }[];
-  }) => {
-    if (question) {
-      editQuestionMutation.mutate(question);
+  const handleOnEditSave = () => {
+    if (content) {
+      editQuestionMutation.mutate(content);
     }
-    if (questionOptions) {
-      editQuestionOption.mutate(questionOptions);
+    if (inputElements) {
+      editQuestionOption.mutate(inputElements);
     }
     clear();
   };

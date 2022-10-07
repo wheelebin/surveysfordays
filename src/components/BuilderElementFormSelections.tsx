@@ -50,22 +50,6 @@ const BuilderElementFormSelections: React.FC<Props> = ({ type }) => {
     setInputElements(newList);
   };
 
-  const handleOnSave = () => {
-    if (!content?.id) {
-      return;
-    }
-
-    handleOnEditSave({
-      question: {
-        id: content?.id,
-        text: content?.text,
-        supportText: content?.supportText || "",
-        type: content?.type,
-      },
-      questionOptions: inputElements,
-    });
-  };
-
   return (
     <div>
       <AppTextField
@@ -97,7 +81,7 @@ const BuilderElementFormSelections: React.FC<Props> = ({ type }) => {
           </DragAndDropItem>
         ))}
       </DragAndDrop>
-      <AppButton className="w-full" onClick={handleOnSave}>
+      <AppButton className="w-full" onClick={handleOnEditSave}>
         Save
       </AppButton>
     </div>

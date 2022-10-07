@@ -31,22 +31,6 @@ const BuilderElementFormInputs: React.FC<Props> = ({
     }
   };
 
-  const handleOnSave = () => {
-    if (!content?.id) {
-      return;
-    }
-
-    handleOnEditSave({
-      question: {
-        id: content?.id,
-        text: content?.text,
-        supportText: content?.supportText || "",
-        type: content?.type,
-      },
-      questionOptions: inputElements,
-    });
-  };
-
   return (
     <div>
       <AppTextField
@@ -64,7 +48,7 @@ const BuilderElementFormInputs: React.FC<Props> = ({
         onChange={(value) => handleOnChange("placeholder", value)}
         value={inputElements[0]?.placeholder || ""}
       />
-      <AppButton className="w-full" onClick={handleOnSave}>
+      <AppButton className="w-full" onClick={handleOnEditSave}>
         Save
       </AppButton>
     </div>
