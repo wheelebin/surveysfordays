@@ -37,9 +37,7 @@ const BuilderSectionContent = (props: Props) => {
 
     if (ELEMENTS_WITH_ADD_MULTIPLE.includes(type)) {
       return <BuilderInputElement type={type} options={elements} />;
-    }
-
-    if (element) {
+    } else if (element) {
       return (
         <BuilderInputElement
           type={type}
