@@ -11,7 +11,7 @@ const BuilderSection = ({ sectionId }: Props) => {
   const { questions, addContent } = useContent(sectionId);
 
   return (
-    <div className="border border-blue-500 my-5 p-5">
+    <div className=" my-5 p-5">
       <div>
         {questions?.map((question) => (
           <div key={question.id} className="hover:bg-slate-50 py-3 px-2">

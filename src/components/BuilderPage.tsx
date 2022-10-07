@@ -1,6 +1,7 @@
 import React from "react";
 import BuilderSection from "./BuilderSection";
 import AppButton from "./AppButton";
+import AppSeperator from "./AppSeperator";
 import useSection from "@/hooks/useSection";
 
 type Props = {
@@ -11,7 +12,7 @@ const BuilderPage = ({ pageId }: Props) => {
   const { sections } = useSection(pageId);
 
   return (
-    <div className="border border-red-600">
+    <div className="">
       <div>
         {sections?.map((section) => (
           <BuilderSection key={section.id} sectionId={section.id} />
@@ -20,6 +21,7 @@ const BuilderPage = ({ pageId }: Props) => {
       <div className="flex justify-center">
         <AppButton>Add section</AppButton>
       </div>
+      <AppSeperator />
     </div>
   );
 };

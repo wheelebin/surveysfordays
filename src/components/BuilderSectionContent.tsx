@@ -50,13 +50,15 @@ const BuilderSectionContent = (props: Props) => {
   };
 
   return (
-    <div>
-      <Pencil1Icon onClick={handleOnEdit} className="ml-2 cursor-pointer" />
-      <div className="flex items-center mb-2">
+    <div className="relative">
+      <div className="absolute top-0 right-0">
+        <Pencil1Icon onClick={handleOnEdit} className="ml-2 cursor-pointer" />
+      </div>
+      <div className="flex items-center mb-4">
         <h1 className="text-xl">{text}</h1>
       </div>
-      {renderElements()}
-      <div className="flex items-center mb-2">
+      <div className="px-4">{renderElements()}</div>
+      <div className="flex items-center mt-4">
         <h1 className="text-sm">{supportText}</h1>
       </div>
     </div>
