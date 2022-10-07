@@ -1,12 +1,7 @@
 import React from "react";
 import AppTextField from "./AppTextField";
-import {
-  contentText,
-  contentSupportingText,
-  contentPlaceholder,
-  contentInputElements,
-} from "@/utils/atoms";
-import { useAtom } from "jotai";
+import AppButton from "./AppButton";
+import useBuilder from "@/hooks/useBuilder";
 
 type Props = {
   elementType: string;
@@ -17,44 +12,61 @@ const BuilderElementFormInputs: React.FC<Props> = ({
   elementType,
   questionId,
 }) => {
-  const [contentText_, setContentText] = useAtom(contentText);
-  const [contentSupportingText_, setContentSupportingText] = useAtom(
-    contentSupportingText
-  );
-  const [contentPlaceholder_, setContentPlaceholder] =
-    useAtom(contentPlaceholder);
-  const [contentInputElements_, setContentInputElements] =
-    useAtom(contentInputElements);
+  const {
+    handleOnEditSave,
+    content,
+    inputElements,
+    setContent,
+    setInputElements,
+  } = useBuilder();
 
   const handleOnChange = (key: string, value: string) => {
-    const [currentElement] = contentInputElements_;
+    const [currentElement] = inputElements;
     if (currentElement) {
       const newInputElement = {
         ...currentElement,
         [key]: value,
       };
-      setContentInputElements([newInputElement]);
-      setContentPlaceholder(value);
+      setInputElements([newInputElement]);
     }
+  };
+
+  const handleOnSave = () => {
+    if (!content?.id) {
+      return;
+    }
+
+    handleOnEditSave({
+      question: {
+        id: content?.id,
+        text: content?.text,
+        supportText: content?.supportText || "",
+        type: content?.type,
+      },
+      questionOptions: inputElements,
+    });
   };
 
   return (
     <div>
       <AppTextField
         label="Label"
-        onChange={setContentText}
-        value={contentText_}
+        onChange={(value) => setContent("text", value)}
+        value={content?.text}
       />
       <AppTextField
         label="Supporting text"
-        onChange={setContentSupportingText}
-        value={contentSupportingText_}
+        onChange={(value) => setContent("supportText", value)}
+        value={content?.supportText || ""}
       />
       <AppTextField
         label="Placeholder"
         onChange={(value) => handleOnChange("placeholder", value)}
-        value={contentPlaceholder_}
+        value={inputElements[0]?.placeholder || ""}
       />
+      <AppButton className="w-full" onClick={handleOnSave}>
+        Save
+      </AppButton>
     </div>
   );
 };

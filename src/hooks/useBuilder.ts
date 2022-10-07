@@ -1,10 +1,17 @@
-import { Prisma } from "@prisma/client";
 import { trpc } from "@/utils/trpc";
-import { useAtom } from "jotai";
-import { clearBuilderContent } from "@/utils/atoms";
+import { useBuilderStore } from "@/stores/builder";
 
 const useBuilder = () => {
-  const [_, clear] = useAtom(clearBuilderContent);
+  const {
+    isAdding,
+    isEditing,
+    initEditing,
+    content,
+    inputElements,
+    setContent,
+    setInputElements,
+    clear,
+  } = useBuilderStore();
 
   const utils = trpc.useContext();
 
@@ -47,28 +54,40 @@ const useBuilder = () => {
     },
   });
 
-  const handleOnAddSave = (
-    question: {
-      sectionId: string;
-      surveyId: string;
-      type: string;
-      orderNumber: number;
-      text: string;
-    },
-    questionOptions: {
-      questionId: string;
-      type: string;
-      text: string;
-      orderNumber: number;
-    }[]
-  ) => {
-    if (question) {
-      addQuestionMutation.mutate(question);
+  const handleOnAdd = async (type: string) => {
+    const { surveyId, sectionId, orderNumber } = content || {};
+
+    if (!surveyId || !sectionId || !orderNumber) {
+      return;
     }
-    if (questionOptions) {
-      addQuestionMutation.mutate(question);
+
+    const newQuestion = await addQuestionMutation.mutateAsync({
+      surveyId,
+      sectionId,
+      type,
+      orderNumber,
+      text: "Change me :)",
+      supportText: "Some support text",
+    });
+
+    if (!newQuestion) {
+      return;
     }
-    clear();
+
+    const newQuestionOption = await addQuestionOption.mutateAsync([
+      {
+        questionId: newQuestion.id,
+        type,
+        label: "Change me :)",
+        placeholder: "Some placeholder",
+        supportText: "Some support text for the input element",
+        orderNumber: 0,
+      },
+    ]);
+
+    if (newQuestion && newQuestionOption) {
+      initEditing(newQuestion, newQuestionOption);
+    }
   };
 
   const handleOnEditSave = ({
@@ -109,7 +128,17 @@ const useBuilder = () => {
     return await addQuestionOption.mutateAsync([questionOption]);
   };
 
-  return { handleOnAddSave, handleOnEditSave, handleOnAddQuestionOption };
+  return {
+    handleOnAdd,
+    handleOnEditSave,
+    handleOnAddQuestionOption,
+    isAdding,
+    isEditing,
+    content,
+    inputElements,
+    setContent,
+    setInputElements,
+  };
 };
 
 export default useBuilder;

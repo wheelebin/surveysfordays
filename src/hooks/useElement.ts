@@ -1,41 +1,27 @@
 import { useState, useEffect } from "react";
 import { trpc } from "@/utils/trpc";
-import { useAtom } from "jotai";
-import {
-  editingContentId,
-  contentType,
-  contentText,
-  contentSupportingText,
-  contentPlaceholder,
-  contentInputElements,
-  InputElement,
-} from "@/utils/atoms";
+import { useBuilderStore, InputElement } from "@/stores/builder";
 
 // TODO Finish this
 
 const useElement = (
   contentId: string,
+  surveyId: string,
+  sectionId: string,
   questionType: string,
   questionText: string,
-  questionSupportText?: string
+  orderNumber: number,
+  questionSupportText?: string | null
 ) => {
+  const builderStore = useBuilderStore();
+
   const [isBeingEdited, setIsBeingEdited] = useState<boolean>(false);
   const [inputElements, setInputElements] = useState<InputElement[]>([]);
-  const [text, setText] = useState<string>("");
-  const [supportText, setSupportText] = useState<string | undefined>(undefined);
+  const [text, setText] = useState<string | undefined>("");
+  const [supportText, setSupportText] =
+    useState<string | undefined | null>(undefined);
   const [placeholder, setPlaceholder] = useState<string | undefined>(undefined);
   const [type, setType] = useState<string | undefined>("");
-  const [editingContentId_, setEditingContentId] = useAtom(editingContentId);
-
-  const [contentType_, setContentType] = useAtom(contentType);
-  const [contentText_, setContentText] = useAtom(contentText);
-  const [contentPlaceholder_, setContentPlaceholder] =
-    useAtom(contentPlaceholder);
-  const [contentSupportingText_, setContentSupportingText] = useAtom(
-    contentSupportingText
-  );
-  const [contentInputElements_, setContentInputElements] =
-    useAtom(contentInputElements);
 
   const { data } = trpc.useQuery(
     ["questionOption.getAllByQuestionId", { questionId: contentId }],
@@ -43,65 +29,58 @@ const useElement = (
   );
 
   useEffect(() => {
-    if (editingContentId_ === contentId) {
+    if (builderStore.isEditing && builderStore.content?.id === contentId) {
       setIsBeingEdited(true);
     } else {
       setIsBeingEdited(false);
     }
-  }, [editingContentId_, contentId]);
+  }, [builderStore.isEditing, builderStore.content?.id, contentId]);
 
   useEffect(() => {
-    if (editingContentId_ === contentId) {
-      setType(contentType_);
+    if (isBeingEdited) {
+      setType(builderStore.content?.type);
     } else {
       setType(questionType);
     }
-  }, [editingContentId_, contentId, contentType_, questionType]);
+  }, [isBeingEdited, builderStore.content?.type, questionType]);
 
   useEffect(() => {
     if (isBeingEdited) {
-      setInputElements(contentInputElements_);
+      setInputElements(builderStore.inputElements);
     } else if (data) {
       setInputElements(data);
     }
-  }, [isBeingEdited, data, contentInputElements_]);
+  }, [isBeingEdited, data, builderStore.inputElements]);
 
   useEffect(() => {
     if (isBeingEdited) {
-      setText(contentText_);
+      setText(builderStore.content?.text);
     } else {
       setText(questionText);
     }
-  }, [isBeingEdited, questionText, contentText_]);
+  }, [isBeingEdited, questionText, builderStore.content?.text]);
 
   useEffect(() => {
     if (isBeingEdited) {
-      setSupportText(contentSupportingText_);
+      setSupportText(builderStore.content?.supportText);
     } else if (questionSupportText) {
       setSupportText(questionSupportText);
     }
-  }, [isBeingEdited, questionSupportText, contentSupportingText_]);
+  }, [isBeingEdited, questionSupportText, builderStore.content?.supportText]);
 
   const handleOnEdit = () => {
-    setEditingContentId(contentId);
-    setContentText(questionText);
-    setContentSupportingText(questionSupportText);
-    setContentType(questionType);
-
-    setContentInputElements(
-      inputElements.map(({ label, type, value, id }) => {
-        return {
-          label,
-          value,
-          type,
-          id,
-        };
-      })
+    builderStore.initEditing(
+      {
+        id: contentId,
+        surveyId,
+        sectionId,
+        text: questionText,
+        supportText: questionSupportText,
+        type: questionType,
+        orderNumber,
+      },
+      inputElements
     );
-  };
-
-  const addInputElement = () => {
-    return;
   };
 
   return {
@@ -109,7 +88,7 @@ const useElement = (
     text,
     supportText,
     inputElements,
-    isBeingEdited,
+    isEditing: builderStore.isEditing,
     handleOnEdit,
   };
 };

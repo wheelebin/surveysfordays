@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import BuilderElementFormInputs from "./BuilderElementFormInputs";
 import AppSelectField from "./AppSelectField";
-import AppButton from "./AppButton";
 import { ELEMENT_GROUPS } from "@/constants/elements";
 import BuilderElementFormSelections from "./BuilderElementFormSelections";
 import { ELEMENTS_WITH_ADD_MULTIPLE } from "@/constants/elements";
-import { useAtom } from "jotai";
-import { editingContentId, contentType } from "@/utils/atoms";
 import useBuilder from "@/hooks/useBuilder";
 
 // TODO Will create a BuilderImageForm, BuilderTextForm and etc
@@ -19,54 +16,38 @@ type Props = {
 
 const Builder: React.FC<Props> = ({ children }) => {
   const [show, setShow] = useState<boolean>(false);
-  const [editingContentId_] = useAtom(editingContentId);
-  const [contentType_, setContentType] = useAtom(contentType);
-  const { handleOnAddQuestionOption } = useBuilder();
+  const { handleOnAdd, content, isAdding, isEditing } = useBuilder();
 
-  useEffect(
-    () => setShow(editingContentId_ ? true : false),
-    [editingContentId_]
-  );
+  useEffect(() => setShow(isAdding || isEditing), [isEditing, isAdding]);
 
   const handleOnChange = (type: string) => {
-    setContentType(type);
-    if (!ELEMENTS_WITH_ADD_MULTIPLE.includes(type) && editingContentId_) {
-      handleOnAddQuestionOption({
-        questionId: editingContentId_,
-        type,
-        label: "Some label",
-        placeholder: "Some placeholder",
-        supportText: "Some supportText",
-        orderNumber: 0,
-      });
-    }
+    handleOnAdd(type);
   };
 
   const getFormElement = () => {
-    if (!contentType_) {
+    if (!content?.type) {
       return <>No elem type</>;
     }
 
-    if (ELEMENTS_WITH_ADD_MULTIPLE.includes(contentType_)) {
+    if (ELEMENTS_WITH_ADD_MULTIPLE.includes(content?.type)) {
       return (
         <BuilderElementFormSelections
-          key={contentType_}
-          type={contentType_}
-          questionId={editingContentId_}
+          key={content?.type}
+          type={content?.type}
         />
       );
     }
     return (
       <BuilderElementFormInputs
-        key={contentType_}
-        elementType={contentType_}
-        questionId={editingContentId_}
+        key={content?.type}
+        elementType={content?.type}
+        questionId={content?.id}
       />
     );
   };
 
   const getElementSelector = () => {
-    if (editingContentId_ && !contentType_) {
+    if (isAdding) {
       return (
         <div>
           <h1 className="text-xl">Choose content type</h1>
