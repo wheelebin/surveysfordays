@@ -1,27 +1,48 @@
+import { useState, useEffect } from "react";
+
 import AppButton from "@/components/AppButton";
 import Builder from "@/components/Builder";
 import BuilderPage from "@/components/BuilderPage";
 import usePage from "@/hooks/usePage";
+import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons";
 
 // TODO Fix this BuilderPage_, underscore added due to naming duplication with BuilderPage component
 const BuilderPage_ = () => {
+  const [currentPageNumber, setCurrentPageNumber] = useState<number>(0);
   const { pages } = usePage();
+
+  const prevPage = () => {
+    if (currentPageNumber !== 0) {
+      setCurrentPageNumber(currentPageNumber - 1);
+    }
+  };
+
+  const nextPage = () => {
+    if (pages && currentPageNumber !== pages.length - 1) {
+      setCurrentPageNumber(currentPageNumber + 1);
+    }
+  };
 
   return (
     <div className="container mx-auto">
       <div className="flex justify-center h-screen">
         <div className="flex flex-col w-1/2 overflow-y-scroll">
-          <div className="flex flex-row justify-between">
-            <div className="w-8 h-8 rounded-full bg-indigo-500 text-white flex justify-center items-center">
-              1
+          <div className="flex flex-row justify-around items-center">
+            <ArrowLeftIcon onClick={prevPage} className="cursor-pointer" />
+            <div className="rounded py-2 px-4 mt-1 bg-indigo-500 text-white flex justify-center items-center">
+              {currentPageNumber + 1} / {pages?.length}
             </div>
+            <ArrowRightIcon onClick={nextPage} className="cursor-pointer" />
           </div>
 
-          {pages?.map((page) => (
-            <BuilderPage key={page.id} pageId={page.id} />
-          ))}
+          {pages?.map((page) => {
+            if (currentPageNumber === page.pageNumber) {
+              return <BuilderPage key={page.id} pageId={page.id} />;
+            }
+            return <></>;
+          })}
 
-          <div className="flex justify-center">
+          <div className="flex justify-around items-center">
             <AppButton>Add page</AppButton>
           </div>
         </div>

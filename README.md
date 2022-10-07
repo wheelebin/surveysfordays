@@ -22,7 +22,6 @@ A survey form builder
 DO THE BELLOW
 - TODO Implement add new section
 - TODO Implement add new page
-- TODO Implement page pagination view, navigation between pages and a page tracker (Like the 1 above the survey but functional)
 - TODO Implement deletion of pages, sections, content or/and content options
 - TODO Implement dragging of pages, sections & content somehow (Dragging of content options is already available through builder forms)
 - TODO Polish design for existing pages
