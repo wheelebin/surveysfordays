@@ -58,7 +58,7 @@ const BuilderElementFormSelections: React.FC<Props> = ({ type }) => {
         value={content?.text}
       />
       <AppTextField
-        label="Supporting text"
+        label="Support text"
         onChange={(value) => setContent("supportText", value)}
         value={content?.supportText || ""}
       />
