@@ -1,17 +1,14 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import AppTextField from "./AppTextField";
 import AppButton from "./AppButton";
+import AppSeperator from "./AppSeperator";
 import useBuilder from "@/hooks/useBuilder";
+import { InputElement } from "@/stores/builder";
 
-type Props = {
-  elementType: string;
-  questionId?: string;
-};
+const BuilderElementFormInputs: React.FC = () => {
+  const [inputElement, setInputElement] =
+    useState<InputElement | undefined>(undefined);
 
-const BuilderElementFormInputs: React.FC<Props> = ({
-  elementType,
-  questionId,
-}) => {
   const {
     handleOnEditSave,
     content,
@@ -20,11 +17,15 @@ const BuilderElementFormInputs: React.FC<Props> = ({
     setInputElements,
   } = useBuilder();
 
+  useEffect(() => {
+    const [internalInputElement] = inputElements;
+    setInputElement(internalInputElement);
+  }, [inputElements]);
+
   const handleOnChange = (key: string, value: string) => {
-    const [currentElement] = inputElements;
-    if (currentElement) {
+    if (inputElement) {
       const newInputElement = {
-        ...currentElement,
+        ...inputElement,
         [key]: value,
       };
       setInputElements([newInputElement]);
@@ -39,14 +40,27 @@ const BuilderElementFormInputs: React.FC<Props> = ({
         value={content?.text}
       />
       <AppTextField
-        label="Supporting text"
+        label="Content support text"
         onChange={(value) => setContent("supportText", value)}
         value={content?.supportText || ""}
+      />
+
+      <AppSeperator />
+
+      <AppTextField
+        label="Label"
+        onChange={(value) => handleOnChange("label", value)}
+        value={inputElement?.label || ""}
       />
       <AppTextField
         label="Placeholder"
         onChange={(value) => handleOnChange("placeholder", value)}
-        value={inputElements[0]?.placeholder || ""}
+        value={inputElement?.placeholder || ""}
+      />
+      <AppTextField
+        label="Support text"
+        onChange={(value) => handleOnChange("supportText", value)}
+        value={inputElement?.supportText || ""}
       />
       <AppButton className="w-full" onClick={handleOnEditSave}>
         Save
