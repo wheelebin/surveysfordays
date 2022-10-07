@@ -12,7 +12,7 @@ const BuilderPage = ({ pageId }: Props) => {
   const { sections } = useSection(pageId);
 
   return (
-    <div className="">
+    <div>
       <div>
         {sections?.map((section) => (
           <BuilderSection key={section.id} sectionId={section.id} />

@@ -26,7 +26,7 @@ const BuilderPage_ = () => {
   return (
     <div className="container mx-auto">
       <div className="flex justify-center h-screen">
-        <div className="flex flex-col w-1/2 overflow-y-scroll">
+        <div className="flex flex-col w-1/2 overflow-y-scroll no-scrollbar">
           <div className="flex flex-row justify-around items-center">
             <ArrowLeftIcon onClick={prevPage} className="cursor-pointer" />
             <div className="rounded py-2 px-4 mt-1 bg-indigo-500 text-white flex justify-center items-center">
