@@ -2,19 +2,28 @@ import React from "react";
 import BuilderSection from "./BuilderSection";
 import AppButton from "./AppButton";
 import useSection from "@/hooks/useSection";
+import { TrashIcon } from "@radix-ui/react-icons";
 
 type Props = {
   pageId: string;
 };
 
 const BuilderPage = ({ pageId }: Props) => {
-  const { sections, addSection } = useSection(pageId);
+  const { sections, addSection, deleteSection } = useSection(pageId);
 
   return (
     <div>
       <div>
         {sections?.map((section) => (
-          <BuilderSection key={section.id} sectionId={section.id} />
+          <div key={section.id}>
+            <div className="flex flex-row-reverse">
+              <TrashIcon
+                className="cursor-pointer"
+                onClick={() => deleteSection(section.id)}
+              />
+            </div>
+            <BuilderSection sectionId={section.id} />
+          </div>
         ))}
       </div>
       <div className="flex justify-center">

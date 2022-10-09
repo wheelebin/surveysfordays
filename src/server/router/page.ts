@@ -61,6 +61,9 @@ export const pageRouter = createRouter()
       id: z.string(),
     }),
     async resolve({ input, ctx }) {
-      return await ctx.prisma.page.delete({ where: { id: input.id } });
+      const deletedPage = await ctx.prisma.page.delete({
+        where: { id: input.id },
+      });
+      return deletedPage;
     },
   });

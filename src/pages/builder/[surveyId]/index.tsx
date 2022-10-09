@@ -8,20 +8,8 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons";
 
 // TODO Fix this BuilderPage_, underscore added due to naming duplication with BuilderPage component
 const BuilderPage_ = () => {
-  const [currentPageNumber, setCurrentPageNumber] = useState<number>(0);
-  const { pages, addPage } = usePage();
-
-  const prevPage = () => {
-    if (currentPageNumber !== 0) {
-      setCurrentPageNumber(currentPageNumber - 1);
-    }
-  };
-
-  const nextPage = () => {
-    if (pages && currentPageNumber !== pages.length - 1) {
-      setCurrentPageNumber(currentPageNumber + 1);
-    }
-  };
+  const { pages, addPage, deletePage, currentPageNumber, prevPage, nextPage } =
+    usePage();
 
   return (
     <div className="container mx-auto">
@@ -38,7 +26,10 @@ const BuilderPage_ = () => {
           {pages?.map((page) => {
             if (currentPageNumber === page.pageNumber) {
               return (
-                <div className="p-3" key={page.id}>
+                <div className="p-5" key={page.id}>
+                  <AppButton onClick={() => deletePage(page.id)}>
+                    Delete page
+                  </AppButton>
                   <BuilderPage pageId={page.id} />
                 </div>
               );

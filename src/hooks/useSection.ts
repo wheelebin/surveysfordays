@@ -3,6 +3,15 @@ import { trpc } from "@/utils/trpc";
 const useSection = (pageId: string) => {
   const utils = trpc.useContext();
 
+  const deleteSectionMutation = trpc.useMutation("section.delete", {
+    onSuccess(input) {
+      utils.invalidateQueries([
+        "section.getAllByPageId",
+        { pageId: input.pageId },
+      ]);
+    },
+  });
+
   const addSectionMutation = trpc.useMutation("section.add", {
     onSuccess(input) {
       utils.invalidateQueries([
@@ -28,9 +37,14 @@ const useSection = (pageId: string) => {
     });
   };
 
+  const deleteSection = (id: string) => {
+    deleteSectionMutation.mutate({ id });
+  };
+
   return {
     sections,
     addSection,
+    deleteSection,
   };
 };
 
