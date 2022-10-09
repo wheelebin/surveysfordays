@@ -37,7 +37,11 @@ const BuilderPage_ = () => {
 
           {pages?.map((page) => {
             if (currentPageNumber === page.pageNumber) {
-              return <BuilderPage key={page.id} pageId={page.id} />;
+              return (
+                <div className="p-3" key={page.id}>
+                  <BuilderPage pageId={page.id} />
+                </div>
+              );
             }
             return <></>;
           })}
