@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import AppButton from "./AppButton";
-import { DragHandleHorizontalIcon } from "@radix-ui/react-icons";
+import { DragHandleHorizontalIcon, TrashIcon } from "@radix-ui/react-icons";
 import AppTextField from "./AppTextField";
 import DragAndDrop from "./DragAndDrop";
 import DragAndDropItem from "./DragAndDropItem";
@@ -14,6 +14,7 @@ const BuilderElementFormSelections: React.FC<Props> = ({ type }) => {
   const {
     handleOnEditSave,
     handleOnAddQuestionOption,
+    handleOnDeleteOption,
     content,
     inputElements,
     setContent,
@@ -73,10 +74,18 @@ const BuilderElementFormSelections: React.FC<Props> = ({ type }) => {
                 <DragHandleHorizontalIcon className="cursor-pointer" />
               </div>
 
-              <AppTextField
-                value={label}
-                onChange={(value) => handleOnChange(i, value)}
-              />
+              <div className="grow px-2">
+                <AppTextField
+                  value={label}
+                  onChange={(value) => handleOnChange(i, value)}
+                />
+              </div>
+              <div className="ml-2 py-5">
+                <TrashIcon
+                  onClick={() => handleOnDeleteOption(id)}
+                  className="cursor-pointer"
+                />
+              </div>
             </div>
           </DragAndDropItem>
         ))}

@@ -82,6 +82,6 @@ export const questionRouter = createRouter()
       await ctx.prisma.questionOption.deleteMany({
         where: { questionId: input.id },
       });
-      await ctx.prisma.question.delete({ where: { id: input.id } });
+      return await ctx.prisma.question.delete({ where: { id: input.id } });
     },
   });

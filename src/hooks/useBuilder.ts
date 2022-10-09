@@ -16,6 +16,18 @@ const useBuilder = () => {
 
   const utils = trpc.useContext();
 
+  const deleteQuestionOptionMutation = trpc.useMutation(
+    "questionOption.delete",
+    {
+      onSuccess(input) {
+        utils.invalidateQueries([
+          "questionOption.getAllByQuestionId",
+          { questionId: input.questionId },
+        ]);
+      },
+    }
+  );
+
   const editQuestionMutation = trpc.useMutation("question.editQuestion", {
     onSuccess(input) {
       utils.invalidateQueries([
@@ -91,6 +103,19 @@ const useBuilder = () => {
     }
   };
 
+  const handleOnDeleteOption = async (id: string) => {
+    const removedQuestionOption =
+      await deleteQuestionOptionMutation.mutateAsync({ id });
+
+    if (removedQuestionOption) {
+      setInputElements(
+        inputElements.filter(
+          (questionOption) => questionOption.id !== removedQuestionOption.id
+        )
+      );
+    }
+  };
+
   const handleOnEditSave = () => {
     if (content) {
       editQuestionMutation.mutate(content);
@@ -116,6 +141,7 @@ const useBuilder = () => {
     handleOnAdd,
     handleOnEditSave,
     handleOnAddQuestionOption,
+    handleOnDeleteOption,
     isAdding,
     isEditing,
     content,

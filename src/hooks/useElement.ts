@@ -20,6 +20,17 @@ const useElement = (
   const [placeholder, setPlaceholder] = useState<string | undefined>(undefined);
   const [type, setType] = useState<string | undefined>("");
 
+  const utils = trpc.useContext();
+
+  const deleteQuestionMutation = trpc.useMutation("question.delete", {
+    onSuccess(input) {
+      utils.invalidateQueries([
+        "question.getAllBySectionId",
+        { sectionId: input.sectionId },
+      ]);
+    },
+  });
+
   const { data } = trpc.useQuery(
     ["questionOption.getAllByQuestionId", { questionId: contentId }],
     { refetchOnWindowFocus: false }
@@ -80,12 +91,17 @@ const useElement = (
     );
   };
 
+  const handleOnDelete = () => {
+    deleteQuestionMutation.mutateAsync({ id: contentId });
+  };
+
   return {
     type,
     text,
     supportText,
     inputElements,
     handleOnEdit,
+    handleOnDelete,
   };
 };
 

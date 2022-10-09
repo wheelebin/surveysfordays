@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import BuilderInputElement from "./BuilderInputElement";
 
-import { Pencil1Icon } from "@radix-ui/react-icons";
+import { TrashIcon, Pencil1Icon } from "@radix-ui/react-icons";
 import useElement from "@/hooks/useElement";
 
 import { ELEMENTS_WITH_ADD_MULTIPLE } from "@/constants/elements";
@@ -17,7 +17,14 @@ type Props = {
 };
 
 const BuilderSectionContent = (props: Props) => {
-  const { inputElements, handleOnEdit, text, supportText, type } = useElement(
+  const {
+    inputElements,
+    handleOnEdit,
+    handleOnDelete,
+    text,
+    supportText,
+    type,
+  } = useElement(
     props.contentId,
     props.surveyId,
     props.sectionId,
@@ -51,9 +58,11 @@ const BuilderSectionContent = (props: Props) => {
 
   return (
     <div className="relative">
-      <div className="absolute top-0 right-0">
+      <div className="absolute top-0 right-0 flex">
         <Pencil1Icon onClick={handleOnEdit} className="ml-2 cursor-pointer" />
+        <TrashIcon onClick={handleOnDelete} className="ml-2 cursor-pointer" />
       </div>
+
       <div className="flex mb-4 flex-col">
         <h1 className="text-xl">{text}</h1>
         <span className="text-sm">{supportText}</span>
