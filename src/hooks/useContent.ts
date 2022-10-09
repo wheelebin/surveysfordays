@@ -6,8 +6,6 @@ const useContent = (sectionId: string) => {
   const router = useRouter();
   const { surveyId } = router.query;
 
-  const { initAdding } = useBuilderStore();
-
   const { data: questions } = trpc.useQuery(
     ["question.getAllBySectionId", { sectionId }],
     { refetchOnWindowFocus: false, enabled: !!sectionId }
@@ -17,7 +15,7 @@ const useContent = (sectionId: string) => {
     const newSurveyId = surveyId as string;
 
     if (questions) {
-      initAdding({
+      useBuilderStore.getState().initAdding({
         surveyId: newSurveyId,
         sectionId,
         orderNumber: questions.length,

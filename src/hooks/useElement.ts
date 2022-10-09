@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { trpc } from "@/utils/trpc";
 import { useBuilderStore, InputElement } from "@/stores/builder";
 
@@ -13,9 +13,6 @@ const useElement = (
   orderNumber: number,
   questionSupportText?: string | null
 ) => {
-  const builderStore = useBuilderStore();
-
-  const [isBeingEdited, setIsBeingEdited] = useState<boolean>(false);
   const [inputElements, setInputElements] = useState<InputElement[]>([]);
   const [text, setText] = useState<string | undefined>("");
   const [supportText, setSupportText] =
@@ -28,48 +25,48 @@ const useElement = (
     { refetchOnWindowFocus: false }
   );
 
+  useEffect(
+    () =>
+      useBuilderStore.subscribe(
+        ({ isEditing, content, inputElements }, prev) => {
+          const isBeingEdited = isEditing && contentId === content?.id;
+          const previousWasBeingEdited = prev.content?.id === contentId;
+
+          if (isBeingEdited) {
+            setInputElements(inputElements);
+            setText(content?.text);
+            setType(content?.type);
+            setSupportText(content?.supportText);
+          }
+
+          if (!isBeingEdited && previousWasBeingEdited) {
+            setInputElements(data || []);
+            setText(questionText);
+            setType(questionType);
+            setSupportText(questionSupportText);
+          }
+        }
+      ),
+    [contentId, data, questionText, questionType, questionSupportText]
+  );
   useEffect(() => {
-    if (builderStore.isEditing && builderStore.content?.id === contentId) {
-      setIsBeingEdited(true);
-    } else {
-      setIsBeingEdited(false);
-    }
-  }, [builderStore.isEditing, builderStore.content?.id, contentId]);
+    setInputElements(data || []);
+  }, [data]);
 
   useEffect(() => {
-    if (isBeingEdited) {
-      setType(builderStore.content?.type);
-    } else {
-      setType(questionType);
-    }
-  }, [isBeingEdited, builderStore.content?.type, questionType]);
+    setText(questionText);
+  }, [questionText]);
 
   useEffect(() => {
-    if (isBeingEdited) {
-      setInputElements(builderStore.inputElements);
-    } else if (data) {
-      setInputElements(data);
-    }
-  }, [isBeingEdited, data, builderStore.inputElements]);
+    setType(questionType);
+  }, [questionType]);
 
   useEffect(() => {
-    if (isBeingEdited) {
-      setText(builderStore.content?.text);
-    } else {
-      setText(questionText);
-    }
-  }, [isBeingEdited, questionText, builderStore.content?.text]);
-
-  useEffect(() => {
-    if (isBeingEdited) {
-      setSupportText(builderStore.content?.supportText);
-    } else if (questionSupportText) {
-      setSupportText(questionSupportText);
-    }
-  }, [isBeingEdited, questionSupportText, builderStore.content?.supportText]);
+    setSupportText(questionSupportText);
+  }, [questionSupportText]);
 
   const handleOnEdit = () => {
-    builderStore.initEditing(
+    useBuilderStore.getState().initEditing(
       {
         id: contentId,
         surveyId,
@@ -88,7 +85,6 @@ const useElement = (
     text,
     supportText,
     inputElements,
-    isEditing: builderStore.isEditing,
     handleOnEdit,
   };
 };
