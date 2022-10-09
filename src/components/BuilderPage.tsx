@@ -1,7 +1,6 @@
 import React from "react";
 import BuilderSection from "./BuilderSection";
 import AppButton from "./AppButton";
-import AppSeperator from "./AppSeperator";
 import useSection from "@/hooks/useSection";
 
 type Props = {
@@ -21,7 +20,6 @@ const BuilderPage = ({ pageId }: Props) => {
       <div className="flex justify-center">
         <AppButton onClick={addSection}>Add section</AppButton>
       </div>
-      <AppSeperator />
     </div>
   );
 };
