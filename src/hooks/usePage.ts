@@ -5,6 +5,17 @@ const usePage = () => {
   const router = useRouter();
   const queries = router.query;
 
+  const utils = trpc.useContext();
+
+  const addPageMutation = trpc.useMutation("page.add", {
+    onSuccess(input) {
+      utils.invalidateQueries([
+        "page.getAllBySurveyId",
+        { surveyId: input.surveyId },
+      ]);
+    },
+  });
+
   const { data: survey } = trpc.useQuery(
     ["survey.byId", { id: queries.surveyId as string }],
     { refetchOnWindowFocus: false }
@@ -16,8 +27,20 @@ const usePage = () => {
     { enabled: !!survey?.id, refetchOnWindowFocus: false }
   );
 
+  const addPage = () => {
+    if (!survey || !pages) {
+      return;
+    }
+
+    addPageMutation.mutate({
+      surveyId: survey.id,
+      pageNumber: pages.length,
+    });
+  };
+
   return {
     pages,
+    addPage,
   };
 };
 

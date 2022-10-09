@@ -9,7 +9,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons";
 // TODO Fix this BuilderPage_, underscore added due to naming duplication with BuilderPage component
 const BuilderPage_ = () => {
   const [currentPageNumber, setCurrentPageNumber] = useState<number>(0);
-  const { pages } = usePage();
+  const { pages, addPage } = usePage();
 
   const prevPage = () => {
     if (currentPageNumber !== 0) {
@@ -43,7 +43,7 @@ const BuilderPage_ = () => {
           })}
 
           <div className="flex justify-around items-center">
-            <AppButton>Add page</AppButton>
+            <AppButton onClick={addPage}>Add page</AppButton>
           </div>
         </div>
         <div className="ml-20 w-1/3">

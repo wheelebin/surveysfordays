@@ -20,7 +20,6 @@ A survey form builder
 # Things Need To Do
 
 DO THE BELLOW
-- TODO Implement add new page
 - TODO Implement deletion of pages, sections, content or/and content options
 - TODO Implement dragging of pages, sections & content somehow (Dragging of content options is already available through builder forms)
 - TODO Polish design for existing pages
