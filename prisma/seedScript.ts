@@ -21,7 +21,7 @@ const duplicate = <T>(
 ): T[] => {
   // Will pick random amount of items to duplicate if amount is 0
   const items: T[] = [];
-  const timesToRun = amount ? amount : getRandomNumber(1, 2);
+  const timesToRun = amount ? amount : getRandomNumber(2, 3);
   for (let i = 0; i < timesToRun; i++) {
     items.push(itemMethod(i));
   }

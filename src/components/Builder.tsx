@@ -37,13 +37,7 @@ const Builder: React.FC<Props> = ({ children }) => {
         />
       );
     }
-    return (
-      <BuilderElementFormInputs
-        key={content?.type}
-        elementType={content?.type}
-        questionId={content?.id}
-      />
-    );
+    return <BuilderElementFormInputs key={content?.type} />;
   };
 
   const getElementSelector = () => {

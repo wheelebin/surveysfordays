@@ -24,7 +24,7 @@ const useContent = (sectionId: string) => {
   };
 
   return {
-    questions,
+    questions: questions || [],
     addContent,
   };
 };

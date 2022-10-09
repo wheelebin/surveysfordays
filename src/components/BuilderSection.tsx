@@ -13,14 +13,18 @@ const BuilderSection = ({ sectionId }: Props) => {
   return (
     <div className=" my-5 p-5">
       <div>
-        {questions?.map((question) => (
-          <div
-            key={question.id}
-            className="hover:bg-slate-50 py-3 px-2 shadow my-4"
-          >
-            <BuilderSectionContent contentId={question.id} {...question} />
-          </div>
-        ))}
+        {questions.length > 0 ? (
+          questions.map((question) => (
+            <div
+              key={question.id}
+              className="hover:bg-slate-50 py-3 px-2 shadow my-4"
+            >
+              <BuilderSectionContent contentId={question.id} {...question} />
+            </div>
+          ))
+        ) : (
+          <div className=" my-5 p-5 bg-slate-50">No content</div>
+        )}
       </div>
       <div className="flex justify-center">
         <AppButton onClick={addContent}>Add content</AppButton>

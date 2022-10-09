@@ -58,7 +58,7 @@ const useBuilder = () => {
   const handleOnAdd = async (type: string) => {
     const { surveyId, sectionId, orderNumber } = initialContent || {};
 
-    if (!surveyId || !sectionId || !orderNumber) {
+    if (!surveyId || !sectionId || orderNumber === undefined) {
       return;
     }
 

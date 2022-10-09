@@ -9,7 +9,7 @@ type Props = {
 };
 
 const BuilderPage = ({ pageId }: Props) => {
-  const { sections } = useSection(pageId);
+  const { sections, addSection } = useSection(pageId);
 
   return (
     <div>
@@ -19,7 +19,7 @@ const BuilderPage = ({ pageId }: Props) => {
         ))}
       </div>
       <div className="flex justify-center">
-        <AppButton>Add section</AppButton>
+        <AppButton onClick={addSection}>Add section</AppButton>
       </div>
       <AppSeperator />
     </div>
