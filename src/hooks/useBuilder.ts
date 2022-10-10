@@ -148,6 +148,7 @@ const useBuilder = () => {
     inputElements,
     setContent,
     setInputElements,
+    clear,
   };
 };
 

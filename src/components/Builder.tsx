@@ -5,6 +5,7 @@ import { ELEMENT_GROUPS } from "@/constants/elements";
 import BuilderElementFormSelections from "./BuilderElementFormSelections";
 import { ELEMENTS_WITH_ADD_MULTIPLE } from "@/constants/elements";
 import useBuilder from "@/hooks/useBuilder";
+import { ExitIcon } from "@radix-ui/react-icons";
 
 // TODO Will create a BuilderImageForm, BuilderTextForm and etc
 // and switch the builder form type out depending on the current elementType
@@ -16,12 +17,16 @@ type Props = {
 
 const Builder: React.FC<Props> = ({ children }) => {
   const [show, setShow] = useState<boolean>(false);
-  const { handleOnAdd, content, isAdding, isEditing } = useBuilder();
+  const { handleOnAdd, content, isAdding, isEditing, clear } = useBuilder();
 
   useEffect(() => setShow(isAdding || isEditing), [isEditing, isAdding]);
 
   const handleOnChange = (type: string) => {
     handleOnAdd(type);
+  };
+
+  const handleOnExit = () => {
+    clear();
   };
 
   const getFormElement = () => {
@@ -61,6 +66,9 @@ const Builder: React.FC<Props> = ({ children }) => {
 
   return show ? (
     <div className="shadow p-4">
+      <div className="pb-2">
+        <ExitIcon onClick={handleOnExit} className="cursor-pointer" />
+      </div>
       {getElementSelector()}
       {getFormElement()}
     </div>
