@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-
+import BuilderHeader from "@/components/BuilderHeader";
 import AppButton from "@/components/AppButton";
 import Builder from "@/components/Builder";
 import BuilderPage from "@/components/BuilderPage";
@@ -12,7 +12,7 @@ const BuilderPage_ = () => {
     usePage();
 
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto ">
       <div className="flex justify-center h-screen">
         <div className="flex flex-col w-1/2 overflow-y-scroll no-scrollbar">
           <div className="flex flex-row justify-around items-center">
@@ -26,11 +26,11 @@ const BuilderPage_ = () => {
           {pages?.map((page) => {
             if (currentPageNumber === page.pageNumber) {
               return (
-                <div className="p-5" key={page.id}>
-                  <AppButton onClick={() => deletePage(page.id)}>
-                    Delete page
-                  </AppButton>
-                  <BuilderPage pageId={page.id} />
+                <div key={page.id}>
+                  <BuilderHeader onDelete={() => deletePage(page.id)} />
+                  <div className="px-5 border border-dotted">
+                    <BuilderPage pageId={page.id} />
+                  </div>
                 </div>
               );
             }

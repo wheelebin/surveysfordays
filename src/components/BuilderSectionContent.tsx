@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import BuilderInputElement from "./BuilderInputElement";
+import BuilderHeader from "./BuilderHeader";
 
 import { TrashIcon, Pencil1Icon } from "@radix-ui/react-icons";
 import useElement from "@/hooks/useElement";
@@ -58,10 +59,7 @@ const BuilderSectionContent = (props: Props) => {
 
   return (
     <div className="relative">
-      <div className="absolute top-0 right-0 flex">
-        <Pencil1Icon onClick={handleOnEdit} className="ml-2 cursor-pointer" />
-        <TrashIcon onClick={handleOnDelete} className="ml-2 cursor-pointer" />
-      </div>
+      <BuilderHeader onEdit={handleOnEdit} onDelete={handleOnDelete} />
 
       <div className="flex mb-4 flex-col">
         <h1 className="text-xl">{text}</h1>

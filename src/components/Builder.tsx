@@ -60,7 +60,7 @@ const Builder: React.FC<Props> = ({ children }) => {
   };
 
   return show ? (
-    <div>
+    <div className="shadow p-4">
       {getElementSelector()}
       {getFormElement()}
     </div>
