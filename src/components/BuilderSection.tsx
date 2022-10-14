@@ -15,10 +15,7 @@ const BuilderSection = ({ sectionId }: Props) => {
       <div>
         {questions.length > 0 ? (
           questions.map((question) => (
-            <div
-              key={question.id}
-              className="hover:bg-slate-50 py-3 px-3 shadow-xl rounded-md"
-            >
+            <div key={question.id} className="py-3 px-3 shadow-xl rounded-md">
               <BuilderSectionContent contentId={question.id} {...question} />
             </div>
           ))
