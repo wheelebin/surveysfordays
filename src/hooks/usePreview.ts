@@ -6,7 +6,8 @@ import useBuilder from "./useBuilder";
 import { useBuilderStore } from "@/stores/builder";
 
 const usePreview = () => {
-  const { sections, addSection, deleteSection, surveyId } = useSection();
+  const { sections, addSection, updateSectionOrder, deleteSection, surveyId } =
+    useSection();
   const { handleOnAdd, content, isAdding, isEditing, clear } = useBuilder();
   const utils = trpc.useContext();
 
@@ -48,6 +49,7 @@ const usePreview = () => {
     addSection,
     deleteSection,
     addContent,
+    updateSectionOrder,
   };
 };
 

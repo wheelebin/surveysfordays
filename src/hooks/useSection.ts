@@ -1,4 +1,5 @@
 import { trpc } from "@/utils/trpc";
+import { Section } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -28,6 +29,12 @@ const useSection = () => {
     },
   });
 
+  const editSectionMutation = trpc.useMutation("section.edit", {
+    onSuccess(input) {
+      utils.invalidateQueries(["section.getAllBySurveyId", { surveyId }]);
+    },
+  });
+
   const { data: sections } = trpc.useQuery(
     ["section.getAllBySurveyId", { surveyId }],
     { refetchOnWindowFocus: false }
@@ -44,6 +51,10 @@ const useSection = () => {
     });
   };
 
+  const updateSectionOrder = async (updatedSections: Section[]) => {
+    return await editSectionMutation.mutateAsync(updatedSections);
+  };
+
   const deleteSection = (id: string) => {
     deleteSectionMutation.mutate({ id });
   };
@@ -52,6 +63,7 @@ const useSection = () => {
     sections,
     addSection,
     deleteSection,
+    updateSectionOrder,
     surveyId,
   };
 };

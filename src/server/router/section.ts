@@ -33,6 +33,25 @@ export const sectionRouter = createRouter()
       return section;
     },
   })
+  .mutation("edit", {
+    input: z.array(
+      z.object({
+        id: z.string(),
+        sectionNumber: z.number(),
+      })
+    ),
+    async resolve({ input, ctx }) {
+      const result = await Promise.all(
+        input.map((section) =>
+          ctx.prisma.section.update({
+            where: { id: section.id },
+            data: section,
+          })
+        )
+      );
+      return result;
+    },
+  })
   .query("getAllBySurveyId", {
     input: z.object({
       surveyId: z.string(),
