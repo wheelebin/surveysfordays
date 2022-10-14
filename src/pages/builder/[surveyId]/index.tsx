@@ -14,11 +14,11 @@ const BuilderPage_ = () => {
           <BuilderPreview />
           <Builder questionId="question-0-0" />
         </div>
-        <div className="flex flex-col w-1/2 overflow-y-scroll no-scrollbar">
+        <div className="flex flex-col w-1/2 overflow-y-scroll no-scrollbar mt-2">
           {sections?.map((section) => {
             return (
-              <div className="py-2" key={section.id}>
-                <div className="px-5 border border-dotted">
+              <div className="py-2 my-12" key={section.id}>
+                <div className="px-5">
                   <BuilderSection sectionId={section.id} />
                 </div>
               </div>

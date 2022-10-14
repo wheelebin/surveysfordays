@@ -38,7 +38,9 @@ const BuilderPreview: React.FC<Props> = ({ children }) => {
   }
 
   return !show ? (
-    <div className="shadow p-4">
+    <div className="shadow-2xl rounded-md p-4 mt-2">
+      <h1 className="text-xl">Overview</h1>
+      <hr className="my-2" />
       <AppButton className="w-full" onClick={addContent}>
         Add content
       </AppButton>
@@ -46,15 +48,18 @@ const BuilderPreview: React.FC<Props> = ({ children }) => {
         {sections?.map((section, i) => {
           const questions = section.questions.map((question) => (
             <div key={question.id} className="flex flex-col">
-              <span>{question.text}</span>
-              <span className="text-xs">{question.type}</span>
+              <span>
+                <span>{section.sectionNumber + 1}. </span>
+                {question.text}
+              </span>
+              {/* <span className="text-xs">{question.type}</span> */}
             </div>
           ));
 
           return (
             <DragAndDropItem key={section.id} id={section.id} index={i}>
               <div
-                className="py-2 flex items-center justify-between"
+                className="py-5 flex items-center justify-between"
                 key={section.id}
               >
                 <div className="mr-2 cursor-pointer flex items-center">
