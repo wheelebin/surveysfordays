@@ -1,13 +1,20 @@
 import { trpc } from "@/utils/trpc";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
-const useSection = (pageId: string) => {
+const useSection = () => {
+  const [surveyId, setSurveyId] = useState<string>("");
+  const router = useRouter();
+  const queries = router.query;
   const utils = trpc.useContext();
+
+  useEffect(() => setSurveyId(queries.surveyId as string), [queries.surveyId]);
 
   const deleteSectionMutation = trpc.useMutation("section.delete", {
     onSuccess(input) {
       utils.invalidateQueries([
-        "section.getAllByPageId",
-        { pageId: input.pageId },
+        "section.getAllBySurveyId",
+        { surveyId: input.surveyId },
       ]);
     },
   });
@@ -15,24 +22,24 @@ const useSection = (pageId: string) => {
   const addSectionMutation = trpc.useMutation("section.add", {
     onSuccess(input) {
       utils.invalidateQueries([
-        "section.getAllByPageId",
-        { pageId: input.pageId },
+        "section.getAllBySurveyId",
+        { surveyId: input.surveyId },
       ]);
     },
   });
 
   const { data: sections } = trpc.useQuery(
-    ["section.getAllByPageId", { pageId }],
+    ["section.getAllBySurveyId", { surveyId }],
     { refetchOnWindowFocus: false }
   );
 
-  const addSection = () => {
+  const addSection = async () => {
     if (!sections) {
       return;
     }
 
-    addSectionMutation.mutate({
-      pageId,
+    return await addSectionMutation.mutateAsync({
+      surveyId,
       sectionNumber: sections.length,
     });
   };
@@ -45,6 +52,7 @@ const useSection = (pageId: string) => {
     sections,
     addSection,
     deleteSection,
+    surveyId,
   };
 };
 

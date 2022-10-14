@@ -23,9 +23,9 @@ const BuilderSection = ({ sectionId }: Props) => {
           <div className=" my-5 p-3 bg-slate-50">No content</div>
         )}
       </div>
-      <div className="flex justify-center">
+      {/*  <div className="flex justify-center">
         <AppButton onClick={addContent}>Add content</AppButton>
-      </div>
+      </div> */}
     </div>
   );
 };

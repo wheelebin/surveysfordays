@@ -5,7 +5,7 @@ import { z } from "zod";
 export const sectionRouter = createRouter()
   .mutation("add", {
     input: z.object({
-      pageId: z.string(),
+      surveyId: z.string(),
       sectionNumber: z.number(),
     }),
     async resolve({ input, ctx }) {
@@ -33,13 +33,15 @@ export const sectionRouter = createRouter()
       return section;
     },
   })
-  .query("getAllByPageId", {
+  .query("getAllBySurveyId", {
     input: z.object({
-      pageId: z.string(),
+      surveyId: z.string(),
     }),
     async resolve({ input, ctx }) {
+      // TODO Maybe create seperate query for the include or have a "withQuestions" param
       return await ctx.prisma.section.findMany({
-        where: { pageId: input.pageId },
+        where: { surveyId: input.surveyId },
+        include: { questions: true },
         orderBy: [{ sectionNumber: "asc" }],
       });
     },

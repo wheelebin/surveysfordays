@@ -59,7 +59,7 @@ const BuilderSectionContent = (props: Props) => {
 
   return (
     <div className="relative">
-      <BuilderHeader onEdit={handleOnEdit} onDelete={handleOnDelete} />
+      <BuilderHeader onEdit={handleOnEdit} />
 
       <div className="flex mb-4 flex-col">
         <h1 className="text-xl">{text}</h1>

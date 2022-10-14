@@ -1,7 +1,6 @@
 import {
   PrismaClient,
   Prisma,
-  Page,
   Section,
   Question,
   QuestionOption,
@@ -40,7 +39,6 @@ const dropDatabase = async () => {
   await prisma.text.deleteMany();
   await prisma.image.deleteMany();
   await prisma.section.deleteMany();
-  await prisma.page.deleteMany();
   await prisma.survey.deleteMany();
 };
 
@@ -54,24 +52,12 @@ export const initMock = () => {
     endsAt: new Date("2022-12-29T00:00:00.000Z"),
   };
 
-  const pages = duplicate<Page>((index: number) => ({
-    pageNumber: index,
-    id: `page-${index}`,
+  const sections = duplicate<Section>((index: number) => ({
+    id: `section-${index}}`,
     surveyId: survey.id,
+    sectionNumber: index,
     createdAt: new Date(),
   }));
-
-  const sections: Section[] = [];
-  pages.forEach((page, pageIndex) =>
-    sections.push(
-      ...duplicate<Section>((index: number) => ({
-        pageId: page.id,
-        id: `section-${index}-${pageIndex}`,
-        sectionNumber: index,
-        createdAt: new Date(),
-      }))
-    )
-  );
 
   // TODO Set question and question options based on hardcoded questions
   // for the different question types
@@ -112,7 +98,6 @@ export const initMock = () => {
 
   return {
     survey,
-    pages,
     sections,
     questions,
     questionOptions,
@@ -121,23 +106,13 @@ export const initMock = () => {
 
 export async function main() {
   await dropDatabase();
-  const { survey, pages, sections, questions, questionOptions } = initMock();
+  const { survey, sections, questions, questionOptions } = initMock();
 
   await prisma.survey.upsert({
     where: { id: survey.id },
     update: {},
     create: survey,
   });
-
-  await Promise.any(
-    pages.map((page) =>
-      prisma.page.upsert({
-        where: { id: page.id },
-        update: {},
-        create: page,
-      })
-    )
-  );
 
   await Promise.any(
     sections.map((section) =>
