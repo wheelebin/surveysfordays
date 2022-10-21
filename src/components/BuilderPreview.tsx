@@ -13,9 +13,10 @@ import { Retryer } from "react-query/types/core/retryer";
 type Props = {
   children?: React.ReactNode;
   questionId?: string;
+  scrollToSection: (sectionNumber: number) => void;
 };
 
-const BuilderPreview: React.FC<Props> = ({ children }) => {
+const BuilderPreview: React.FC<Props> = ({ children, scrollToSection }) => {
   const [show, setShow] = useState<boolean>(false);
   const { handleOnAdd, content, isAdding, isEditing, clear } = useBuilder();
   const { sections, addContent, deleteSection, updateSectionOrder } =
@@ -38,7 +39,7 @@ const BuilderPreview: React.FC<Props> = ({ children }) => {
   }
 
   return !show ? (
-    <div className="shadow-2xl rounded-md p-4 mt-2">
+    <div className="shadow rounded-md p-4 mt-2 bg-white">
       <h1 className="text-xl">Overview</h1>
       <hr className="my-2" />
       <AppButton className="w-full" onClick={addContent}>
@@ -64,7 +65,9 @@ const BuilderPreview: React.FC<Props> = ({ children }) => {
               >
                 <div className="mr-2 cursor-pointer flex items-center">
                   <DragHandleHorizontalIcon className="mr-4" />
-                  {questions}
+                  <div onClick={() => scrollToSection(section.sectionNumber)}>
+                    {questions}
+                  </div>
                 </div>
                 <div>
                   <TrashIcon

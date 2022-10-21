@@ -17,19 +17,22 @@ A survey form builder
 
 - Append revision table ID to answer table so when user completes survey a we keep track of which revision
 
-# Things Need To Do
+# Good ol' To Do
 
-DO THE BELLOW
+## Doing
 
-- TODO Implement dragging of pages, sections & content somehow (Dragging of content options is already available through builder forms)
+- TODO Create & implement card component
 - TODO Polish design for existing pages
+
+## Backlog Prio
+
 - TODO Implement next auth
 - TODO Implement completion of surveys by users outside of our system (answer table and etc)
 - TODO Implement publishing of created surveys so they can be completed by other users
 - TODO Implement a simple results view for the publisher to see the result of the survey
-- TODO Add skeleton loading to components that need it
 
-# Things I Want To Do
+## Backlog
 
 - TODO Extract ui components for survey builder into it's own repo & pkg
 - TODO Look into https://storybook.js.org/docs/react/writing-tests/interaction-testing
+- TODO Add skeleton loading to components that need it

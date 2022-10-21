@@ -65,7 +65,7 @@ const Builder: React.FC<Props> = ({ children }) => {
   };
 
   return show ? (
-    <div className="shadow p-4">
+    <div className="shadow p-4 bg-white">
       <div className="pb-2">
         <ExitIcon onClick={handleOnExit} className="cursor-pointer" />
       </div>
