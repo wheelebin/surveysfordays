@@ -21,7 +21,6 @@ A survey form builder
 
 ## Doing
 
-- TODO Create & implement card component
 - TODO Add menu dots to overview and put delete & edit there (Remove edit from cards)
 - TODO Polish design for existing pages
 
