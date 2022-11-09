@@ -6,6 +6,7 @@ import BuilderElementFormSelections from "./BuilderElementFormSelections";
 import { ELEMENTS_WITH_ADD_MULTIPLE } from "@/constants/elements";
 import useBuilder from "@/hooks/useBuilder";
 import { ExitIcon } from "@radix-ui/react-icons";
+import AppCard from "./AppCard";
 
 // TODO Will create a BuilderImageForm, BuilderTextForm and etc
 // and switch the builder form type out depending on the current elementType
@@ -65,13 +66,13 @@ const Builder: React.FC<Props> = ({ children }) => {
   };
 
   return show ? (
-    <div className="shadow p-4 bg-white">
+    <AppCard>
       <div className="pb-2">
         <ExitIcon onClick={handleOnExit} className="cursor-pointer" />
       </div>
       {getElementSelector()}
       {getFormElement()}
-    </div>
+    </AppCard>
   ) : (
     <></>
   );

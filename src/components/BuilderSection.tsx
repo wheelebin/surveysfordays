@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import BuilderSectionContent from "./BuilderSectionContent";
-import AppButton from "./AppButton";
+import AppCard from "./AppCard";
 import useContent from "@/hooks/useContent";
 
 type Props = {
@@ -27,14 +27,9 @@ const BuilderSection = ({ sectionId, isCurrent }: Props) => {
       <div>
         {questions.length > 0 ? (
           questions.map((question) => (
-            <div
-              key={question.id}
-              className={`py-5 px-3 shadow rounded-md bg-white ${
-                isCurrent && "py-20"
-              }`}
-            >
+            <AppCard key={question.id} isCurrent={isCurrent}>
               <BuilderSectionContent contentId={question.id} {...question} />
-            </div>
+            </AppCard>
           ))
         ) : (
           <div className=" my-5 p-3 bg-slate-50">No content</div>

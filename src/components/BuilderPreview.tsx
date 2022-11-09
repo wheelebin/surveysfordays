@@ -2,10 +2,14 @@ import React, { useEffect, useState } from "react";
 import useBuilder from "@/hooks/useBuilder";
 import usePreview from "@/hooks/usePreview";
 import AppButton from "./AppButton";
-import { DragHandleHorizontalIcon, TrashIcon } from "@radix-ui/react-icons";
+import {
+  DragHandleHorizontalIcon,
+  TrashIcon,
+  Pencil1Icon,
+} from "@radix-ui/react-icons";
 import DragAndDrop from "./DragAndDrop";
 import DragAndDropItem from "./DragAndDropItem";
-import { Retryer } from "react-query/types/core/retryer";
+import AppCard from "./AppCard";
 
 // TODO Will create a BuilderImageForm, BuilderTextForm and etc
 // and switch the builder form type out depending on the current elementType
@@ -19,8 +23,13 @@ type Props = {
 const BuilderPreview: React.FC<Props> = ({ children, scrollToSection }) => {
   const [show, setShow] = useState<boolean>(false);
   const { handleOnAdd, content, isAdding, isEditing, clear } = useBuilder();
-  const { sections, addContent, deleteSection, updateSectionOrder } =
-    usePreview();
+  const {
+    sections,
+    addContent,
+    deleteSection,
+    updateSectionOrder,
+    handleOnEdit,
+  } = usePreview();
 
   useEffect(() => setShow(isAdding || isEditing), [isEditing, isAdding]);
 
@@ -39,48 +48,51 @@ const BuilderPreview: React.FC<Props> = ({ children, scrollToSection }) => {
   }
 
   return !show ? (
-    <div className="shadow rounded-md p-4 mt-2 bg-white">
-      <h1 className="text-xl">Overview</h1>
-      <hr className="my-2" />
-      <AppButton className="w-full" onClick={addContent}>
-        Add content
-      </AppButton>
-      <DragAndDrop onDragEnd={handleOnDragEnd} list={sections}>
-        {sections?.map((section, i) => {
-          const questions = section.questions.map((question) => (
-            <div key={question.id} className="flex flex-col">
-              <span>
-                <span>{section.sectionNumber + 1}. </span>
-                {question.text}
-              </span>
-              {/* <span className="text-xs">{question.type}</span> */}
-            </div>
-          ));
+    <AppCard>
+      <>
+        <h1 className="text-xl">Overview</h1>
+        <hr className="my-2" />
+        <AppButton className="w-full" onClick={addContent}>
+          Add content
+        </AppButton>
+        <DragAndDrop onDragEnd={handleOnDragEnd} list={sections}>
+          {sections?.map((section, i) => {
+            const questions = section.questions.map((question) => (
+              <div key={question.id} className="flex flex-col">
+                <span>
+                  <span>{section.sectionNumber + 1}. </span>
+                  {question.text}
+                </span>
+                {/* <span className="text-xs">{question.type}</span> */}
+              </div>
+            ));
 
-          return (
-            <DragAndDropItem key={section.id} id={section.id} index={i}>
-              <div
-                className="py-5 flex items-center justify-between"
-                key={section.id}
-              >
-                <div className="mr-2 cursor-pointer flex items-center">
-                  <DragHandleHorizontalIcon className="mr-4" />
-                  <div onClick={() => scrollToSection(section.sectionNumber)}>
-                    {questions}
+            return (
+              <DragAndDropItem key={section.id} id={section.id} index={i}>
+                <div
+                  className="py-5 flex items-center justify-between"
+                  key={section.id}
+                >
+                  <div className="mr-2 cursor-pointer flex items-center">
+                    <DragHandleHorizontalIcon className="mr-4" />
+                    <div onClick={() => scrollToSection(section.sectionNumber)}>
+                      {questions}
+                    </div>
+                  </div>
+                  <div>
+                    <TrashIcon
+                      onClick={() => deleteSection(section.id)}
+                      className="cursor-pointer h-4 w-4"
+                    />
+                    <Pencil1Icon onClick={() => handleOnEdit(section.id)} />
                   </div>
                 </div>
-                <div>
-                  <TrashIcon
-                    onClick={() => deleteSection(section.id)}
-                    className="cursor-pointer h-4 w-4"
-                  />
-                </div>
-              </div>
-            </DragAndDropItem>
-          );
-        })}
-      </DragAndDrop>
-    </div>
+              </DragAndDropItem>
+            );
+          })}
+        </DragAndDrop>
+      </>
+    </AppCard>
   ) : (
     <></>
   );
