@@ -70,5 +70,4 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
       initialContent: undefined,
       inputElements: [],
     }),
-  // increasePopulation: () => set((state) => ({ bears: state.bears + 1 })),
 }));
