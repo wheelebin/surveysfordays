@@ -4,8 +4,7 @@ import BuilderSection from "@/components/BuilderSection";
 import useSection from "@/hooks/useSection";
 import { useState } from "react";
 
-// TODO Fix this BuilderPage_, underscore added due to naming duplication with BuilderPage component
-const BuilderPage_ = () => {
+const BuilderPage = () => {
   const [currentSectionNumber, setCurrentSectionNumber] = useState(0);
   const { sections } = useSection();
 
@@ -39,4 +38,4 @@ const BuilderPage_ = () => {
   );
 };
 
-export default BuilderPage_;
+export default BuilderPage;
