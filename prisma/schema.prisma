@@ -52,19 +52,21 @@ model Image {
 // TODO Reconcider the naming of bellow tables
 // Question could be Content and QuestionOptions could be InputElement (examples)
 model Question {
-    id          String   @id @default(cuid())
-    type        String
-    surveyId    String
-    section     Section  @relation(fields: [sectionId], references: [id], onDelete: Cascade)
-    sectionId   String
-    text        String
-    supportText String?
-    orderNumber Int
-    createdAt   DateTime @default(now())
+    id              String           @id @default(cuid())
+    type            String
+    surveyId        String
+    section         Section          @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+    sectionId       String
+    text            String
+    supportText     String?
+    orderNumber     Int
+    questionOptions QuestionOption[]
+    createdAt       DateTime         @default(now())
 }
 
 model QuestionOption {
     id          String   @id @default(cuid())
+    question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
     questionId  String
     type        String // RADIO, RADIOTEXT, TEXT, NUMBER, DATE, TIME, CHECKBOX
     label       String

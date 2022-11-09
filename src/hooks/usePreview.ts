@@ -45,15 +45,14 @@ const usePreview = () => {
   };
 
   const handleOnEdit = (sectionId: string) => {
-    // TODO Honestly just remove/combine section or question
-
     const section = sections?.find(({ id }) => id === sectionId);
 
     const question = section && section.questions[0];
 
+    const questionOptions = question?.questionOptions || [];
+
     if (section && question) {
-      // How do I get the input elements here?
-      // useBuilderStore.getState().initEditing(question, [inputElements]);
+      useBuilderStore.getState().initEditing(question, questionOptions);
     }
   };
 

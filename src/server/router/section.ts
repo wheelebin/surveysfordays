@@ -57,10 +57,17 @@ export const sectionRouter = createRouter()
       surveyId: z.string(),
     }),
     async resolve({ input, ctx }) {
-      // TODO Maybe create seperate query for the include or have a "withQuestions" param
       return await ctx.prisma.section.findMany({
         where: { surveyId: input.surveyId },
-        include: { questions: true },
+        include: {
+          questions: {
+            include: {
+              questionOptions: {
+                orderBy: { orderNumber: "asc" },
+              },
+            },
+          },
+        },
         orderBy: [{ sectionNumber: "asc" }],
       });
     },

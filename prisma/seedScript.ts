@@ -63,18 +63,16 @@ export const initMock = () => {
   // for the different question types
   const questions: Question[] = [];
   sections.forEach((section, sectionIndex) =>
-    questions.push(
-      ...duplicate<Question>((index: number) => ({
-        id: `question-${index}-${sectionIndex}`,
-        sectionId: section.id,
-        surveyId: survey.id,
-        text: "What is your favorite color?",
-        supportText: "Some support text",
-        type: "RADIO",
-        orderNumber: index,
-        createdAt: new Date(),
-      }))
-    )
+    questions.push({
+      id: `question-${sectionIndex}`,
+      sectionId: section.id,
+      surveyId: survey.id,
+      text: "What is your favorite color?",
+      supportText: "Some support text",
+      type: "RADIO",
+      orderNumber: 0,
+      createdAt: new Date(),
+    })
   );
 
   const questionOptions: QuestionOption[] = [];
