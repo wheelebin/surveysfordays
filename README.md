@@ -36,3 +36,8 @@ A survey form builder
 - TODO Extract ui components for survey builder into it's own repo & pkg
 - TODO Look into https://storybook.js.org/docs/react/writing-tests/interaction-testing
 - TODO Add skeleton loading to components that need it
+
+## Analyze
+
+- TODO Section could have it's own title and description which is visible in the preview
+  - And then the secion could still have multiple pieces of content and etc like planned if the user ops for it
