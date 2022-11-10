@@ -31,12 +31,7 @@ const useBuilder = () => {
   const editQuestionMutation = trpc.useMutation("question.editQuestion", {
     onSuccess(input) {
       utils.invalidateQueries([
-        "question.getAllBySectionId",
-        { sectionId: input.sectionId },
-      ]);
-
-      utils.invalidateQueries([
-        "section.getAllBySurveyId",
+        "question.getAllBySurveyId",
         { surveyId: input.surveyId },
       ]);
     },
@@ -66,26 +61,21 @@ const useBuilder = () => {
   const addQuestionMutation = trpc.useMutation("question.add", {
     onSuccess(input) {
       utils.invalidateQueries([
-        "question.getAllBySectionId",
-        { sectionId: input.sectionId },
-      ]);
-      utils.invalidateQueries([
-        "section.getAllBySurveyId",
+        "question.getAllBySurveyId",
         { surveyId: input.surveyId },
       ]);
     },
   });
 
   const handleOnAdd = async (type: string) => {
-    const { surveyId, sectionId, orderNumber } = initialContent || {};
+    const { surveyId, orderNumber } = initialContent || {};
 
-    if (!surveyId || !sectionId || orderNumber === undefined) {
+    if (!surveyId || orderNumber === undefined) {
       return;
     }
 
     const newQuestion = await addQuestionMutation.mutateAsync({
       surveyId,
-      sectionId,
       type,
       orderNumber,
       text: "Change me :)",

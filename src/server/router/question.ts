@@ -11,7 +11,6 @@ export const questionRouter = createRouter()
   .mutation("add", {
     input: z.object({
       surveyId: z.string(),
-      sectionId: z.string(),
       type: z.string(),
       text: z.string(),
       supportText: z.string().optional().nullable(),
