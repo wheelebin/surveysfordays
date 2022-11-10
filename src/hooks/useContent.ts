@@ -2,9 +2,6 @@ import { trpc } from "@/utils/trpc";
 import { useBuilderStore } from "@/stores/builder";
 
 const useContent = (surveyId: string) => {
-  // const router = useRouter();
-  // const { surveyId } = router.query;
-
   const { data: questions } = trpc.useQuery(
     ["question.getAllBySurveyId", { surveyId }],
     { refetchOnWindowFocus: false, enabled: !!surveyId }

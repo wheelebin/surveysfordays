@@ -39,7 +39,7 @@ const BuilderPreview: React.FC<Props> = ({ children, scrollToQuestion }) => {
 
   const handleOnDragEnd = (list: any) => {
     // TODO Handle updating orderNumber here and not in hanldeOnEditSave
-    const newList = list.map((item, i) => ({ ...item, sectionNumber: i }));
+    const newList = list.map((item, i) => ({ ...item, orderNumber: i }));
     updateQuestionOrder(newList);
   };
 

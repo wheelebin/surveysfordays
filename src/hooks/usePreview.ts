@@ -2,24 +2,25 @@ import { trpc } from "@/utils/trpc";
 import { Question } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useBuilderStore } from "@/stores/builder";
+import { useSurveyStore } from "@/stores/survey";
 
 const usePreview = () => {
-  const router = useRouter();
-  const queries = router.query;
-  const { surveyId } = queries;
+  const { currentSurveyId } = useSurveyStore();
 
   const { data: questions } = trpc.useQuery(
-    ["question.getAllBySurveyId", { surveyId: surveyId as string }],
-    { refetchOnWindowFocus: false, enabled: !!surveyId }
+    ["question.getAllBySurveyId", { surveyId: currentSurveyId as string }],
+    { refetchOnWindowFocus: false, enabled: !!currentSurveyId }
   );
 
+  console.log(currentSurveyId);
+
   const addQuestion = async () => {
-    if (!questions) {
+    if (!questions || !currentSurveyId) {
       return;
     }
 
     useBuilderStore.getState().initAdding({
-      surveyId: surveyId as string,
+      surveyId: currentSurveyId,
       orderNumber: questions.length,
     });
   };
