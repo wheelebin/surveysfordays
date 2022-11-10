@@ -1,7 +1,6 @@
 import {
   PrismaClient,
   Prisma,
-  Section,
   Question,
   QuestionOption,
   Text,
@@ -38,7 +37,6 @@ const dropDatabase = async () => {
   await prisma.question.deleteMany();
   await prisma.text.deleteMany();
   await prisma.image.deleteMany();
-  await prisma.section.deleteMany();
   await prisma.survey.deleteMany();
 };
 
@@ -52,28 +50,17 @@ export const initMock = () => {
     endsAt: new Date("2022-12-29T00:00:00.000Z"),
   };
 
-  const sections = duplicate<Section>((index: number) => ({
-    id: `section-${index}}`,
-    surveyId: survey.id,
-    sectionNumber: index,
-    createdAt: new Date(),
-  }));
-
   // TODO Set question and question options based on hardcoded questions
   // for the different question types
-  const questions: Question[] = [];
-  sections.forEach((section, sectionIndex) =>
-    questions.push({
-      id: `question-${sectionIndex}`,
-      sectionId: section.id,
-      surveyId: survey.id,
-      text: "What is your favorite color?",
-      supportText: "Some support text",
-      type: "RADIO",
-      orderNumber: 0,
-      createdAt: new Date(),
-    })
-  );
+  const questions = duplicate<Question>((index: number) => ({
+    id: `question-${index}`,
+    surveyId: survey.id,
+    text: "What is your favorite color?",
+    supportText: "Some support text",
+    type: "RADIO",
+    orderNumber: 0,
+    createdAt: new Date(),
+  }));
 
   const questionOptions: QuestionOption[] = [];
   questions.forEach((question, questionIndex) =>
@@ -96,7 +83,6 @@ export const initMock = () => {
 
   return {
     survey,
-    sections,
     questions,
     questionOptions,
   };
@@ -104,23 +90,13 @@ export const initMock = () => {
 
 export async function main() {
   await dropDatabase();
-  const { survey, sections, questions, questionOptions } = initMock();
+  const { survey, questions, questionOptions } = initMock();
 
   await prisma.survey.upsert({
     where: { id: survey.id },
     update: {},
     create: survey,
   });
-
-  await Promise.any(
-    sections.map((section) =>
-      prisma.section.upsert({
-        where: { id: section.id },
-        update: {},
-        create: section,
-      })
-    )
-  );
 
   await Promise.any(
     questions.map((question) =>

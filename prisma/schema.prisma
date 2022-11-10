@@ -26,13 +26,13 @@ model Survey {
     //user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model Section {
-    id            String     @id @default(cuid())
-    surveyId      String
-    sectionNumber Int
-    questions     Question[]
-    createdAt     DateTime   @default(now())
-}
+// model Section {
+//     id            String     @id @default(cuid())
+//     surveyId      String
+//     sectionNumber Int
+//     questions     Question[]
+//     createdAt     DateTime   @default(now())
+// }
 
 model Text {
     id        String   @id @default(cuid())
@@ -55,8 +55,8 @@ model Question {
     id              String           @id @default(cuid())
     type            String
     surveyId        String
-    section         Section          @relation(fields: [sectionId], references: [id], onDelete: Cascade)
-    sectionId       String
+    // section         Section          @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+    // sectionId       String
     text            String
     supportText     String?
     orderNumber     Int
