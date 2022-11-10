@@ -24,7 +24,7 @@ A survey form builder
 - TODO Look into flow of data in application (hooks & trpc calls) and refactor to clean up / make more clear
 - TODO Clean up naming of tables & components and hooks
 
-  - Question & QuestionOption
+  - Question & QuestionOption (Content & ContentInputElement)
 
 - TODO Polish design for existing pages
   - TODO Add menu dots to overview and put delete & edit there (Remove edit from cards)
