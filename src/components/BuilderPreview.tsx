@@ -67,10 +67,7 @@ const BuilderPreview: React.FC<Props> = ({ children, scrollToQuestion }) => {
                     <DragHandleHorizontalIcon className="mr-4" />
                     <div onClick={() => scrollToQuestion(question.orderNumber)}>
                       <div key={question.id} className="flex flex-col">
-                        <span>
-                          <span>{question.orderNumber + 1}. </span>
-                          {question.text}
-                        </span>
+                        <span>{question.text}</span>
                       </div>
                     </div>
                   </div>
