@@ -58,7 +58,7 @@ export const initMock = () => {
     text: "What is your favorite color?",
     supportText: "Some support text",
     type: "RADIO",
-    orderNumber: 0,
+    orderNumber: index,
     createdAt: new Date(),
   }));
 
