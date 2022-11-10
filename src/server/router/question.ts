@@ -43,6 +43,25 @@ export const questionRouter = createRouter()
       return question;
     },
   })
+  .mutation("editQuestionsOrderNumber", {
+    input: z.array(
+      z.object({
+        id: z.string(),
+        orderNumber: z.number(),
+      })
+    ),
+    async resolve({ input, ctx }) {
+      const result = await Promise.all(
+        input.map((section) =>
+          ctx.prisma.question.update({
+            where: { id: section.id },
+            data: section,
+          })
+        )
+      );
+      return result;
+    },
+  })
   .query("getAllBySurveyId", {
     input: z.object({
       surveyId: z.string(),

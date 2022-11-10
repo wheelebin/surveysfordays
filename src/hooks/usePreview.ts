@@ -5,6 +5,7 @@ import { useBuilderStore } from "@/stores/builder";
 import { useSurveyStore } from "@/stores/survey";
 
 const usePreview = () => {
+  const utils = trpc.useContext();
   const { currentSurveyId } = useSurveyStore();
 
   const { data: questions } = trpc.useQuery(
@@ -12,7 +13,29 @@ const usePreview = () => {
     { refetchOnWindowFocus: false, enabled: !!currentSurveyId }
   );
 
-  console.log(currentSurveyId);
+  const deleteQuestionMutation = trpc.useMutation("question.delete", {
+    onSuccess(input) {
+      utils.invalidateQueries([
+        "question.getAllBySurveyId",
+        { surveyId: input.surveyId },
+      ]);
+    },
+  });
+
+  const editQuestionsOrderNumberMutation = trpc.useMutation(
+    "question.editQuestionsOrderNumber",
+    {
+      onSuccess(input) {
+        const surveyId = input[0]?.surveyId;
+        if (surveyId) {
+          utils.invalidateQueries([
+            "question.getAllBySurveyId",
+            { surveyId: surveyId },
+          ]);
+        }
+      },
+    }
+  );
 
   const addQuestion = async () => {
     if (!questions || !currentSurveyId) {
@@ -34,8 +57,13 @@ const usePreview = () => {
     }
   };
 
-  const updateQuestionOrder = (updatedQuestions: Question[]) => ({});
-  const deleteQuestion = (questionId: string) => ({});
+  const updateQuestionOrder = (updatedQuestions: Question[]) => {
+    editQuestionsOrderNumberMutation.mutate(updatedQuestions);
+  };
+
+  const deleteQuestion = (questionId: string) => {
+    deleteQuestionMutation.mutateAsync({ id: questionId });
+  };
 
   return {
     questions,
