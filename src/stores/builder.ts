@@ -10,14 +10,12 @@ export interface InputElement {
 }
 
 export interface InitialContent {
-  sectionId: string;
   surveyId: string;
   orderNumber: number;
 }
 
 export interface Content {
   id: string;
-  sectionId: string;
   surveyId: string;
   type: string;
   text: string;

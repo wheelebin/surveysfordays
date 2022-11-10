@@ -1,68 +1,47 @@
 import { trpc } from "@/utils/trpc";
+import { Question } from "@prisma/client";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import useSection from "./useSection";
-import useBuilder from "./useBuilder";
 import { useBuilderStore } from "@/stores/builder";
 
 const usePreview = () => {
-  const { sections, addSection, updateSectionOrder, deleteSection, surveyId } =
-    useSection();
-  const { handleOnAdd, content, isAdding, isEditing, clear } = useBuilder();
-  const utils = trpc.useContext();
+  const router = useRouter();
+  const queries = router.query;
+  const { surveyId } = queries;
 
   const { data: questions } = trpc.useQuery(
-    ["section.getAllBySurveyId", { surveyId }],
+    ["question.getAllBySurveyId", { surveyId: surveyId as string }],
     { refetchOnWindowFocus: false, enabled: !!surveyId }
   );
 
-  const addSectionMutation = trpc.useMutation("section.add", {
-    onSuccess(input) {
-      utils.invalidateQueries([
-        "section.getAllBySurveyId",
-        { surveyId: input.surveyId },
-      ]);
-    },
-  });
-
-  const addContent = async () => {
-    if (!sections) {
+  const addQuestion = async () => {
+    if (!questions) {
       return;
     }
 
-    const section = await addSectionMutation.mutateAsync({
-      surveyId,
-      sectionNumber: sections?.length,
+    useBuilderStore.getState().initAdding({
+      surveyId: surveyId as string,
+      orderNumber: questions.length,
     });
-
-    if (section && questions) {
-      useBuilderStore.getState().initAdding({
-        surveyId,
-        sectionId: section.id,
-        orderNumber: questions.length,
-      });
-    }
   };
 
-  const handleOnEdit = (sectionId: string) => {
-    const section = sections?.find(({ id }) => id === sectionId);
+  const handleOnEdit = (questionId: string) => {
+    const question = questions?.find(({ id }) => id === questionId);
 
-    const question = section && section.questions[0];
-
-    const questionOptions = question?.questionOptions || [];
-
-    if (section && question) {
+    if (question) {
+      const questionOptions = question.questionOptions;
       useBuilderStore.getState().initEditing(question, questionOptions);
     }
   };
 
+  const updateQuestionOrder = (updatedQuestions: Question[]) => ({});
+  const deleteQuestion = (questionId: string) => ({});
+
   return {
-    sections,
-    addSection,
-    deleteSection,
+    questions,
     handleOnEdit,
-    addContent,
-    updateSectionOrder,
+    addQuestion,
+    updateQuestionOrder,
+    deleteQuestion,
   };
 };
 

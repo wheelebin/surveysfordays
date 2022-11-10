@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import BuilderInputElement from "./BuilderInputElement";
 import BuilderHeader from "./BuilderHeader";
+import AppCard from "./AppCard";
 
 import { TrashIcon, Pencil1Icon } from "@radix-ui/react-icons";
 import useElement from "@/hooks/useElement";
@@ -11,13 +12,14 @@ type Props = {
   contentId: string;
   type: string;
   surveyId: string;
-  sectionId: string;
   text: string;
   supportText?: string | null;
   orderNumber: number;
+  isCurrent: boolean;
 };
 
 const BuilderSectionContent = (props: Props) => {
+  const myRef = useRef<HTMLDivElement | null>(null);
   const {
     inputElements,
     handleOnEdit,
@@ -28,12 +30,21 @@ const BuilderSectionContent = (props: Props) => {
   } = useElement(
     props.contentId,
     props.surveyId,
-    props.sectionId,
     props.type,
     props.text,
     props.orderNumber,
     props.supportText
   );
+
+  useEffect(() => {
+    if (myRef && myRef.current && props.isCurrent) {
+      myRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "center",
+      });
+    }
+  }, [props.isCurrent]);
 
   const renderElements = () => {
     const elements = inputElements;
@@ -58,14 +69,18 @@ const BuilderSectionContent = (props: Props) => {
   };
 
   return (
-    <div className="relative">
-      <BuilderHeader onEdit={handleOnEdit} />
+    <div>
+      <AppCard isCurrent={props.isCurrent}>
+        <div className="relative">
+          <BuilderHeader onEdit={handleOnEdit} />
 
-      <div className="flex mb-4 flex-col">
-        <h1 className="text-xl">{text}</h1>
-        <span className="text-sm">{supportText}</span>
-      </div>
-      <div className="">{renderElements()}</div>
+          <div className="flex mb-4 flex-col">
+            <h1 className="text-xl">{text}</h1>
+            <span className="text-sm">{supportText}</span>
+          </div>
+          <div className="">{renderElements()}</div>
+        </div>
+      </AppCard>
     </div>
   );
 };

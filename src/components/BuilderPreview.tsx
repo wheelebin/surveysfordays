@@ -17,17 +17,17 @@ import AppCard from "./AppCard";
 type Props = {
   children?: React.ReactNode;
   questionId?: string;
-  scrollToSection: (sectionNumber: number) => void;
+  scrollToQuestion: (orderNumber: number) => void;
 };
 
-const BuilderPreview: React.FC<Props> = ({ children, scrollToSection }) => {
+const BuilderPreview: React.FC<Props> = ({ children, scrollToQuestion }) => {
   const [show, setShow] = useState<boolean>(false);
-  const { handleOnAdd, content, isAdding, isEditing, clear } = useBuilder();
+  const { isAdding, isEditing } = useBuilder();
   const {
-    sections,
-    addContent,
-    deleteSection,
-    updateSectionOrder,
+    questions,
+    addQuestion,
+    deleteQuestion,
+    updateQuestionOrder,
     handleOnEdit,
   } = usePreview();
 
@@ -40,10 +40,10 @@ const BuilderPreview: React.FC<Props> = ({ children, scrollToSection }) => {
   const handleOnDragEnd = (list: any) => {
     // TODO Handle updating orderNumber here and not in hanldeOnEditSave
     const newList = list.map((item, i) => ({ ...item, sectionNumber: i }));
-    updateSectionOrder(newList);
+    updateQuestionOrder(newList);
   };
 
-  if (!sections) {
+  if (!questions) {
     return <></>;
   }
 
@@ -52,39 +52,34 @@ const BuilderPreview: React.FC<Props> = ({ children, scrollToSection }) => {
       <>
         <h1 className="text-xl">Overview</h1>
         <hr className="my-2" />
-        <AppButton className="w-full" onClick={addContent}>
+        <AppButton className="w-full" onClick={addQuestion}>
           Add content
         </AppButton>
-        <DragAndDrop onDragEnd={handleOnDragEnd} list={sections}>
-          {sections?.map((section, i) => {
-            const questions = section.questions.map((question) => (
-              <div key={question.id} className="flex flex-col">
-                <span>
-                  <span>{section.sectionNumber + 1}. </span>
-                  {question.text}
-                </span>
-                {/* <span className="text-xs">{question.type}</span> */}
-              </div>
-            ));
-
+        <DragAndDrop onDragEnd={handleOnDragEnd} list={questions}>
+          {questions?.map((question, i) => {
             return (
-              <DragAndDropItem key={section.id} id={section.id} index={i}>
+              <DragAndDropItem key={question.id} id={question.id} index={i}>
                 <div
                   className="py-5 flex items-center justify-between"
-                  key={section.id}
+                  key={question.id}
                 >
                   <div className="mr-2 cursor-pointer flex items-center">
                     <DragHandleHorizontalIcon className="mr-4" />
-                    <div onClick={() => scrollToSection(section.sectionNumber)}>
-                      {questions}
+                    <div onClick={() => scrollToQuestion(question.orderNumber)}>
+                      <div key={question.id} className="flex flex-col">
+                        <span>
+                          <span>{question.orderNumber + 1}. </span>
+                          {question.text}
+                        </span>
+                      </div>
                     </div>
                   </div>
                   <div>
                     <TrashIcon
-                      onClick={() => deleteSection(section.id)}
+                      onClick={() => deleteQuestion(question.id)}
                       className="cursor-pointer h-4 w-4"
                     />
-                    <Pencil1Icon onClick={() => handleOnEdit(section.id)} />
+                    <Pencil1Icon onClick={() => handleOnEdit(question.id)} />
                   </div>
                 </div>
               </DragAndDropItem>

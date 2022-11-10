@@ -7,7 +7,6 @@ import { useBuilderStore, InputElement } from "@/stores/builder";
 const useElement = (
   contentId: string,
   surveyId: string,
-  sectionId: string,
   questionType: string,
   questionText: string,
   orderNumber: number,
@@ -25,8 +24,8 @@ const useElement = (
   const deleteQuestionMutation = trpc.useMutation("question.delete", {
     onSuccess(input) {
       utils.invalidateQueries([
-        "question.getAllBySectionId",
-        { sectionId: input.sectionId },
+        "question.getAllBySurveyId",
+        { surveyId: input.surveyId },
       ]);
     },
   });
@@ -81,7 +80,6 @@ const useElement = (
       {
         id: contentId,
         surveyId,
-        sectionId,
         text: questionText,
         supportText: questionSupportText,
         type: questionType,

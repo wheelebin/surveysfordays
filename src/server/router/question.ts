@@ -44,17 +44,6 @@ export const questionRouter = createRouter()
       return question;
     },
   })
-  .query("getAllBySectionId", {
-    input: z.object({
-      sectionId: z.string(),
-    }),
-    async resolve({ input, ctx }) {
-      return await ctx.prisma.question.findMany({
-        where: { sectionId: input.sectionId },
-        orderBy: [{ orderNumber: "asc" }],
-      });
-    },
-  })
   .query("getAllBySurveyId", {
     input: z.object({
       surveyId: z.string(),
@@ -62,6 +51,11 @@ export const questionRouter = createRouter()
     async resolve({ input, ctx }) {
       return await ctx.prisma.question.findMany({
         where: { surveyId: input.surveyId },
+        include: {
+          questionOptions: {
+            orderBy: { orderNumber: "asc" },
+          },
+        },
         orderBy: [{ orderNumber: "asc" }],
       });
     },

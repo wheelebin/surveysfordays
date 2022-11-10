@@ -1,14 +1,13 @@
-import { useRouter } from "next/router";
 import { trpc } from "@/utils/trpc";
 import { useBuilderStore } from "@/stores/builder";
 
-const useContent = (sectionId: string) => {
-  const router = useRouter();
-  const { surveyId } = router.query;
+const useContent = (surveyId: string) => {
+  // const router = useRouter();
+  // const { surveyId } = router.query;
 
   const { data: questions } = trpc.useQuery(
-    ["question.getAllBySectionId", { sectionId }],
-    { refetchOnWindowFocus: false, enabled: !!sectionId }
+    ["question.getAllBySurveyId", { surveyId }],
+    { refetchOnWindowFocus: false, enabled: !!surveyId }
   );
 
   const addContent = async () => {
@@ -17,7 +16,6 @@ const useContent = (sectionId: string) => {
     if (questions) {
       useBuilderStore.getState().initAdding({
         surveyId: newSurveyId,
-        sectionId,
         orderNumber: questions.length,
       });
     }
