@@ -8,9 +8,6 @@ import useBuilder from "@/hooks/useBuilder";
 import { ExitIcon } from "@radix-ui/react-icons";
 import AppCard from "./AppCard";
 
-// TODO Will create a BuilderImageForm, BuilderTextForm and etc
-// and switch the builder form type out depending on the current elementType
-
 type Props = {
   children?: React.ReactNode;
   questionId?: string;
