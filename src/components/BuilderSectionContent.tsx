@@ -69,7 +69,7 @@ const BuilderSectionContent = (props: Props) => {
   };
 
   return (
-    <div>
+    <div className="mb-5">
       <AppCard isCurrent={props.isCurrent}>
         <div className="relative">
           <BuilderHeader onEdit={handleOnEdit} />

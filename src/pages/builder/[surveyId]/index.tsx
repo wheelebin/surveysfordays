@@ -39,20 +39,18 @@ const BuilderPage = () => {
         </div>
         <div className="flex flex-col w-1/2 overflow-y-scroll no-scrollbar ">
           <div className={`p-3 `}>
-            <div>
-              {questions.length > 0 ? (
-                questions.map((question) => (
-                  <BuilderSectionContent
-                    key={question.id}
-                    isCurrent={currentOrderNumber === question.orderNumber}
-                    contentId={question.id}
-                    {...question}
-                  />
-                ))
-              ) : (
-                <div className=" my-5 p-3 bg-slate-50">No content</div>
-              )}
-            </div>
+            {questions.length > 0 ? (
+              questions.map((question) => (
+                <BuilderSectionContent
+                  key={question.id}
+                  isCurrent={currentOrderNumber === question.orderNumber}
+                  contentId={question.id}
+                  {...question}
+                />
+              ))
+            ) : (
+              <div className=" my-5 p-3 bg-slate-50">No content</div>
+            )}
           </div>
         </div>
       </div>

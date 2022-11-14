@@ -21,7 +21,6 @@ A survey form builder
 
 ## Doing
 
-- TODO Look into flow of data in application (hooks & trpc calls) and refactor to clean up / make more clear
 - TODO Clean up naming of tables & components and hooks
 
   - Question & QuestionOption (Content & ContentInputElement)
