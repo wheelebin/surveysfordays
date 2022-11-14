@@ -1,11 +1,5 @@
 import { trpc } from "@/utils/trpc";
 import { Question } from "@prisma/client";
-/*
-    - useContent [DONE]
-    - useBuilder
-    - usePreview
-    - useElement
-*/
 
 const useQuestion = (surveyId: string) => {
   const utils = trpc.useContext();

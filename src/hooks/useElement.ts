@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { trpc } from "@/utils/trpc";
 import { useBuilderStore, InputElement } from "@/stores/builder";
+import useQuestion from "./useQuestion";
 
 // TODO Finish this
 
@@ -19,17 +20,9 @@ const useElement = (
   const [placeholder, setPlaceholder] = useState<string | undefined>(undefined);
   const [type, setType] = useState<string | undefined>("");
 
-  const utils = trpc.useContext();
+  const { deleteQuestion } = useQuestion(surveyId);
 
-  const deleteQuestionMutation = trpc.useMutation("question.delete", {
-    onSuccess(input) {
-      utils.invalidateQueries([
-        "question.getAllBySurveyId",
-        { surveyId: input.surveyId },
-      ]);
-    },
-  });
-
+  // TODO This could stay here, we could put it in useQuestion or create a new hook for QuestionOption
   const { data } = trpc.useQuery(
     ["questionOption.getAllByQuestionId", { questionId: contentId }],
     { refetchOnWindowFocus: false }
@@ -89,17 +82,13 @@ const useElement = (
     );
   };
 
-  const handleOnDelete = () => {
-    deleteQuestionMutation.mutateAsync({ id: contentId });
-  };
-
   return {
     type,
     text,
     supportText,
     inputElements,
     handleOnEdit,
-    handleOnDelete,
+    handleOnDelete: () => deleteQuestion(contentId),
   };
 };
 

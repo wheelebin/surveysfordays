@@ -1,7 +1,7 @@
 import Builder from "@/components/Builder";
 import BuilderPreview from "@/components/BuilderPreview";
 import BuilderSectionContent from "@/components/BuilderSectionContent";
-import useContent from "@/hooks/useContent";
+import useQuestion from "@/hooks/useQuestion";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSurveyStore } from "@/stores/survey";
@@ -19,7 +19,7 @@ const BuilderPage = () => {
   }, [surveyIdParam]);
 
   const [currentOrderNumber, setCurrentOrderNumber] = useState(0);
-  const { questions } = useContent(surveyId as string);
+  const { questions } = useQuestion(surveyId as string);
 
   if (!surveyId) {
     return <></>;
