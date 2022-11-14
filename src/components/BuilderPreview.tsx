@@ -17,12 +17,17 @@ import AppCard from "./AppCard";
 type Props = {
   children?: React.ReactNode;
   questionId?: string;
+  surveyId: string;
   scrollToQuestion: (orderNumber: number) => void;
 };
 
-const BuilderPreview: React.FC<Props> = ({ children, scrollToQuestion }) => {
+const BuilderPreview: React.FC<Props> = ({
+  children,
+  scrollToQuestion,
+  surveyId,
+}) => {
   const [show, setShow] = useState<boolean>(false);
-  const { isAdding, isEditing } = useBuilder();
+  const { isAdding, isEditing } = useBuilder(surveyId);
   const {
     questions,
     addQuestion,

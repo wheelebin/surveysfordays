@@ -7,26 +7,35 @@ import { useRouter } from "next/router";
 import { useSurveyStore } from "@/stores/survey";
 
 const BuilderPage = () => {
+  const [surveyId, setSurveyId] = useState<string | undefined>(undefined);
   const router = useRouter();
-  const { surveyId } = router.query;
+  const { surveyId: surveyIdParam } = router.query;
 
   useEffect(() => {
-    useSurveyStore.getState().setCurrentSurveyId(surveyId as string);
-  }, [surveyId]);
+    if (typeof surveyIdParam === "string") {
+      setSurveyId(surveyIdParam);
+      useSurveyStore.getState().setCurrentSurveyId(surveyIdParam);
+    }
+  }, [surveyIdParam]);
 
   const [currentOrderNumber, setCurrentOrderNumber] = useState(0);
   const { questions } = useContent(surveyId as string);
+
+  if (!surveyId) {
+    return <></>;
+  }
 
   return (
     <div className="mx-auto container">
       <div className="flex justify-center h-screen">
         <div className="w-1/3 my-2 mr-2">
           <BuilderPreview
+            surveyId={surveyId}
             scrollToQuestion={(orderNumber: number) =>
               setCurrentOrderNumber(orderNumber)
             }
           />
-          <Builder questionId="question-0-0" />
+          <Builder surveyId={surveyId} questionId="question-0-0" />
         </div>
         <div className="flex flex-col w-1/2 overflow-y-scroll no-scrollbar ">
           <div className={`p-3 `}>

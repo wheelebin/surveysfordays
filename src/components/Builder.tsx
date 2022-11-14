@@ -9,13 +9,15 @@ import { ExitIcon } from "@radix-ui/react-icons";
 import AppCard from "./AppCard";
 
 type Props = {
+  surveyId: string;
   children?: React.ReactNode;
   questionId?: string;
 };
 
-const Builder: React.FC<Props> = ({ children }) => {
+const Builder: React.FC<Props> = ({ surveyId, children }) => {
   const [show, setShow] = useState<boolean>(false);
-  const { handleOnAdd, content, isAdding, isEditing, clear } = useBuilder();
+  const { handleOnAdd, content, isAdding, isEditing, clear } =
+    useBuilder(surveyId);
 
   useEffect(() => setShow(isAdding || isEditing), [isEditing, isAdding]);
 

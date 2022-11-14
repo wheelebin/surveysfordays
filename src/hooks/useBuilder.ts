@@ -1,7 +1,8 @@
 import { trpc } from "@/utils/trpc";
+import useQuestion from "./useQuestion";
 import { useBuilderStore } from "@/stores/builder";
 
-const useBuilder = () => {
+const useBuilder = (surveyId: string) => {
   const {
     isAdding,
     isEditing,
@@ -14,58 +15,13 @@ const useBuilder = () => {
     clear,
   } = useBuilderStore();
 
-  const utils = trpc.useContext();
-
-  const deleteQuestionOptionMutation = trpc.useMutation(
-    "questionOption.delete",
-    {
-      onSuccess(input) {
-        utils.invalidateQueries([
-          "questionOption.getAllByQuestionId",
-          { questionId: input.questionId },
-        ]);
-      },
-    }
-  );
-
-  const editQuestionMutation = trpc.useMutation("question.editQuestion", {
-    onSuccess(input) {
-      utils.invalidateQueries([
-        "question.getAllBySurveyId",
-        { surveyId: input.surveyId },
-      ]);
-    },
-  });
-  const editQuestionOption = trpc.useMutation("questionOption.edit", {
-    onSuccess(input) {
-      const questionId = input[0]?.questionId;
-      if (questionId) {
-        utils.invalidateQueries([
-          "questionOption.getAllByQuestionId",
-          { questionId: questionId },
-        ]);
-      }
-    },
-  });
-  const addQuestionOption = trpc.useMutation("questionOption.add", {
-    onSuccess(input) {
-      const questionId = input[0]?.questionId;
-      if (questionId) {
-        utils.invalidateQueries([
-          "questionOption.getAllByQuestionId",
-          { questionId: questionId },
-        ]);
-      }
-    },
-  });
-  const addQuestionMutation = trpc.useMutation("question.add", {
-    onSuccess(input) {
-      utils.invalidateQueries([
-        "question.getAllBySurveyId",
-        { surveyId: input.surveyId },
-      ]);
-    },
-  });
+  const {
+    addQuestion,
+    editQuestion,
+    addQuestionOption,
+    editQuestionOption,
+    deleteQuestionOption,
+  } = useQuestion(surveyId);
 
   const handleOnAdd = async (type: string) => {
     const { surveyId, orderNumber } = initialContent || {};
@@ -74,37 +30,21 @@ const useBuilder = () => {
       return;
     }
 
-    const newQuestion = await addQuestionMutation.mutateAsync({
-      surveyId,
-      type,
-      orderNumber,
-      text: "Change me :)",
-      supportText: "Some support text",
-    });
+    const resp = await addQuestion(type, orderNumber);
 
-    if (!newQuestion) {
+    if (!resp) {
       return;
     }
 
-    const newQuestionOption = await addQuestionOption.mutateAsync([
-      {
-        questionId: newQuestion.id,
-        type,
-        label: "Change me :)",
-        placeholder: "Some placeholder",
-        supportText: "Some support text for the input element",
-        orderNumber: 0,
-      },
-    ]);
+    const { question, questionOptions } = resp;
 
-    if (newQuestion && newQuestionOption) {
-      initEditing(newQuestion, newQuestionOption);
+    if (question && questionOptions) {
+      initEditing(question, questionOptions);
     }
   };
 
   const handleOnDeleteOption = async (id: string) => {
-    const removedQuestionOption =
-      await deleteQuestionOptionMutation.mutateAsync({ id });
+    const removedQuestionOption = await deleteQuestionOption(id);
 
     if (removedQuestionOption) {
       setInputElements(
@@ -117,10 +57,10 @@ const useBuilder = () => {
 
   const handleOnEditSave = () => {
     if (content) {
-      editQuestionMutation.mutate(content);
+      editQuestion(content);
     }
     if (inputElements) {
-      editQuestionOption.mutate(inputElements);
+      editQuestionOption(inputElements);
     }
     clear();
   };
@@ -133,7 +73,7 @@ const useBuilder = () => {
     supportText?: string;
     orderNumber: number;
   }) => {
-    return await addQuestionOption.mutateAsync([questionOption]);
+    return await addQuestionOption([questionOption]);
   };
 
   return {

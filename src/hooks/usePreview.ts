@@ -1,6 +1,5 @@
 import { trpc } from "@/utils/trpc";
 import { Question } from "@prisma/client";
-import { useRouter } from "next/router";
 import { useBuilderStore } from "@/stores/builder";
 import { useSurveyStore } from "@/stores/survey";
 
