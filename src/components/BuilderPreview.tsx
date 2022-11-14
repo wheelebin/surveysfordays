@@ -34,7 +34,7 @@ const BuilderPreview: React.FC<Props> = ({
     deleteQuestion,
     updateQuestionOrder,
     handleOnEdit,
-  } = usePreview();
+  } = usePreview(surveyId);
 
   useEffect(() => setShow(isAdding || isEditing), [isEditing, isAdding]);
 

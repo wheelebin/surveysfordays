@@ -1,5 +1,5 @@
 import { trpc } from "@/utils/trpc";
-import { Prisma, Question } from "@prisma/client";
+import { Question } from "@prisma/client";
 /*
     - useContent [DONE]
     - useBuilder
@@ -37,6 +37,28 @@ const useQuestion = (surveyId: string) => {
       ]);
     },
   });
+  const deleteQuestionMutation = trpc.useMutation("question.delete", {
+    onSuccess(input) {
+      utils.invalidateQueries([
+        "question.getAllBySurveyId",
+        { surveyId: input.surveyId },
+      ]);
+    },
+  });
+  const editQuestionsOrderNumberMutation = trpc.useMutation(
+    "question.editQuestionsOrderNumber",
+    {
+      onSuccess(input) {
+        const surveyId = input[0]?.surveyId;
+        if (surveyId) {
+          utils.invalidateQueries([
+            "question.getAllBySurveyId",
+            { surveyId: surveyId },
+          ]);
+        }
+      },
+    }
+  );
   const editQuestionOptionMutation = trpc.useMutation("questionOption.edit", {
     onSuccess(input) {
       const questionId = input[0]?.questionId;
@@ -109,6 +131,14 @@ const useQuestion = (surveyId: string) => {
     return await editQuestionMutation.mutateAsync(question);
   };
 
+  const editQuestionsOrder = (updatedQuestions: Question[]) => {
+    editQuestionsOrderNumberMutation.mutate(updatedQuestions);
+  };
+
+  const deleteQuestion = (id: string) => {
+    deleteQuestionMutation.mutate({ id });
+  };
+
   const addQuestionOption = async (
     questionOptions: {
       questionId: string;
@@ -146,6 +176,8 @@ const useQuestion = (surveyId: string) => {
     questions: questions || [],
     addQuestion,
     editQuestion,
+    editQuestionsOrder,
+    deleteQuestion,
     addQuestionOption,
     editQuestionOption,
     deleteQuestionOption,
