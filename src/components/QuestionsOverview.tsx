@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useBuilder from "@/hooks/useBuilder";
-import usePreview from "@/hooks/usePreview";
+import useQuestionsOverview from "@/hooks/useQuestionsOverview";
 import AppButton from "./AppButton";
 import {
   DragHandleHorizontalIcon,
@@ -10,6 +10,8 @@ import {
 import DragAndDrop from "./DragAndDrop";
 import DragAndDropItem from "./DragAndDropItem";
 import AppCard from "./AppCard";
+import AppDropdown from "./AppDropdown";
+import AppDropdownItem from "./AppDropdownItem";
 
 // TODO Will create a BuilderImageForm, BuilderTextForm and etc
 // and switch the builder form type out depending on the current elementType
@@ -21,7 +23,7 @@ type Props = {
   scrollToQuestion: (orderNumber: number) => void;
 };
 
-const BuilderPreview: React.FC<Props> = ({
+const QuestionsOverview: React.FC<Props> = ({
   children,
   scrollToQuestion,
   surveyId,
@@ -34,13 +36,9 @@ const BuilderPreview: React.FC<Props> = ({
     deleteQuestion,
     updateQuestionOrder,
     handleOnEdit,
-  } = usePreview(surveyId);
+  } = useQuestionsOverview(surveyId);
 
   useEffect(() => setShow(isAdding || isEditing), [isEditing, isAdding]);
-
-  // TODO Add content here, it'll need to add content as well as a section to belong to
-
-  // TODO I want to remove the add content button in the builderSection component if content already exists ()
 
   const handleOnDragEnd = (list: any) => {
     // TODO Handle updating orderNumber here and not in hanldeOnEditSave
@@ -55,10 +53,10 @@ const BuilderPreview: React.FC<Props> = ({
   return !show ? (
     <AppCard>
       <>
-        <h1 className="text-xl">Overview</h1>
+        <h1 className="text-xl">Questions Overview</h1>
         <hr className="my-2" />
         <AppButton className="w-full" onClick={addQuestion}>
-          Add content
+          Add question
         </AppButton>
         <DragAndDrop onDragEnd={handleOnDragEnd} list={questions}>
           {questions?.map((question, i) => {
@@ -76,12 +74,19 @@ const BuilderPreview: React.FC<Props> = ({
                       </div>
                     </div>
                   </div>
-                  <div>
-                    <TrashIcon
-                      onClick={() => deleteQuestion(question.id)}
-                      className="cursor-pointer h-4 w-4"
-                    />
-                    <Pencil1Icon onClick={() => handleOnEdit(question.id)} />
+                  <div className="flex items-center">
+                    <AppDropdown>
+                      <AppDropdownItem
+                        label="Edit"
+                        icon={<Pencil1Icon />}
+                        onClick={() => handleOnEdit(question.id)}
+                      />
+                      <AppDropdownItem
+                        label="Delete"
+                        icon={<TrashIcon />}
+                        onClick={() => deleteQuestion(question.id)}
+                      />
+                    </AppDropdown>
                   </div>
                 </div>
               </DragAndDropItem>
@@ -95,4 +100,4 @@ const BuilderPreview: React.FC<Props> = ({
   );
 };
 
-export default BuilderPreview;
+export default QuestionsOverview;

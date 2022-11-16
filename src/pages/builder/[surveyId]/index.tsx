@@ -1,5 +1,5 @@
 import Builder from "@/components/Builder";
-import BuilderPreview from "@/components/BuilderPreview";
+import QuestionsOverview from "@/components/QuestionsOverview";
 import BuilderSectionContent from "@/components/BuilderSectionContent";
 import useQuestion from "@/hooks/useQuestion";
 import { useEffect, useState } from "react";
@@ -29,7 +29,7 @@ const BuilderPage = () => {
     <div className="mx-auto container">
       <div className="flex justify-center h-screen">
         <div className="w-1/3 my-2 mr-2">
-          <BuilderPreview
+          <QuestionsOverview
             surveyId={surveyId}
             scrollToQuestion={(orderNumber: number) =>
               setCurrentOrderNumber(orderNumber)

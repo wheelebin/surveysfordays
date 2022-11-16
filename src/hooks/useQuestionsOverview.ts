@@ -1,23 +1,19 @@
 import { trpc } from "@/utils/trpc";
 import { Question } from "@prisma/client";
 import { useBuilderStore } from "@/stores/builder";
-import { useSurveyStore } from "@/stores/survey";
 import useQuestion from "./useQuestion";
-import Survey from "src/pages";
 
-const usePreview = (surveyId: string) => {
-  const utils = trpc.useContext();
-  const { currentSurveyId } = useSurveyStore();
+const useQuestionsOverview = (surveyId: string) => {
   const { questions, editQuestionsOrder, deleteQuestion } =
     useQuestion(surveyId);
 
   const addQuestion = async () => {
-    if (!questions || !currentSurveyId) {
+    if (!questions) {
       return;
     }
 
     useBuilderStore.getState().initAdding({
-      surveyId: currentSurveyId,
+      surveyId,
       orderNumber: questions.length,
     });
   };
@@ -41,4 +37,4 @@ const usePreview = (surveyId: string) => {
   };
 };
 
-export default usePreview;
+export default useQuestionsOverview;
