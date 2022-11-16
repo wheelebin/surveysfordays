@@ -34,19 +34,7 @@ const BuilderElementFormInputs: React.FC = () => {
 
   return (
     <div>
-      <AppTextField
-        label="Label"
-        onChange={(value) => setContent("text", value)}
-        value={content?.text}
-      />
-      <AppTextField
-        label="Content support text"
-        onChange={(value) => setContent("supportText", value)}
-        value={content?.supportText || ""}
-      />
-
-      <AppSeperator />
-
+      <h1 className="text-xl">Input</h1>
       <AppTextField
         label="Label"
         onChange={(value) => handleOnChange("label", value)}

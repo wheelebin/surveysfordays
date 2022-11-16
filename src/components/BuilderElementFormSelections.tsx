@@ -53,16 +53,7 @@ const BuilderElementFormSelections: React.FC<Props> = ({ type }) => {
 
   return (
     <div>
-      <AppTextField
-        label="Label"
-        onChange={(value) => setContent("text", value)}
-        value={content?.text}
-      />
-      <AppTextField
-        label="Support text"
-        onChange={(value) => setContent("supportText", value)}
-        value={content?.supportText || ""}
-      />
+      <h1 className="text-xl">Input</h1>
       <AppButton className="w-full" onClick={handleOnAdd}>
         Add option
       </AppButton>

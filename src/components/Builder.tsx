@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import BuilderElementFormInputs from "./BuilderElementFormInputs";
+import BuilderQuestionForm from "./BuilderQuestionForm";
 import AppSelectField from "./AppSelectField";
 import { ELEMENT_GROUPS } from "@/constants/elements";
 import BuilderElementFormSelections from "./BuilderElementFormSelections";
@@ -70,6 +71,7 @@ const Builder: React.FC<Props> = ({ surveyId, children }) => {
         <ExitIcon onClick={handleOnExit} className="cursor-pointer" />
       </div>
       {getElementSelector()}
+      {content?.type && <BuilderQuestionForm />}
       {getFormElement()}
     </AppCard>
   ) : (
