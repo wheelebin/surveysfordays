@@ -26,7 +26,6 @@ A survey form builder
   - Question & QuestionOption (Content & ContentInputElement)
 
 - TODO Polish design for existing pages
-  - TODO Add menu dots to overview and put delete & edit there (Remove edit from cards)
 
 ## Backlog Prio
 
