@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { useSession, signOut } from "next-auth/react";
 
 const navItems = [
   { label: "Home", route: "/" },
@@ -20,7 +21,10 @@ const AppNavBar = () => {
           ))}
         </div>
         <div>
-          <div className="cursor-pointer py-2 px-2 w-full text-indigo-500 font-semibold">
+          <div
+            className="cursor-pointer py-2 px-2 w-full text-indigo-500 font-semibold"
+            onClick={() => signOut()}
+          >
             Logout
           </div>
         </div>
