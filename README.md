@@ -21,18 +21,14 @@ A survey form builder
 
 ## Doing
 
-- TODO Clean up naming of tables & components and hooks
-
-  - Question & QuestionOption (Content & ContentInputElement)
-
-- TODO Polish design for existing pages
+- TODO Implement next auth
 
 ## Backlog Prio
 
-- TODO Implement next auth
 - TODO Implement completion of surveys by users outside of our system (answer table and etc)
 - TODO Implement publishing of created surveys so they can be completed by other users
 - TODO Implement a simple results view for the publisher to see the result of the survey
+- TODO Polish design
 
 ## Backlog
 
