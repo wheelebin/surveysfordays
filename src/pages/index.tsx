@@ -2,9 +2,21 @@ import { trpc } from "@/utils/trpc";
 import AppButton from "@/components/AppButton";
 import AppNavBar from "@/components/AppNavBar";
 import Link from "next/link";
+import { useSession, signIn, signOut } from "next-auth/react";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 const Survey = () => {
+  const router = useRouter();
   const { data: surveys } = trpc.useQuery(["survey.getAll"]);
+
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status !== "loading" && !session) {
+      router.push("/api/auth/signin");
+    }
+  }, [status, session]);
 
   return (
     <div>
