@@ -1,12 +1,4 @@
-import {
-  PrismaClient,
-  Prisma,
-  Question,
-  QuestionOption,
-  Text,
-  Image,
-  PrismaPromise,
-} from "@prisma/client";
+import { PrismaClient, Question, QuestionOption } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -48,6 +40,7 @@ export const initMock = () => {
     description: "What are your favorite things?",
     startsAt: new Date("2022-01-01T00:00:00.000Z"),
     endsAt: new Date("2022-12-29T00:00:00.000Z"),
+    userId: "clbdf1rxy0000uzr9p0bbh4wo",
   };
 
   // TODO Set question and question options based on hardcoded questions

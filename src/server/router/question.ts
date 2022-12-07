@@ -1,13 +1,12 @@
-import { createRouter } from "./context";
 import { TRPCError } from "@trpc/server";
+import { createProtectedRouter } from "./protectedRouter";
 import { z } from "zod";
+import {
+  userCanAccessQuestion,
+  userCanAccessSurvey,
+} from "src/lib/userCanAccess";
 
-// Create a question with or without question options
-// Get a question and all it's question options
-// Edit question text
-// Delete question and all of it's question options
-
-export const questionRouter = createRouter()
+export const questionRouter = createProtectedRouter()
   .mutation("add", {
     input: z.object({
       surveyId: z.string(),
@@ -17,6 +16,9 @@ export const questionRouter = createRouter()
       orderNumber: z.number(),
     }),
     async resolve({ input, ctx }) {
+      if (!(await userCanAccessSurvey(input.surveyId, ctx.userId))) {
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+      }
       return await ctx.prisma.question.create({
         data: input,
       });
@@ -30,17 +32,18 @@ export const questionRouter = createRouter()
       type: z.string().optional(),
     }),
     async resolve({ input, ctx }) {
-      const question = await ctx.prisma.question.update({
-        where: { id: input.id },
-        data: input,
-      });
+      const question = await userCanAccessQuestion(input.id, ctx.userId);
       if (!question) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: `No question with id ${input.id}`,
-        });
+        throw new TRPCError({ code: "UNAUTHORIZED" });
       }
-      return question;
+      return await ctx.prisma.question.update({
+        data: {
+          text: input.text,
+          supportText: input.supportText,
+          type: input.type,
+        },
+        where: { id: input.id },
+      });
     },
   })
   .mutation("editQuestionsOrderNumber", {
@@ -51,13 +54,19 @@ export const questionRouter = createRouter()
       })
     ),
     async resolve({ input, ctx }) {
+      // TODO Change how this works, feels odd to check and update work in loops
+
       const result = await Promise.all(
-        input.map((section) =>
-          ctx.prisma.question.update({
-            where: { id: section.id },
-            data: section,
-          })
-        )
+        input.map(async (question) => {
+          if (!(await userCanAccessQuestion(question.id, ctx.userId))) {
+            throw new TRPCError({ code: "UNAUTHORIZED" });
+          }
+
+          return ctx.prisma.question.update({
+            where: { id: question.id },
+            data: question,
+          });
+        })
       );
       return result;
     },
@@ -67,8 +76,19 @@ export const questionRouter = createRouter()
       surveyId: z.string(),
     }),
     async resolve({ input, ctx }) {
+      if (!(await userCanAccessSurvey(input.surveyId, ctx.userId))) {
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+      }
+
       return await ctx.prisma.question.findMany({
-        where: { surveyId: input.surveyId },
+        where: {
+          surveyId: input.surveyId,
+          survey: {
+            userId: {
+              equals: ctx.userId,
+            },
+          },
+        },
         include: {
           questionOptions: {
             orderBy: { orderNumber: "asc" },
@@ -83,6 +103,9 @@ export const questionRouter = createRouter()
       id: z.string(),
     }),
     async resolve({ input, ctx }) {
+      if (!(await userCanAccessQuestion(input.id, ctx.userId))) {
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+      }
       return await ctx.prisma.question.findUnique({ where: { id: input.id } });
     },
   })
@@ -91,6 +114,10 @@ export const questionRouter = createRouter()
       id: z.string(),
     }),
     async resolve({ input, ctx }) {
+      if (!(await userCanAccessQuestion(input.id, ctx.userId))) {
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+      }
+      // TODO  DO I need this, don't I cascade on delete?
       await ctx.prisma.questionOption.deleteMany({
         where: { questionId: input.id },
       });

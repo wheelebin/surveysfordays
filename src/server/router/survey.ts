@@ -1,8 +1,10 @@
 import { createRouter } from "./context";
+import { createProtectedRouter } from "./protectedRouter";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
+import { userCanAccessSurvey } from "src/lib/userCanAccess";
 
-export const surveyRouter = createRouter()
+export const surveyRouterPrivate = createProtectedRouter()
   .mutation("add", {
     input: z.object({
       name: z.string(),
@@ -13,7 +15,7 @@ export const surveyRouter = createRouter()
     }),
     async resolve({ input, ctx }) {
       const survey = await ctx.prisma.survey.create({
-        data: input,
+        data: { ...input, userId: ctx.userId },
       });
       return survey;
     },
@@ -28,22 +30,21 @@ export const surveyRouter = createRouter()
       endsAt: z.date().optional(),
     }),
     async resolve({ input, ctx }) {
-      const survey = await ctx.prisma.survey.update({
+      if (!(await userCanAccessSurvey(input.id, ctx.userId))) {
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+      }
+
+      return await ctx.prisma.survey.update({
         where: { id: input.id },
         data: input,
       });
-      if (!survey) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: `No survey with id ${input.id}`,
-        });
-      }
-      return survey;
     },
   })
   .query("getAll", {
     async resolve({ ctx }) {
-      return await ctx.prisma.survey.findMany();
+      return await ctx.prisma.survey.findMany({
+        where: { userId: ctx.userId },
+      });
     },
   })
   .query("byId", {
@@ -51,7 +52,12 @@ export const surveyRouter = createRouter()
       id: z.string(),
     }),
     async resolve({ input, ctx }) {
-      return await ctx.prisma.survey.findUnique({ where: { id: input.id } });
+      const survey = await userCanAccessSurvey(input.id, ctx.userId);
+      if (!survey) {
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+      }
+
+      return survey;
     },
   })
   .mutation("delete", {
@@ -59,6 +65,38 @@ export const surveyRouter = createRouter()
       id: z.string(),
     }),
     async resolve({ input, ctx }) {
+      if (!(await userCanAccessSurvey(input.id, ctx.userId))) {
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+      }
       return await ctx.prisma.survey.delete({ where: { id: input.id } });
     },
   });
+
+export const surveyRouterPublic = createRouter().query(
+  "getPublishedSurveyById",
+  {
+    input: z.object({
+      id: z.string(),
+    }),
+    async resolve({ input, ctx }) {
+      const survey = await ctx.prisma.survey.findUnique({
+        where: { id: input.id },
+      });
+      if (!survey) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: `No survey with id ${input.id}`,
+        });
+      }
+
+      // Check if survey is published
+      // This is for users who are going to answer the surveys
+
+      return survey;
+    },
+  }
+);
+
+export const surveyRouter = createRouter()
+  .merge(surveyRouterPrivate)
+  .merge(surveyRouterPublic);

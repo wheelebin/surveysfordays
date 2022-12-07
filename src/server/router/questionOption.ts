@@ -1,12 +1,13 @@
 import { createRouter } from "./context";
-import { TRPCError } from "@trpc/server";
+import { createProtectedRouter } from "./protectedRouter";
 import { z } from "zod";
+import {
+  userCanAccessQuestion,
+  userCanAccessQuestionOption,
+} from "src/lib/userCanAccess";
+import { TRPCError } from "@trpc/server";
 
-// Create a question option
-// Delete a question option
-// Edit a question option
-
-export const questionOptionRouter = createRouter()
+export const questionOptionRouter = createProtectedRouter()
   .mutation("add", {
     input: z.array(
       z.object({
@@ -20,11 +21,19 @@ export const questionOptionRouter = createRouter()
     ),
     async resolve({ input, ctx }) {
       const result = await Promise.all(
-        input.map((questionOption) =>
-          ctx.prisma.questionOption.create({
+        input.map(async (questionOption) => {
+          if (
+            !(await userCanAccessQuestion(
+              questionOption.questionId,
+              ctx.userId
+            ))
+          ) {
+            throw new TRPCError({ code: "UNAUTHORIZED" });
+          }
+          return ctx.prisma.questionOption.create({
             data: questionOption,
-          })
-        )
+          });
+        })
       );
       return result;
     },
@@ -41,12 +50,17 @@ export const questionOptionRouter = createRouter()
     ),
     async resolve({ input, ctx }) {
       const result = await Promise.all(
-        input.map((questionOption) =>
+        input.map(async (questionOption) => {
+          if (
+            !(await userCanAccessQuestionOption(questionOption.id, ctx.userId))
+          ) {
+            throw new TRPCError({ code: "UNAUTHORIZED" });
+          }
           ctx.prisma.questionOption.update({
             where: { id: questionOption.id },
             data: questionOption,
-          })
-        )
+          });
+        })
       );
       return result;
     },
@@ -56,6 +70,9 @@ export const questionOptionRouter = createRouter()
       questionId: z.string(),
     }),
     async resolve({ input, ctx }) {
+      if (!(await userCanAccessQuestion(input.questionId, ctx.userId))) {
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+      }
       return await ctx.prisma.questionOption.findMany({
         where: { questionId: input.questionId },
         orderBy: [{ orderNumber: "asc" }],
@@ -67,6 +84,9 @@ export const questionOptionRouter = createRouter()
       id: z.string(),
     }),
     async resolve({ input, ctx }) {
+      if (!(await userCanAccessQuestionOption(input.id, ctx.userId))) {
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+      }
       return await ctx.prisma.questionOption.delete({
         where: { id: input.id },
       });
