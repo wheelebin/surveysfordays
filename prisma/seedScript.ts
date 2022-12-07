@@ -1,4 +1,9 @@
-import { PrismaClient, Question, QuestionOption } from "@prisma/client";
+import {
+  PrismaClient,
+  Question,
+  QuestionOption,
+  SurveyVersion,
+} from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -38,9 +43,7 @@ export const initMock = () => {
     title: "what are your favorite things",
     name: "Favorite things",
     description: "What are your favorite things?",
-    startsAt: new Date("2022-01-01T00:00:00.000Z"),
-    endsAt: new Date("2022-12-29T00:00:00.000Z"),
-    userId: "clbdf1rxy0000uzr9p0bbh4wo",
+    userId: "clbdnf4br0000uz119c090po7",
   };
 
   // TODO Set question and question options based on hardcoded questions
@@ -72,23 +75,37 @@ export const initMock = () => {
     )
   );
 
-  // TODO Add text & image creation to this method
+  const surveyVersion = {
+    id: "surveyVersion-0",
+    surveyId: survey.id,
+    surveyData: JSON.stringify({ survey, questions, questionOptions }),
+    name: "Initial version",
+    isCurrent: true,
+    publishAt: new Date("2022-01-01T00:00:00.000Z"),
+  };
 
   return {
     survey,
     questions,
     questionOptions,
+    surveyVersion,
   };
 };
 
 export async function main() {
   await dropDatabase();
-  const { survey, questions, questionOptions } = initMock();
+  const { survey, questions, questionOptions, surveyVersion } = initMock();
 
   await prisma.survey.upsert({
     where: { id: survey.id },
     update: {},
     create: survey,
+  });
+
+  await prisma.surveyVersion.upsert({
+    where: { id: surveyVersion.id },
+    update: {},
+    create: surveyVersion,
   });
 
   await Promise.any(

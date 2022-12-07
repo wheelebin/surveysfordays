@@ -21,7 +21,7 @@ A survey form builder
 
 ## Doing
 
-- TODO Implement publishing of created surveys so they can be completed by other users
+- TODO Implement drafts & publishing of created surveys so they can be completed by other users
 
 ## Backlog Prio
 

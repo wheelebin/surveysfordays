@@ -45,7 +45,7 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
-    Survey        Survey[]
+    surveys       Survey[]
 }
 
 model VerificationToken {
@@ -58,16 +58,27 @@ model VerificationToken {
 
 // TODO Add draft status to survey
 model Survey {
-    id          String     @id @default(cuid())
-    name        String
-    title       String
-    description String
-    createdAt   DateTime   @default(now())
-    startsAt    DateTime
-    endsAt      DateTime
-    user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId      String
-    Question    Question[]
+    id             String          @id @default(cuid())
+    name           String
+    title          String
+    description    String
+    createdAt      DateTime        @default(now())
+    user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId         String
+    Question       Question[]
+    surveyVersions SurveyVersion[]
+}
+
+model SurveyVersion {
+    id         String    @id @default(cuid())
+    survey     Survey    @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+    surveyId   String
+    surveyData Json
+    name       String
+    isCurrent  Boolean
+    publishAt  DateTime
+    hideAt     DateTime?
+    createdAt  DateTime  @default(now())
 }
 
 // model Section {
