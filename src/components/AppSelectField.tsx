@@ -14,6 +14,7 @@ type SelectGroup = {
 
 type AppSelectFieldProps = {
   selectGroups: SelectGroup[];
+  value: string;
   onChange?: (value: string) => void;
   placeholder?: string;
 };
@@ -21,10 +22,11 @@ type AppSelectFieldProps = {
 const AppSelectField = ({
   selectGroups,
   onChange,
+  value,
   placeholder,
 }: AppSelectFieldProps) => {
   return (
-    <Select.Root onValueChange={onChange}>
+    <Select.Root onValueChange={onChange} value={value}>
       <Select.Trigger className="flex items-center justify-between w-full">
         <Select.Value placeholder={placeholder} />
         <Select.Icon>
