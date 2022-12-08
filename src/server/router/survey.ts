@@ -51,6 +51,7 @@ export const surveyRouterPrivate = createProtectedRouter()
   .query("byId", {
     input: z.object({
       id: z.string(),
+      published: z.boolean(),
     }),
     async resolve({ input, ctx }) {
       const survey = await userCanAccessSurvey(input.id, ctx.userId);
@@ -91,9 +92,13 @@ export const surveyRouterPublic = createRouter().query(
   "getPublishedSurveyById",
   {
     input: z.object({
-      id: z.string(),
+      id: z.string().nullish(),
     }),
     async resolve({ input, ctx }) {
+      if (!input.id) {
+        throw new TRPCError({ code: "BAD_REQUEST" });
+      }
+
       const survey = await ctx.prisma.survey.findUnique({
         where: { id_status: { id: input.id, status: "PUBLISH" } },
       });

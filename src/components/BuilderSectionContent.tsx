@@ -9,13 +9,14 @@ import useElement from "@/hooks/useElement";
 import { ELEMENTS_WITH_ADD_MULTIPLE } from "@/constants/elements";
 
 type Props = {
-  contentId: string;
+  questionId: string;
   type: string;
   surveyId: string;
   text: string;
   supportText?: string | null;
   orderNumber: number;
   isCurrent: boolean;
+  isPublished?: boolean;
 };
 
 const BuilderSectionContent = (props: Props) => {
@@ -28,11 +29,12 @@ const BuilderSectionContent = (props: Props) => {
     supportText,
     type,
   } = useElement(
-    props.contentId,
+    props.questionId,
     props.surveyId,
     props.type,
     props.text,
     props.orderNumber,
+    props.isPublished,
     props.supportText
   );
 

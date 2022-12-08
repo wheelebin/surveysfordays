@@ -1,3 +1,4 @@
+import { createRouter } from "./context";
 import { TRPCError } from "@trpc/server";
 import { createProtectedRouter } from "./protectedRouter";
 import { z } from "zod";
@@ -6,7 +7,7 @@ import {
   userCanAccessSurvey,
 } from "src/lib/userCanAccess";
 
-export const questionRouter = createProtectedRouter()
+const questionRouterPrivate = createProtectedRouter()
   .mutation("add", {
     input: z.object({
       surveyId: z.string(),
@@ -129,3 +130,49 @@ export const questionRouter = createProtectedRouter()
       });
     },
   });
+
+const questionRouterPublic = createRouter().query("getAllPublishedBySurveyId", {
+  input: z.object({
+    surveyId: z.string().nullish(),
+  }),
+  async resolve({ input, ctx }) {
+    if (!input.surveyId) {
+      throw new TRPCError({ code: "BAD_REQUEST" });
+    }
+    return await ctx.prisma.question.findMany({
+      where: { surveyId: input.surveyId, status: "PUBLISH" },
+    });
+  },
+});
+/* .query("getAllBySurveyId", {
+    input: z.object({
+      surveyId: z.string(),
+    }),
+    async resolve({ input, ctx }) {
+      if (!(await userCanAccessSurvey(input.surveyId, ctx.session?.user.id))) {
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+      }
+
+      return await ctx.prisma.question.findMany({
+        where: {
+          surveyId: input.surveyId,
+          status: "DRAFT",
+          survey: {
+            userId: {
+              equals: ctx.userId,
+            },
+          },
+        },
+        include: {
+          questionOptions: {
+            orderBy: { orderNumber: "asc" },
+          },
+        },
+        orderBy: [{ orderNumber: "asc" }],
+      });
+    },
+  }); */
+
+export const questionRouter = createRouter()
+  .merge(questionRouterPrivate)
+  .merge(questionRouterPublic);

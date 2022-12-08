@@ -2,6 +2,7 @@ import Builder from "@/components/Builder";
 import QuestionsOverview from "@/components/QuestionsOverview";
 import BuilderSectionContent from "@/components/BuilderSectionContent";
 import AppNavBar from "@/components/AppNavBar";
+import AppButton from "@/components/AppButton";
 import useQuestion from "@/hooks/useQuestion";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -40,11 +41,12 @@ const BuilderPage = () => {
       <div className="mx-auto container">
         <div className="flex justify-between h-screen">
           <div className="w-1/3 my-2 mr-2">
-            <button
+            <AppButton
+              className="w-full"
               onClick={() => publishMutation.mutate({ id: surveyId as string })}
             >
               publish
-            </button>
+            </AppButton>
             <QuestionsOverview
               surveyId={surveyId}
               scrollToQuestion={(orderNumber: number) =>
@@ -60,7 +62,7 @@ const BuilderPage = () => {
                   <BuilderSectionContent
                     key={question.id}
                     isCurrent={currentOrderNumber === question.orderNumber}
-                    contentId={question.id}
+                    questionId={question.id}
                     {...question}
                   />
                 ))

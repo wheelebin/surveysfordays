@@ -11,6 +11,7 @@ const useElement = (
   questionType: string,
   questionText: string,
   orderNumber: number,
+  isPublished?: boolean,
   questionSupportText?: string | null
 ) => {
   const [inputElements, setInputElements] = useState<InputElement[]>([]);
@@ -23,9 +24,24 @@ const useElement = (
   const { deleteQuestion } = useQuestion(surveyId);
 
   // TODO This could stay here, we could put it in useQuestion or create a new hook for QuestionOption
+  console.log(
+    isPublished
+      ? [
+          "questionOption.getAllPublishedByQuestionId",
+          { questionId: contentId },
+        ]
+      : ["questionOption.getAllByQuestionId", { questionId: contentId }]
+  );
   const { data } = trpc.useQuery(
-    ["questionOption.getAllByQuestionId", { questionId: contentId }],
-    { refetchOnWindowFocus: false }
+    isPublished
+      ? [
+          "questionOption.getAllPublishedByQuestionId",
+          { questionId: contentId },
+        ]
+      : ["questionOption.getAllByQuestionId", { questionId: contentId }],
+    {
+      refetchOnWindowFocus: false,
+    }
   );
 
   useEffect(

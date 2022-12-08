@@ -7,7 +7,7 @@ import {
 } from "src/lib/userCanAccess";
 import { TRPCError } from "@trpc/server";
 
-export const questionOptionRouter = createProtectedRouter()
+export const questionOptionRouterPrivate = createProtectedRouter()
   .mutation("add", {
     input: z.array(
       z.object({
@@ -92,3 +92,27 @@ export const questionOptionRouter = createProtectedRouter()
       });
     },
   });
+
+export const questionOptionRouterPublic = createRouter().query(
+  "getAllPublishedByQuestionId",
+  {
+    input: z.object({
+      questionId: z.string().nullish(),
+    }),
+    async resolve({ input, ctx }) {
+      if (!input.questionId) {
+        throw new TRPCError({ code: "BAD_REQUEST" });
+      }
+      return await ctx.prisma.questionOption.findMany({
+        where: {
+          questionId: input.questionId,
+          status: "PUBLISH",
+        },
+      });
+    },
+  }
+);
+
+export const questionOptionRouter = createRouter()
+  .merge(questionOptionRouterPrivate)
+  .merge(questionOptionRouterPublic);
