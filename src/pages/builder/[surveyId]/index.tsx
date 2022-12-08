@@ -6,8 +6,10 @@ import useQuestion from "@/hooks/useQuestion";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSurveyStore } from "@/stores/survey";
+import { trpc } from "@/utils/trpc";
 
 const BuilderPage = () => {
+  const utils = trpc.useContext();
   const [surveyId, setSurveyId] = useState<string | undefined>(undefined);
   const router = useRouter();
   const { surveyId: surveyIdParam } = router.query;
@@ -22,6 +24,12 @@ const BuilderPage = () => {
   const [currentOrderNumber, setCurrentOrderNumber] = useState(0);
   const { questions } = useQuestion(surveyId as string);
 
+  const publishMutation = trpc.useMutation("survey.publish", {
+    onSuccess(input) {
+      //utils.invalidateQueries(["questionOption.getAllByQuestionId"]);
+    },
+  });
+
   if (!surveyId) {
     return <></>;
   }
@@ -32,6 +40,11 @@ const BuilderPage = () => {
       <div className="mx-auto container">
         <div className="flex justify-between h-screen">
           <div className="w-1/3 my-2 mr-2">
+            <button
+              onClick={() => publishMutation.mutate({ id: surveyId as string })}
+            >
+              publish
+            </button>
             <QuestionsOverview
               surveyId={surveyId}
               scrollToQuestion={(orderNumber: number) =>

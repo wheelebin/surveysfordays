@@ -3,6 +3,7 @@ import { createProtectedRouter } from "./protectedRouter";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { userCanAccessSurvey } from "src/lib/userCanAccess";
+import { publishSurvey } from "src/lib/publishHandler";
 
 export const surveyRouterPrivate = createProtectedRouter()
   .mutation("add", {
@@ -35,7 +36,7 @@ export const surveyRouterPrivate = createProtectedRouter()
       }
 
       return await ctx.prisma.survey.update({
-        where: { id: input.id },
+        where: { id_status: { id: input.id, status: "DRAFT" } },
         data: input,
       });
     },
@@ -43,7 +44,7 @@ export const surveyRouterPrivate = createProtectedRouter()
   .query("getAll", {
     async resolve({ ctx }) {
       return await ctx.prisma.survey.findMany({
-        where: { userId: ctx.userId },
+        where: { userId: ctx.userId, status: "DRAFT" },
       });
     },
   })
@@ -68,7 +69,21 @@ export const surveyRouterPrivate = createProtectedRouter()
       if (!(await userCanAccessSurvey(input.id, ctx.userId))) {
         throw new TRPCError({ code: "UNAUTHORIZED" });
       }
-      return await ctx.prisma.survey.delete({ where: { id: input.id } });
+      return await ctx.prisma.survey.delete({
+        where: { id_status: { id: input.id, status: "DRAFT" } },
+      });
+    },
+  })
+  .mutation("publish", {
+    input: z.object({
+      id: z.string(),
+    }),
+    async resolve({ input, ctx }) {
+      if (!(await userCanAccessSurvey(input.id, ctx.userId))) {
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+      }
+
+      await publishSurvey(input.id);
     },
   });
 
@@ -80,7 +95,7 @@ export const surveyRouterPublic = createRouter().query(
     }),
     async resolve({ input, ctx }) {
       const survey = await ctx.prisma.survey.findUnique({
-        where: { id: input.id },
+        where: { id_status: { id: input.id, status: "PUBLISH" } },
       });
       if (!survey) {
         throw new TRPCError({
@@ -88,9 +103,6 @@ export const surveyRouterPublic = createRouter().query(
           message: `No survey with id ${input.id}`,
         });
       }
-
-      // Check if survey is published
-      // This is for users who are going to answer the surveys
 
       return survey;
     },

@@ -1,8 +1,12 @@
 import { prisma } from "../server/db/client";
 
-export const userCanAccessSurvey = async (id: string, userId: string) => {
+export const userCanAccessSurvey = async (
+  id: string,
+  userId: string,
+  status: "DRAFT" | "PUBLISH" = "DRAFT"
+) => {
   const survey = await prisma.survey.findFirst({
-    where: { id, userId },
+    where: { id, userId, status },
   });
   if (!survey) {
     return null;
@@ -10,10 +14,15 @@ export const userCanAccessSurvey = async (id: string, userId: string) => {
   return survey;
 };
 
-export const userCanAccessQuestion = async (id: string, userId: string) => {
+export const userCanAccessQuestion = async (
+  id: string,
+  userId: string,
+  status: "DRAFT" | "PUBLISH" = "DRAFT"
+) => {
   const question = await prisma.question.findFirst({
     where: {
       id,
+      status,
       survey: {
         userId,
       },
@@ -27,11 +36,13 @@ export const userCanAccessQuestion = async (id: string, userId: string) => {
 
 export const userCanAccessQuestionOption = async (
   id: string,
-  userId: string
+  userId: string,
+  status: "DRAFT" | "PUBLISH" = "DRAFT"
 ) => {
   const questionOption = await prisma.questionOption.findFirst({
     where: {
       id,
+      status,
       question: {
         survey: {
           userId,

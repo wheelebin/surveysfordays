@@ -42,7 +42,7 @@ export const questionRouter = createProtectedRouter()
           supportText: input.supportText,
           type: input.type,
         },
-        where: { id: input.id },
+        where: { id_status: { id: input.id, status: "DRAFT" } },
       });
     },
   })
@@ -63,7 +63,7 @@ export const questionRouter = createProtectedRouter()
           }
 
           return ctx.prisma.question.update({
-            where: { id: question.id },
+            where: { id_status: { id: question.id, status: "DRAFT" } },
             data: question,
           });
         })
@@ -83,6 +83,7 @@ export const questionRouter = createProtectedRouter()
       return await ctx.prisma.question.findMany({
         where: {
           surveyId: input.surveyId,
+          status: "DRAFT",
           survey: {
             userId: {
               equals: ctx.userId,
@@ -106,7 +107,9 @@ export const questionRouter = createProtectedRouter()
       if (!(await userCanAccessQuestion(input.id, ctx.userId))) {
         throw new TRPCError({ code: "UNAUTHORIZED" });
       }
-      return await ctx.prisma.question.findUnique({ where: { id: input.id } });
+      return await ctx.prisma.question.findUnique({
+        where: { id_status: { id: input.id, status: "DRAFT" } },
+      });
     },
   })
   .mutation("delete", {
@@ -121,6 +124,8 @@ export const questionRouter = createProtectedRouter()
       await ctx.prisma.questionOption.deleteMany({
         where: { questionId: input.id },
       });
-      return await ctx.prisma.question.delete({ where: { id: input.id } });
+      return await ctx.prisma.question.delete({
+        where: { id_status: { id: input.id, status: "DRAFT" } },
+      });
     },
   });

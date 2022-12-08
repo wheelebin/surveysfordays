@@ -58,27 +58,19 @@ model VerificationToken {
 
 // TODO Add draft status to survey
 model Survey {
-    id             String          @id @default(cuid())
-    name           String
-    title          String
-    description    String
-    createdAt      DateTime        @default(now())
-    user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId         String
-    Question       Question[]
-    surveyVersions SurveyVersion[]
-}
+    id          String     @default(cuid())
+    name        String
+    title       String
+    description String
+    createdAt   DateTime   @default(now())
+    user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId      String
+    Question    Question[]
 
-model SurveyVersion {
-    id         String    @id @default(cuid())
-    survey     Survey    @relation(fields: [surveyId], references: [id], onDelete: Cascade)
-    surveyId   String
-    surveyData Json
-    name       String
-    isCurrent  Boolean
-    publishAt  DateTime
-    hideAt     DateTime?
-    createdAt  DateTime  @default(now())
+    parentId String?      @unique
+    status   SurveyStatus @default(DRAFT)
+
+    @@id([id, status])
 }
 
 // model Section {
@@ -107,20 +99,25 @@ model Image {
 // TODO Reconcider the naming of bellow tables
 // Question could be Content and QuestionOptions could be InputElement (examples)
 model Question {
-    id              String           @id @default(cuid())
+    id              String           @default(cuid())
     type            String
-    survey          Survey           @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+    survey          Survey           @relation(fields: [surveyId, status], references: [id, status], onDelete: Cascade)
     surveyId        String
     text            String
     supportText     String?
     orderNumber     Int
     questionOptions QuestionOption[]
     createdAt       DateTime         @default(now())
+
+    parentId String?      @unique
+    status   SurveyStatus @default(DRAFT)
+
+    @@id([id, status])
 }
 
 model QuestionOption {
-    id          String   @id @default(cuid())
-    question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+    id          String   @default(cuid())
+    question    Question @relation(fields: [questionId, status], references: [id, status], onDelete: Cascade)
     questionId  String
     type        String // RADIO, RADIOTEXT, TEXT, NUMBER, DATE, TIME, CHECKBOX
     label       String
@@ -129,6 +126,11 @@ model QuestionOption {
     value       String   @default(cuid())
     orderNumber Int
     createdAt   DateTime @default(now())
+
+    parentId String?      @unique
+    status   SurveyStatus @default(DRAFT)
+
+    @@id([id, status])
 }
 
 model Answer {
@@ -139,4 +141,9 @@ model Answer {
     createdAt        DateTime @default(now())
 
     @@unique([questionId, questionOptionId, userId])
+}
+
+enum SurveyStatus {
+    DRAFT
+    PUBLISH
 }
