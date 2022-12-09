@@ -21,12 +21,11 @@ A survey form builder
 
 ## Doing
 
-- TODO Implement drafts & publishing of created surveys so they can be completed by other users
+- TODO Implement completion of surveys by users outside of our system (answer table and etc)
+- TODO Implement a simple results view for the publisher to see the result of the survey
 
 ## Backlog Prio
 
-- TODO Implement completion of surveys by users outside of our system (answer table and etc)
-- TODO Implement a simple results view for the publisher to see the result of the survey
 - TODO Polish design
 
 ## Backlog
