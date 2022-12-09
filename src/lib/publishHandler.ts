@@ -9,6 +9,7 @@ enum SurveyStatus {
 }
 
 export const publishSurvey = async (surveyId: string) => {
+  // TODO Room for refactoring/improvment?
   const survey = await prisma.survey.findUnique({
     where: { id_status: { id: surveyId, status: "DRAFT" } },
     include: { Question: { include: { questionOptions: true } } },
@@ -34,7 +35,7 @@ export const publishSurvey = async (surveyId: string) => {
     questionOptions.map((questionOption) => questionOption)
   );
 
-  await prisma.$transaction([
+  const result = await prisma.$transaction([
     prisma.survey.upsert({
       where: { id_status: { id: survey.id, status: "PUBLISH" } },
       update: {
@@ -69,4 +70,38 @@ export const publishSurvey = async (surveyId: string) => {
       })
     ),
   ]);
+
+  // Cleanup, remove any deleted questions and/or questionOptions
+
+  const publishedSurvey = await prisma.survey.findUnique({
+    where: { id_status: { id: surveyId, status: "PUBLISH" } },
+    include: { Question: { include: { questionOptions: true } } },
+  });
+
+  if (!publishedSurvey) {
+    return null;
+  }
+
+  publishedSurvey.Question.forEach(async ({ id }) => {
+    const obj = questionsData.find((draftQuestion) => draftQuestion.id === id);
+
+    if (!obj) {
+      const res = await prisma.question.delete({
+        where: { id_status: { id, status: "PUBLISH" } },
+      });
+    }
+  });
+  publishedSurvey.Question.flatMap(({ questionOptions }) =>
+    questionOptions.map(async ({ id }) => {
+      const obj = questionOptionsData.find(
+        (draftQuestionOption) => draftQuestionOption.id === id
+      );
+
+      if (!obj) {
+        await prisma.questionOption.delete({
+          where: { id_status: { id, status: "PUBLISH" } },
+        });
+      }
+    })
+  );
 };
