@@ -20,8 +20,9 @@ const questionRouterPrivate = createProtectedRouter()
       if (!(await userCanAccessSurvey(input.surveyId, ctx.userId))) {
         throw new TRPCError({ code: "UNAUTHORIZED" });
       }
+      console.log(input);
       return await ctx.prisma.question.create({
-        data: input,
+        data: { ...input, status: "DRAFT" },
       });
     },
   })
@@ -43,7 +44,7 @@ const questionRouterPrivate = createProtectedRouter()
           supportText: input.supportText,
           type: input.type,
         },
-        where: { id_status: { id: input.id, status: "DRAFT" } },
+        where: { id: input.id },
       });
     },
   })
@@ -64,7 +65,7 @@ const questionRouterPrivate = createProtectedRouter()
           }
 
           return ctx.prisma.question.update({
-            where: { id_status: { id: question.id, status: "DRAFT" } },
+            where: { id: question.id },
             data: question,
           });
         })
@@ -109,7 +110,7 @@ const questionRouterPrivate = createProtectedRouter()
         throw new TRPCError({ code: "UNAUTHORIZED" });
       }
       return await ctx.prisma.question.findUnique({
-        where: { id_status: { id: input.id, status: "DRAFT" } },
+        where: { id: input.id },
       });
     },
   })
@@ -126,7 +127,7 @@ const questionRouterPrivate = createProtectedRouter()
         where: { questionId: input.id },
       });
       return await ctx.prisma.question.delete({
-        where: { id_status: { id: input.id, status: "DRAFT" } },
+        where: { id: input.id },
       });
     },
   });

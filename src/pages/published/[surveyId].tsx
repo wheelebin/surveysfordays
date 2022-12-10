@@ -18,6 +18,8 @@ const BuilderPage = () => {
     surveyId: surveyId as string,
   });
 
+  console.log(survey, questions);
+
   useEffect(() => {
     if (typeof surveyIdParam === "string") {
       setSurveyId(surveyIdParam);

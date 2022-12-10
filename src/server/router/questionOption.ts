@@ -57,7 +57,7 @@ export const questionOptionRouterPrivate = createProtectedRouter()
             throw new TRPCError({ code: "UNAUTHORIZED" });
           }
           return ctx.prisma.questionOption.update({
-            where: { id_status: { id: questionOption.id, status: "DRAFT" } },
+            where: { id: questionOption.id },
             data: questionOption,
           });
         })
@@ -88,7 +88,7 @@ export const questionOptionRouterPrivate = createProtectedRouter()
         throw new TRPCError({ code: "UNAUTHORIZED" });
       }
       return await ctx.prisma.questionOption.delete({
-        where: { id_status: { id: input.id, status: "DRAFT" } },
+        where: { id: input.id },
       });
     },
   });
@@ -106,7 +106,6 @@ export const questionOptionRouterPublic = createRouter().query(
       return await ctx.prisma.questionOption.findMany({
         where: {
           questionId: input.questionId,
-          status: "PUBLISH",
         },
       });
     },

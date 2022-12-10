@@ -13,19 +13,13 @@ const usePublished = ({
   );
 
   const { data: questions } = trpc.useQuery(
-    ["question.getAllPublishedBySurveyId", { surveyId }],
-    { refetchOnWindowFocus: false, enabled: !!surveyId }
-  );
-
-  const { data: questionOptions } = trpc.useQuery(
-    ["questionOption.getAllPublishedByQuestionId", { questionId }],
-    { refetchOnWindowFocus: false, enabled: !!questionId }
+    ["question.getAllPublishedBySurveyId", { surveyId: survey?.id }],
+    { refetchOnWindowFocus: false, enabled: !!survey?.id }
   );
 
   return {
     survey,
     questions: questions || [],
-    questionOptions: questionOptions || [],
   };
 };
 

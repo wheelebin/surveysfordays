@@ -10,6 +10,10 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+generator dbml {
+    provider = "prisma-dbml-generator"
+}
+
 model Account {
     id                String  @id @default(cuid())
     userId            String
@@ -38,14 +42,15 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
+    id            String       @id @default(cuid())
     name          String?
-    email         String?   @unique
+    email         String?      @unique
     emailVerified DateTime?
     image         String?
     accounts      Account[]
     sessions      Session[]
     surveys       Survey[]
+    Submission    Submission[]
 }
 
 model VerificationToken {
@@ -56,9 +61,8 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
-// TODO Add draft status to survey
 model Survey {
-    id          String     @default(cuid())
+    id          String     @id @default(cuid())
     name        String
     title       String
     description String
@@ -67,41 +71,15 @@ model Survey {
     userId      String
     Question    Question[]
 
-    parentId String?      @unique
-    status   SurveyStatus @default(DRAFT)
-
-    @@id([id, status])
+    parentId   String?      @unique
+    status     SurveyStatus @default(DRAFT)
+    Submission Submission[]
 }
 
-// model Section {
-//     id            String     @id @default(cuid())
-//     surveyId      String
-//     sectionNumber Int
-//     questions     Question[]
-//     createdAt     DateTime   @default(now())
-// }
-
-model Text {
-    id        String   @id @default(cuid())
-    sectionId String
-    text      String
-    createdAt DateTime @default(now())
-}
-
-model Image {
-    id        String   @id @default(cuid())
-    sectionId String
-    url       String
-    createdAt DateTime @default(now())
-}
-
-// TODO Add supporting text to bellow
-// TODO Reconcider the naming of bellow tables
-// Question could be Content and QuestionOptions could be InputElement (examples)
 model Question {
-    id              String           @default(cuid())
+    id              String           @id @default(cuid())
     type            String
-    survey          Survey           @relation(fields: [surveyId, status], references: [id, status], onDelete: Cascade)
+    survey          Survey           @relation(fields: [surveyId], references: [id], onDelete: Cascade)
     surveyId        String
     text            String
     supportText     String?
@@ -109,15 +87,17 @@ model Question {
     questionOptions QuestionOption[]
     createdAt       DateTime         @default(now())
 
-    parentId String?      @unique
-    status   SurveyStatus @default(DRAFT)
+    parentId              String?                 @unique
+    status                SurveyStatus            @default(DRAFT)
+    Answer_QuestionOption Answer_QuestionOption[]
 
-    @@id([id, status])
+    // @@unique([id, status]) 
+    // TODO Can I do this? This is the truth, id & status combined is what makes it unique
 }
 
 model QuestionOption {
-    id          String   @default(cuid())
-    question    Question @relation(fields: [questionId, status], references: [id, status], onDelete: Cascade)
+    id          String   @id @default(cuid())
+    question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
     questionId  String
     type        String // RADIO, RADIOTEXT, TEXT, NUMBER, DATE, TIME, CHECKBOX
     label       String
@@ -129,18 +109,34 @@ model QuestionOption {
 
     parentId String?      @unique
     status   SurveyStatus @default(DRAFT)
+}
 
-    @@id([id, status])
+model Submission {
+    id       String   @id @default(cuid())
+    surveyId String
+    survey   Survey   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+    userId   String?
+    user     User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    Answer   Answer[]
 }
 
 model Answer {
-    questionId       String
-    questionOptionId String
-    userId           String
-    text             String?
-    createdAt        DateTime @default(now())
+    id           String     @id @default(cuid())
+    submissionId String
+    submission   Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
 
-    @@unique([questionId, questionOptionId, userId])
+    createdAt             DateTime                @default(now())
+    Answer_QuestionOption Answer_QuestionOption[]
+}
+
+model Answer_QuestionOption {
+    answerId String
+    answer   Answer @relation(fields: [answerId], references: [id], onDelete: Cascade)
+
+    questionOptionId String
+    questionOption   Question @relation(fields: [questionOptionId], references: [id], onDelete: Cascade)
+
+    @@id([answerId, questionOptionId])
 }
 
 enum SurveyStatus {

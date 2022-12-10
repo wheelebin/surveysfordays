@@ -36,7 +36,7 @@ export const surveyRouterPrivate = createProtectedRouter()
       }
 
       return await ctx.prisma.survey.update({
-        where: { id_status: { id: input.id, status: "DRAFT" } },
+        where: { id: input.id },
         data: input,
       });
     },
@@ -71,7 +71,7 @@ export const surveyRouterPrivate = createProtectedRouter()
         throw new TRPCError({ code: "UNAUTHORIZED" });
       }
       return await ctx.prisma.survey.delete({
-        where: { id_status: { id: input.id, status: "DRAFT" } },
+        where: { id: input.id },
       });
     },
   })
@@ -100,7 +100,7 @@ export const surveyRouterPublic = createRouter().query(
       }
 
       const survey = await ctx.prisma.survey.findUnique({
-        where: { id_status: { id: input.id, status: "PUBLISH" } },
+        where: { parentId: input.id },
       });
       if (!survey) {
         throw new TRPCError({

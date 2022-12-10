@@ -1,9 +1,8 @@
 import React, { useRef, useEffect } from "react";
 import BuilderInputElement from "./BuilderInputElement";
-import BuilderHeader from "./BuilderHeader";
 import AppCard from "./AppCard";
+import AppButton from "./AppButton";
 
-import { TrashIcon, Pencil1Icon } from "@radix-ui/react-icons";
 import useElement from "@/hooks/useElement";
 
 import { ELEMENTS_WITH_ADD_MULTIPLE } from "@/constants/elements";
@@ -17,18 +16,12 @@ type Props = {
   orderNumber: number;
   isCurrent: boolean;
   isPublished?: boolean;
+  onSubmit?: () => void;
 };
 
 const BuilderSectionContent = (props: Props) => {
   const myRef = useRef<HTMLDivElement | null>(null);
-  const {
-    inputElements,
-    handleOnEdit,
-    handleOnDelete,
-    text,
-    supportText,
-    type,
-  } = useElement(
+  const { inputElements, text, supportText, type } = useElement(
     props.questionId,
     props.surveyId,
     props.type,
@@ -70,17 +63,29 @@ const BuilderSectionContent = (props: Props) => {
     }
   };
 
+  const submitAnswer = () => {
+    // Do some submit logic
+    // Set next question
+
+    if (props.onSubmit) {
+      props.onSubmit();
+    }
+  };
+
   return (
     <div className="mb-5">
       <AppCard isCurrent={props.isCurrent}>
         <div className="relative">
-          {/* <BuilderHeader onEdit={handleOnEdit} /> */}
-
           <div className="flex mb-4 flex-col">
             <h1 className="text-xl">{text}</h1>
             <span className="text-sm">{supportText}</span>
           </div>
           <div className="">{renderElements()}</div>
+        </div>
+        <div>
+          <AppButton className="w-full" onClick={submitAnswer}>
+            Next
+          </AppButton>
         </div>
       </AppCard>
     </div>

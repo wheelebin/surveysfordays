@@ -1,0 +1,150 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table Account {
+  id String [pk]
+  userId String [not null]
+  type String [not null]
+  provider String [not null]
+  providerAccountId String [not null]
+  refresh_token String
+  access_token String
+  expires_at Int
+  token_type String
+  scope String
+  id_token String
+  session_state String
+  user User [not null]
+
+  indexes {
+    (provider, providerAccountId) [unique]
+  }
+}
+
+Table Session {
+  id String [pk]
+  sessionToken String [unique, not null]
+  userId String [not null]
+  expires DateTime [not null]
+  user User [not null]
+}
+
+Table User {
+  id String [pk]
+  name String
+  email String [unique]
+  emailVerified DateTime
+  image String
+  accounts Account [not null]
+  sessions Session [not null]
+  surveys Survey [not null]
+  Submission Submission [not null]
+}
+
+Table VerificationToken {
+  identifier String [not null]
+  token String [unique, not null]
+  expires DateTime [not null]
+
+  indexes {
+    (identifier, token) [unique]
+  }
+}
+
+Table Survey {
+  id String [pk]
+  name String [not null]
+  title String [not null]
+  description String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  user User [not null]
+  userId String [not null]
+  Question Question [not null]
+  parentId String [unique]
+  status SurveyStatus [not null, default: 'DRAFT']
+  Submission Submission [not null]
+}
+
+Table Question {
+  id String [pk]
+  type String [not null]
+  survey Survey [not null]
+  surveyId String [not null]
+  text String [not null]
+  supportText String
+  orderNumber Int [not null]
+  questionOptions QuestionOption [not null]
+  createdAt DateTime [default: `now()`, not null]
+  parentId String [unique]
+  status SurveyStatus [not null, default: 'DRAFT']
+  Answer_QuestionOption Answer_QuestionOption [not null]
+}
+
+Table QuestionOption {
+  id String [pk]
+  question Question [not null]
+  questionId String [not null]
+  type String [not null]
+  label String [not null]
+  placeholder String
+  supportText String
+  value String [not null]
+  orderNumber Int [not null]
+  createdAt DateTime [default: `now()`, not null]
+  parentId String [unique]
+  status SurveyStatus [not null, default: 'DRAFT']
+}
+
+Table Submission {
+  id String [pk]
+  surveyId String [not null]
+  survey Survey [not null]
+  userId String
+  user User
+  Answer Answer [not null]
+}
+
+Table Answer {
+  id String [pk]
+  submissionId String [not null]
+  submission Submission [not null]
+  createdAt DateTime [default: `now()`, not null]
+  Answer_QuestionOption Answer_QuestionOption [not null]
+}
+
+Table Answer_QuestionOption {
+  answerId String [not null]
+  answer Answer [not null]
+  questionOptionId String [not null]
+  questionOption Question [not null]
+
+  indexes {
+    (answerId, questionOptionId) [pk]
+  }
+}
+
+Enum SurveyStatus {
+  DRAFT
+  PUBLISH
+}
+
+Ref: Account.userId > User.id [delete: Cascade]
+
+Ref: Session.userId > User.id [delete: Cascade]
+
+Ref: Survey.userId > User.id [delete: Cascade]
+
+Ref: Question.surveyId > Survey.id [delete: Cascade]
+
+Ref: QuestionOption.questionId > Question.id [delete: Cascade]
+
+Ref: Submission.surveyId > Survey.id [delete: Cascade]
+
+Ref: Submission.userId > User.id [delete: Cascade]
+
+Ref: Answer.submissionId > Submission.id [delete: Cascade]
+
+Ref: Answer_QuestionOption.answerId > Answer.id [delete: Cascade]
+
+Ref: Answer_QuestionOption.questionOptionId > Question.id [delete: Cascade]

@@ -27,8 +27,6 @@ const dropDatabase = async () => {
   // TODO manage this in a better way
   await prisma.questionOption.deleteMany();
   await prisma.question.deleteMany();
-  await prisma.text.deleteMany();
-  await prisma.image.deleteMany();
   await prisma.survey.deleteMany();
 };
 
@@ -38,7 +36,7 @@ export const initMock = () => {
     title: "what are your favorite things",
     name: "Favorite things",
     description: "What are your favorite things?",
-    userId: "clbew4qj00000uzx09y8t4ipc",
+    userId: "clbigbc1b0000uzvi4tmcef3m",
     status: "DRAFT",
     parentId: null,
     createdAt: new Date(),
@@ -54,6 +52,8 @@ export const initMock = () => {
     type: "RADIO",
     orderNumber: index,
     createdAt: new Date(),
+    parentId: null,
+    status: "DRAFT",
   }));
 
   const questionOptions: QuestionOption[] = [];
@@ -69,6 +69,8 @@ export const initMock = () => {
         value: `questionOption-${questionIndex}-${index}`,
         orderNumber: index,
         createdAt: new Date(),
+        parentId: null,
+        status: "DRAFT",
       }))
     )
   );
@@ -84,28 +86,22 @@ export async function main() {
   await dropDatabase();
   const { survey, questions, questionOptions } = initMock();
 
-  await prisma.survey.upsert({
-    where: { id: survey.id },
-    update: {},
-    create: survey,
+  await prisma.survey.create({
+    data: survey,
   });
 
   await Promise.any(
     questions.map((question) =>
-      prisma.question.upsert({
-        where: { id: question.id },
-        update: {},
-        create: question,
+      prisma.question.create({
+        data: question,
       })
     )
   );
 
   await Promise.any(
     questionOptions.map((questionOption) =>
-      prisma.questionOption.upsert({
-        where: { id: questionOption.id },
-        update: {},
-        create: questionOption,
+      prisma.questionOption.create({
+        data: questionOption,
       })
     )
   );
