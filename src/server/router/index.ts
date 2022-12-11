@@ -14,7 +14,7 @@ export const appRouter = createRouter()
   .merge("page.", pageRouter)
   .merge("question.", questionRouter)
   .merge("questionOption.", questionOptionRouter)
-  .merge("submissionRouter", submissionRouter);
+  .merge("submission", submissionRouter);
 
 // export type definition of API
 export type AppRouter = typeof appRouter;

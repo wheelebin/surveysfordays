@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import BuilderInputElement from "./BuilderInputElement";
 import AppCard from "./AppCard";
 import AppButton from "./AppButton";
@@ -16,10 +16,11 @@ type Props = {
   orderNumber: number;
   isCurrent: boolean;
   isPublished?: boolean;
-  onSubmit?: () => void;
+  onSubmit?: (values: string[]) => void;
 };
 
 const BuilderSectionContent = (props: Props) => {
+  const [answers, setAnswers] = useState<string[]>([]);
   const myRef = useRef<HTMLDivElement | null>(null);
   const { inputElements, text, supportText, type } = useElement(
     props.questionId,
@@ -50,7 +51,13 @@ const BuilderSectionContent = (props: Props) => {
     }
 
     if (ELEMENTS_WITH_ADD_MULTIPLE.includes(type)) {
-      return <BuilderInputElement type={type} options={elements} />;
+      return (
+        <BuilderInputElement
+          type={type}
+          options={elements}
+          onChange={(value) => setAnswers(value)}
+        />
+      );
     } else if (element) {
       return (
         <BuilderInputElement
@@ -58,6 +65,7 @@ const BuilderSectionContent = (props: Props) => {
           support={element.supportText || undefined}
           placeholder={element.placeholder || undefined}
           label={element.label}
+          onChange={(value) => setAnswers(value)}
         />
       );
     }
@@ -68,7 +76,7 @@ const BuilderSectionContent = (props: Props) => {
     // Set next question
 
     if (props.onSubmit) {
-      props.onSubmit();
+      props.onSubmit(answers);
     }
   };
 

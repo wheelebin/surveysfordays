@@ -4,7 +4,7 @@ import AppRadioGroupItem from "./AppRadioGroupItem";
 
 type AppRadioGroupProps = {
   children?: React.ReactNode;
-  radioItems?: { id?: string; value?: string; label?: string }[];
+  radioItems?: { id: string; value?: string; label?: string }[];
   onChange?: (value: string) => void;
 };
 

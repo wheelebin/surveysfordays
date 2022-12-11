@@ -1,6 +1,7 @@
 import usePublished from "@/hooks/usePublished";
 
 import BuilderSectionContent from "@/components/BuilderSectionContent";
+import AppButton from "@/components/AppButton";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSurveyStore } from "@/stores/survey";
@@ -13,12 +14,18 @@ const BuilderPage = () => {
   const { surveyId: surveyIdParam } = router.query;
 
   const [currentOrderNumber, setCurrentOrderNumber] = useState(0);
+  const [allAnswers, setAllAnswers] = useState<
+    {
+      questionId: string;
+      questionOptionIds: string[];
+    }[]
+  >([]);
 
   const { survey, questions } = usePublished({
     surveyId: surveyId as string,
   });
 
-  console.log(survey, questions);
+  const submitMutation = trpc.useMutation("submissionsubmit");
 
   useEffect(() => {
     if (typeof surveyIdParam === "string") {
@@ -30,6 +37,25 @@ const BuilderPage = () => {
   if (!surveyId) {
     return <></>;
   }
+
+  const submitAnswer = (questionId: string, values: string[]) => {
+    const a = allAnswers.filter((answer) => {
+      return answer.questionId !== questionId;
+    });
+    setAllAnswers([...a, { questionId, questionOptionIds: values }]);
+  };
+  const submitAnswers = () => {
+    if (survey) {
+      const req = {
+        userId: null,
+        surveyId: survey.id,
+        answers: allAnswers.map(({ questionOptionIds }) => ({
+          questionOptionIds,
+        })),
+      };
+      submitMutation.mutate(req);
+    }
+  };
 
   // Add type or versionStatus or isPublished to the components-
   // in order to switch to the getPublished* methods instead
@@ -47,6 +73,7 @@ const BuilderPage = () => {
                     isCurrent={currentOrderNumber === question.orderNumber}
                     questionId={question.id}
                     isPublished={question.status === "PUBLISH"}
+                    onSubmit={(values) => submitAnswer(question.id, values)}
                     {...question}
                   />
                 ))
@@ -54,6 +81,9 @@ const BuilderPage = () => {
                 <div className=" my-5 p-3 bg-slate-50">No content</div>
               )}
             </div>
+            <AppButton className="w-full" onClick={submitAnswers}>
+              Next
+            </AppButton>
           </div>
         </div>
       </div>

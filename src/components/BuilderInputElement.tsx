@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useSyncExternalStore } from "react";
 import AppRadioGroup from "./AppRadioGroup";
 import AppCheckbox from "./AppCheckbox";
 import AppTextField from "./AppTextField";
@@ -7,11 +7,11 @@ type Props = {
   id?: string;
   type: string;
   value?: string;
-  options?: { id?: string; value: string; label: string }[];
+  options?: { id: string; value: string; label: string }[];
   label?: string;
   placeholder?: string;
   support?: string;
-  onChange?: (value: string) => void;
+  onChange?: (value: string[]) => void;
 };
 
 const BuilderInputElement: React.FC<Props> = ({
@@ -23,18 +23,34 @@ const BuilderInputElement: React.FC<Props> = ({
   support,
   onChange,
 }) => {
+  const [valueInternal, setValueInternal] = useState<string[]>([]);
   // TODO Label in here is only for on an input element level, actual question text is in BuilderSectionContent
   const getElement = () => {
     if (type === "RADIO") {
-      return <AppRadioGroup radioItems={options} />;
+      return (
+        <AppRadioGroup
+          onChange={(value: string) => onChange && onChange([value])}
+          radioItems={options}
+        />
+      );
     }
 
     if (type === "CHECKBOX") {
+      const handleOnCheckedChange = (id: string, isChecked: boolean) => {
+        const value = isChecked
+          ? [...valueInternal, id]
+          : valueInternal.filter((value) => value !== id);
+        setValueInternal(value);
+        onChange && onChange(value);
+      };
       return options ? (
         options.map((option) => (
           <AppCheckbox
+            onChange={(isChecked) =>
+              handleOnCheckedChange(option.id, isChecked)
+            }
             key={option.id}
-            value={option.value}
+            value={option.id}
             label={option.label}
           />
         ))

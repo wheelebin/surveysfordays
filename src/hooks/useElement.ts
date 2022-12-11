@@ -21,17 +21,10 @@ const useElement = (
   const [placeholder, setPlaceholder] = useState<string | undefined>(undefined);
   const [type, setType] = useState<string | undefined>("");
 
-  const { deleteQuestion } = useQuestion(surveyId);
+  //const { deleteQuestion } = useQuestion(surveyId);
 
   // TODO This could stay here, we could put it in useQuestion or create a new hook for QuestionOption
-  console.log(
-    isPublished
-      ? [
-          "questionOption.getAllPublishedByQuestionId",
-          { questionId: contentId },
-        ]
-      : ["questionOption.getAllByQuestionId", { questionId: contentId }]
-  );
+
   const { data } = trpc.useQuery(
     isPublished
       ? [
@@ -103,8 +96,8 @@ const useElement = (
     text,
     supportText,
     inputElements,
-    handleOnEdit,
-    handleOnDelete: () => deleteQuestion(contentId),
+    //handleOnEdit,
+    //handleOnDelete: () => deleteQuestion(contentId),
   };
 };
 

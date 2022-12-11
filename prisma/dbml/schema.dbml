@@ -78,7 +78,6 @@ Table Question {
   createdAt DateTime [default: `now()`, not null]
   parentId String [unique]
   status SurveyStatus [not null, default: 'DRAFT']
-  Answer_QuestionOption Answer_QuestionOption [not null]
 }
 
 Table QuestionOption {
@@ -94,6 +93,7 @@ Table QuestionOption {
   createdAt DateTime [default: `now()`, not null]
   parentId String [unique]
   status SurveyStatus [not null, default: 'DRAFT']
+  Answer_QuestionOption Answer_QuestionOption [not null]
 }
 
 Table Submission {
@@ -117,7 +117,7 @@ Table Answer_QuestionOption {
   answerId String [not null]
   answer Answer [not null]
   questionOptionId String [not null]
-  questionOption Question [not null]
+  questionOption QuestionOption [not null]
 
   indexes {
     (answerId, questionOptionId) [pk]
@@ -147,4 +147,4 @@ Ref: Answer.submissionId > Submission.id [delete: Cascade]
 
 Ref: Answer_QuestionOption.answerId > Answer.id [delete: Cascade]
 
-Ref: Answer_QuestionOption.questionOptionId > Question.id [delete: Cascade]
+Ref: Answer_QuestionOption.questionOptionId > QuestionOption.id [delete: Cascade]

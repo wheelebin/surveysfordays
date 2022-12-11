@@ -20,15 +20,17 @@ export const submissionRouter = createRouter().mutation("submit", {
     });
 
     // TODO This stuff should be a transaction
-    input.answers.forEach(async ({ questionOptionIds }) => {
+    input.answers.map(async ({ questionOptionIds }) => {
+      const stuffs = questionOptionIds.map((answerOption) => ({
+        questionOptionId: answerOption,
+      }));
       const answer = await ctx.prisma.answer.create({
-        data: { submissionId: submission.id },
-      });
-      await ctx.prisma.answer_QuestionOption.createMany({
-        data: questionOptionIds.map((questionOptionId) => ({
-          answerId: answer.id,
-          questionOptionId,
-        })),
+        data: {
+          submissionId: submission.id,
+          Answer_QuestionOption: {
+            createMany: { data: stuffs },
+          },
+        },
       });
     });
   },

@@ -87,9 +87,8 @@ model Question {
     questionOptions QuestionOption[]
     createdAt       DateTime         @default(now())
 
-    parentId              String?                 @unique
-    status                SurveyStatus            @default(DRAFT)
-    Answer_QuestionOption Answer_QuestionOption[]
+    parentId String?      @unique
+    status   SurveyStatus @default(DRAFT)
 
     // @@unique([id, status]) 
     // TODO Can I do this? This is the truth, id & status combined is what makes it unique
@@ -107,8 +106,9 @@ model QuestionOption {
     orderNumber Int
     createdAt   DateTime @default(now())
 
-    parentId String?      @unique
-    status   SurveyStatus @default(DRAFT)
+    parentId              String?                 @unique
+    status                SurveyStatus            @default(DRAFT)
+    Answer_QuestionOption Answer_QuestionOption[]
 }
 
 model Submission {
@@ -134,7 +134,7 @@ model Answer_QuestionOption {
     answer   Answer @relation(fields: [answerId], references: [id], onDelete: Cascade)
 
     questionOptionId String
-    questionOption   Question @relation(fields: [questionOptionId], references: [id], onDelete: Cascade)
+    questionOption   QuestionOption @relation(fields: [questionOptionId], references: [id], onDelete: Cascade)
 
     @@id([answerId, questionOptionId])
 }
