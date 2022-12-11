@@ -38,21 +38,21 @@ const SubmissionPage = () => {
   // in order to switch to the getPublished* methods instead
 
   return (
-    <div className="w-3/5">
+    <div className="w-4/5">
       <div className="flex">
         {data.header?.map((item) => (
-          <div className="w-60" key={item.id}>
+          <div className="w-72 font-bold" key={item.id}>
             {item.text}
           </div>
         ))}
       </div>
       <div className="flex flex-wrap">
-        {data.data?.flatMap((data, i) => {
+        {data.data?.map((row, i) => {
           return (
-            <div className="w-full flex " key={"a-" + i}>
-              {data.map((data_) => (
-                <div className="w-60" key={"b-" + i}>
-                  {data_ ? data_ : "-"}
+            <div className="w-full flex " key={`row-${i}`}>
+              {row.map((cellValue) => (
+                <div className="w-72" key={`cell-${i}`}>
+                  {cellValue ? cellValue : "-"}
                 </div>
               ))}
             </div>
