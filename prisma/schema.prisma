@@ -90,8 +90,7 @@ model Question {
     parentId String?      @unique
     status   SurveyStatus @default(DRAFT)
 
-    // @@unique([id, status]) 
-    // TODO Can I do this? This is the truth, id & status combined is what makes it unique
+    Answer Answer[]
 }
 
 model QuestionOption {
@@ -125,7 +124,9 @@ model Answer {
     submissionId String
     submission   Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
 
-    text String?
+    text       String?
+    questionId String
+    question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
     createdAt             DateTime                @default(now())
     Answer_QuestionOption Answer_QuestionOption[]

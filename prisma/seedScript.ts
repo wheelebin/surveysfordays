@@ -36,7 +36,7 @@ export const initMock = () => {
     title: "what are your favorite things",
     name: "Favorite things",
     description: "What are your favorite things?",
-    userId: "clbigbc1b0000uzvi4tmcef3m",
+    userId: "clbjhs8m60000uzeavia3cjqo",
     status: "DRAFT",
     parentId: null,
     createdAt: new Date(),

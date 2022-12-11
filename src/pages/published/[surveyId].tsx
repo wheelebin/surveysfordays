@@ -27,7 +27,7 @@ const BuilderPage = () => {
     surveyId: surveyId as string,
   });
 
-  const submitMutation = trpc.useMutation("submissionsubmit");
+  const submitMutation = trpc.useMutation("submission.submit");
 
   useEffect(() => {
     if (typeof surveyIdParam === "string") {
@@ -61,7 +61,8 @@ const BuilderPage = () => {
       const req = {
         userId: null,
         surveyId: survey.id,
-        answers: allAnswers.map(({ questionOptionIds, text }) => ({
+        answers: allAnswers.map(({ questionOptionIds, text, questionId }) => ({
+          questionId,
           questionOptionIds,
           text: text || null,
         })),
