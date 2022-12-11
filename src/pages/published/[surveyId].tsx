@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSurveyStore } from "@/stores/survey";
 import { trpc } from "@/utils/trpc";
+import { ELEMENTS_WITH_PLACEHOLDER } from "@/constants/elements";
 
 const BuilderPage = () => {
   const utils = trpc.useContext();
@@ -17,6 +18,7 @@ const BuilderPage = () => {
   const [allAnswers, setAllAnswers] = useState<
     {
       questionId: string;
+      text?: string;
       questionOptionIds: string[];
     }[]
   >([]);
@@ -38,21 +40,33 @@ const BuilderPage = () => {
     return <></>;
   }
 
-  const submitAnswer = (questionId: string, values: string[]) => {
+  const submitAnswer = (type: string, questionId: string, values: string[]) => {
     const a = allAnswers.filter((answer) => {
       return answer.questionId !== questionId;
     });
-    setAllAnswers([...a, { questionId, questionOptionIds: values }]);
+
+    const text = ELEMENTS_WITH_PLACEHOLDER.includes(type)
+      ? values[0]
+      : undefined;
+
+    setAllAnswers([
+      ...a,
+      { questionId, questionOptionIds: !text ? values : [], text },
+    ]);
+
+    console.log(text, allAnswers);
   };
   const submitAnswers = () => {
     if (survey) {
       const req = {
         userId: null,
         surveyId: survey.id,
-        answers: allAnswers.map(({ questionOptionIds }) => ({
+        answers: allAnswers.map(({ questionOptionIds, text }) => ({
           questionOptionIds,
+          text: text || null,
         })),
       };
+      console.log(req);
       submitMutation.mutate(req);
     }
   };
@@ -73,7 +87,9 @@ const BuilderPage = () => {
                     isCurrent={currentOrderNumber === question.orderNumber}
                     questionId={question.id}
                     isPublished={question.status === "PUBLISH"}
-                    onSubmit={(values) => submitAnswer(question.id, values)}
+                    onSubmit={(values) =>
+                      submitAnswer(question.type, question.id, values)
+                    }
                     {...question}
                   />
                 ))

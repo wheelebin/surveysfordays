@@ -77,6 +77,7 @@ const BuilderSectionContent = (props: Props) => {
 
     if (props.onSubmit) {
       props.onSubmit(answers);
+      console.log(answers);
     }
   };
 

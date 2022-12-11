@@ -60,7 +60,13 @@ const BuilderInputElement: React.FC<Props> = ({
     }
 
     if (type === "TEXT") {
-      return <AppTextField value={value} placeholder={placeholder} />;
+      return (
+        <AppTextField
+          onChange={(value) => onChange && onChange([value])}
+          value={value}
+          placeholder={placeholder}
+        />
+      );
     }
   };
 

@@ -125,6 +125,8 @@ model Answer {
     submissionId String
     submission   Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
 
+    text String?
+
     createdAt             DateTime                @default(now())
     Answer_QuestionOption Answer_QuestionOption[]
 }
