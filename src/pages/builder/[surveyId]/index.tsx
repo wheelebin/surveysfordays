@@ -25,7 +25,7 @@ const BuilderPage = () => {
   const [currentOrderNumber, setCurrentOrderNumber] = useState(0);
   const { questions } = useQuestion(surveyId as string);
 
-  const publishMutation = trpc.useMutation("survey.publish", {
+  const publishMutation = trpc.survey.publish.useMutation({
     onSuccess(input) {
       //utils.invalidateQueries(["questionOption.getAllByQuestionId"]);
     },

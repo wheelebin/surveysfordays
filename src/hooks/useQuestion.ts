@@ -4,81 +4,58 @@ import { Question } from "@prisma/client";
 const useQuestion = (surveyId: string) => {
   const utils = trpc.useContext();
 
-  const deleteQuestionOptionMutation = trpc.useMutation(
-    "questionOption.delete",
+  const deleteQuestionOptionMutation = trpc.questionOption.delete.useMutation(
     {
       onSuccess(input) {
-        utils.invalidateQueries([
-          "questionOption.getAllByQuestionId",
-          { questionId: input.questionId },
-        ]);
+        utils.questionOption.getAllByQuestionId.invalidate({ questionId: input.questionId });
       },
     }
   );
-  const addQuestionMutation = trpc.useMutation("question.add", {
+  const addQuestionMutation = trpc.question.add.useMutation({
     onSuccess(input) {
-      utils.invalidateQueries([
-        "question.getAllBySurveyId",
-        { surveyId: input.surveyId },
-      ]);
+      utils.question.getAllBySurveyId.invalidate({ surveyId: input.surveyId });
     },
   });
-  const editQuestionMutation = trpc.useMutation("question.editQuestion", {
+  const editQuestionMutation = trpc.question.editQuestion.useMutation({
     onSuccess(input) {
-      utils.invalidateQueries([
-        "question.getAllBySurveyId",
-        { surveyId: input.surveyId },
-      ]);
+      utils.question.getAllBySurveyId.invalidate({ surveyId: input.surveyId });
     },
   });
-  const deleteQuestionMutation = trpc.useMutation("question.delete", {
+  const deleteQuestionMutation = trpc.question.delete.useMutation({
     onSuccess(input) {
-      utils.invalidateQueries([
-        "question.getAllBySurveyId",
-        { surveyId: input.surveyId },
-      ]);
+      utils.question.getAllBySurveyId.invalidate({ surveyId: input.surveyId });
     },
   });
-  const editQuestionsOrderNumberMutation = trpc.useMutation(
-    "question.editQuestionsOrderNumber",
+  const editQuestionsOrderNumberMutation = trpc.question.editQuestionsOrderNumber.useMutation(
     {
       onSuccess(input) {
         const surveyId = input[0]?.surveyId;
         if (surveyId) {
-          utils.invalidateQueries([
-            "question.getAllBySurveyId",
-            { surveyId: surveyId },
-          ]);
+          utils.question.getAllBySurveyId.invalidate({ surveyId: surveyId });
         }
       },
     }
   );
-  const editQuestionOptionMutation = trpc.useMutation("questionOption.edit", {
+  const editQuestionOptionMutation = trpc.questionOption.edit.useMutation({
     onSuccess(input) {
       const questionId = input[0]?.questionId;
       if (questionId) {
-        utils.invalidateQueries([
-          "questionOption.getAllByQuestionId",
-          { questionId: questionId },
-        ]);
+        utils.questionOption.getAllByQuestionId.invalidate({ questionId: questionId });
       }
     },
   });
-  const addQuestionOptionMutation = trpc.useMutation("questionOption.add", {
+  const addQuestionOptionMutation = trpc.questionOption.add.useMutation({
     onSuccess(input) {
       const questionId = input[0]?.questionId;
       if (questionId) {
-        utils.invalidateQueries([
-          "questionOption.getAllByQuestionId",
-          { questionId: questionId },
-        ]);
+        utils.questionOption.getAllByQuestionId.invalidate({ questionId: questionId });
       }
     },
   });
 
-  const { data: questions } = trpc.useQuery(
-    ["question.getAllBySurveyId", { surveyId }],
-    { refetchOnWindowFocus: false, enabled: !!surveyId }
+  const { data: questions } = trpc.question.getAllBySurveyId.useQuery(
+    { surveyId },
+      { refetchOnWindowFocus: false, enabled: !!surveyId }
   );
 
   const addQuestion = async (type: string, orderNumber: number) => {

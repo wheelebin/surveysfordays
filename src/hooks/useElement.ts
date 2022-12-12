@@ -25,13 +25,14 @@ const useElement = (
 
   // TODO This could stay here, we could put it in useQuestion or create a new hook for QuestionOption
 
-  const { data } = trpc.useQuery(
+  const { data } = (
     isPublished
-      ? [
-          "questionOption.getAllPublishedByQuestionId",
-          { questionId: contentId },
-        ]
-      : ["questionOption.getAllByQuestionId", { questionId: contentId }],
+      ? trpc.questionOption.getAllPublishedByQuestionId
+      : trpc.questionOption.getAllByQuestionId
+  ).useQuery(
+    {
+      questionId: contentId,
+    },
     {
       refetchOnWindowFocus: false,
     }

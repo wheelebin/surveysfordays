@@ -7,14 +7,14 @@ const usePublished = ({
   surveyId?: string;
   questionId?: string;
 }) => {
-  const { data: survey } = trpc.useQuery(
-    ["survey.getPublishedSurveyById", { id: surveyId }],
-    { refetchOnWindowFocus: false, enabled: !!surveyId }
+  const { data: survey } = trpc.survey.getPublishedSurveyById.useQuery(
+    { id: surveyId },
+      { refetchOnWindowFocus: false, enabled: !!surveyId }
   );
 
-  const { data: questions } = trpc.useQuery(
-    ["question.getAllPublishedBySurveyId", { surveyId: survey?.id }],
-    { refetchOnWindowFocus: false, enabled: !!survey?.id }
+  const { data: questions } = trpc.question.getAllPublishedBySurveyId.useQuery(
+    { surveyId: survey?.id },
+      { refetchOnWindowFocus: false, enabled: !!survey?.id }
   );
 
   return {

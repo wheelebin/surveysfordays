@@ -14,12 +14,9 @@ const SubmissionPage = () => {
   const router = useRouter();
   const { surveyId: surveyIdParam } = router.query;
 
-  const submitMutation = trpc.useMutation("submission.submit");
+  const submitMutation = trpc.submission.submit.useMutation();
 
-  const { data } = trpc.useQuery([
-    "submission.getAllBySurveyId",
-    { surveyId: surveyId as string },
-  ]);
+  const { data } = trpc.submission.getAllBySurveyId.useQuery({ surveyId: surveyId as string });
 
   // clbihl3d10023uz8fqnjyqsud
 

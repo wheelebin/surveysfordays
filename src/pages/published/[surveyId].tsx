@@ -27,7 +27,7 @@ const BuilderPage = () => {
     surveyId: surveyId as string,
   });
 
-  const submitMutation = trpc.useMutation("submission.submit");
+  const submitMutation = trpc.submission.submit.useMutation();
 
   useEffect(() => {
     if (typeof surveyIdParam === "string") {

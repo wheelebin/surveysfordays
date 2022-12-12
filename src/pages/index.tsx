@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 
 const Survey = () => {
   const router = useRouter();
-  const { data: surveys } = trpc.useQuery(["survey.getAll"]);
+  const { data: surveys } = trpc.survey.getAll.useQuery();
 
   const { data: session, status } = useSession();
 

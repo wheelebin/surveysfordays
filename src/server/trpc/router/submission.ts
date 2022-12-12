@@ -1,56 +1,54 @@
+import { router, publicProcedure, protectedProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
-import { promise, z } from "zod";
-import { createRouter } from "./context";
-import { createProtectedRouter } from "./protectedRouter";
+import { z } from "zod";
 
-export const submissionRouterPublic = createRouter().mutation("submit", {
-  input: z.object({
-    surveyId: z.string(),
-    userId: z.string().nullable(),
-    answers: z.array(
+export const submissionRouter = router({
+  submit: publicProcedure
+    .input(
       z.object({
-        questionId: z.string(),
-        questionOptionIds: z.array(z.string()),
-        text: z.string().nullable(),
+        surveyId: z.string(),
+        userId: z.string().nullable(),
+        answers: z.array(
+          z.object({
+            questionId: z.string(),
+            questionOptionIds: z.array(z.string()),
+            text: z.string().nullable(),
+          })
+        ),
       })
-    ),
-  }),
-  async resolve({ ctx, input }) {
-    const submission = await ctx.prisma.submission.create({
-      data: {
-        surveyId: input.surveyId,
-        userId: input.userId,
-      },
-    });
-
-    // TODO This stuff should be a transaction
-    input.answers.map(async ({ questionOptionIds, text, questionId }) => {
-      const stuffs = questionOptionIds.map((answerOption) => ({
-        questionOptionId: answerOption,
-      }));
-
-      const answer = await ctx.prisma.answer.create({
+    )
+    .mutation(async ({ ctx, input }) => {
+      const submission = await ctx.prisma.submission.create({
         data: {
-          submissionId: submission.id,
-          text,
-          questionId,
-          Answer_QuestionOption: !text
-            ? {
-                createMany: { data: stuffs },
-              }
-            : {},
+          surveyId: input.surveyId,
+          userId: input.userId,
         },
       });
-      console.log(answer);
-    });
-  },
-});
 
-export const submissionRouterPrivate = createProtectedRouter().query(
-  "getAllBySurveyId",
-  {
-    input: z.object({ surveyId: z.string() }),
-    async resolve({ input, ctx }) {
+      // TODO This stuff should be a transaction
+      input.answers.map(async ({ questionOptionIds, text, questionId }) => {
+        const stuffs = questionOptionIds.map((answerOption) => ({
+          questionOptionId: answerOption,
+        }));
+
+        const answer = await ctx.prisma.answer.create({
+          data: {
+            submissionId: submission.id,
+            text,
+            questionId,
+            Answer_QuestionOption: !text
+              ? {
+                  createMany: { data: stuffs },
+                }
+              : {},
+          },
+        });
+        console.log(answer);
+      });
+    }),
+  getAllBySurveyId: protectedProcedure
+    .input(z.object({ surveyId: z.string() }))
+    .query(async ({ ctx, input }) => {
       const questions = await ctx.prisma.question.findMany({
         where: { survey: { parentId: input.surveyId } },
         include: {
@@ -115,10 +113,5 @@ export const submissionRouterPrivate = createProtectedRouter().query(
       ) as [string][];
 
       return { header, data: dataRows };
-    },
-  }
-);
-
-export const submissionRouter = createRouter()
-  .merge(submissionRouterPublic)
-  .merge(submissionRouterPrivate);
+    }),
+});
