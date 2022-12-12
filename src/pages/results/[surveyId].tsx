@@ -1,12 +1,14 @@
-import usePublished from "@/hooks/usePublished";
-
+import Builder from "@/components/Builder";
+import QuestionsOverview from "@/components/QuestionsOverview";
+import MainNavBar from "@/components/MainNavBar";
 import BuilderSectionContent from "@/components/BuilderSectionContent";
-import AppButton from "@/components/AppButton";
+import BuilderNavBar from "@/components/BuilderNavBar";
+import AppTable from "@/components/AppTable";
+import useQuestion from "@/hooks/useQuestion";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSurveyStore } from "@/stores/survey";
 import { trpc } from "@/utils/trpc";
-import { ELEMENTS_WITH_PLACEHOLDER } from "@/constants/elements";
 
 const SubmissionPage = () => {
   const utils = trpc.useContext();
@@ -16,7 +18,9 @@ const SubmissionPage = () => {
 
   const submitMutation = trpc.submission.submit.useMutation();
 
-  const { data } = trpc.submission.getAllBySurveyId.useQuery({ surveyId: surveyId as string });
+  const { data } = trpc.submission.getAllBySurveyId.useQuery({
+    surveyId: surveyId as string,
+  });
 
   // clbihl3d10023uz8fqnjyqsud
 
@@ -35,26 +39,11 @@ const SubmissionPage = () => {
   // in order to switch to the getPublished* methods instead
 
   return (
-    <div className="w-4/5">
-      <div className="flex">
-        {data.header?.map((item) => (
-          <div className="w-72 font-bold" key={item.id}>
-            {item.text}
-          </div>
-        ))}
-      </div>
-      <div className="flex flex-wrap">
-        {data.data?.map((row, i) => {
-          return (
-            <div className="w-full flex " key={`row-${i}`}>
-              {row.map((cellValue) => (
-                <div className="w-72" key={`cell-${i}`}>
-                  {cellValue ? cellValue : "-"}
-                </div>
-              ))}
-            </div>
-          );
-        })}
+    <div>
+      <MainNavBar />
+      <BuilderNavBar />
+      <div className="mx-auto container">
+        <AppTable headerItems={data.header} contentItems={data.data} />
       </div>
     </div>
   );
