@@ -1,6 +1,6 @@
 import { trpc } from "@/utils/trpc";
 import AppButton from "@/components/AppButton";
-import AppNavBar from "@/components/AppNavBar";
+import MainNavBar from "@/components/MainNavBar";
 import Link from "next/link";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useEffect } from "react";
@@ -20,7 +20,7 @@ const Survey = () => {
 
   return (
     <div>
-      <AppNavBar />
+      <MainNavBar />
       <div className="container mx-auto">
         <div className="flex justify-center mt-5">
           <AppButton>Create survey</AppButton>

@@ -1,7 +1,8 @@
 import Builder from "@/components/Builder";
 import QuestionsOverview from "@/components/QuestionsOverview";
+import MainNavBar from "@/components/MainNavBar";
 import BuilderSectionContent from "@/components/BuilderSectionContent";
-import AppNavBar from "@/components/AppNavBar";
+import BuilderNavBar from "@/components/BuilderNavBar";
 import AppButton from "@/components/AppButton";
 import useQuestion from "@/hooks/useQuestion";
 import { useEffect, useState } from "react";
@@ -37,7 +38,8 @@ const BuilderPage = () => {
 
   return (
     <div>
-      <AppNavBar />
+      <MainNavBar />
+      <BuilderNavBar />
       <div className="mx-auto container">
         <div className="flex justify-between h-screen">
           <div className="w-1/3 my-2 mr-2">
