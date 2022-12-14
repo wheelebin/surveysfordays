@@ -1,10 +1,17 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { trpc } from "@/utils/trpc";
 
 const AppNavBar = () => {
   const router = useRouter();
   const { surveyId } = router.query;
+
+  const publishMutation = trpc.survey.publish.useMutation({
+    onSuccess(input) {
+      //utils.invalidateQueries(["questionOption.getAllByQuestionId"]);
+    },
+  });
 
   const navItems = [
     {
@@ -31,6 +38,14 @@ const AppNavBar = () => {
               ) : undefined}
             </Link>
           ))}
+        </div>
+        <div className="">
+          <div
+            className="cursor-pointer py-2 px-1 w-full"
+            onClick={() => publishMutation.mutate({ id: surveyId as string })}
+          >
+            Publish
+          </div>
         </div>
       </div>
     </div>
