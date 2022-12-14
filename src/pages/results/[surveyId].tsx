@@ -22,8 +22,6 @@ const SubmissionPage = () => {
     surveyId: surveyId as string,
   });
 
-  // clbihl3d10023uz8fqnjyqsud
-
   useEffect(() => {
     if (typeof surveyIdParam === "string") {
       setSurveyId(surveyIdParam);
@@ -41,7 +39,6 @@ const SubmissionPage = () => {
   return (
     <div>
       <MainNavBar />
-      <BuilderNavBar />
       <div className="mx-auto container">
         <AppTable headerItems={data.header} contentItems={data.data} />
       </div>
