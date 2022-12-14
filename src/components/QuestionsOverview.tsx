@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import useBuilder from "@/hooks/useBuilder";
 import useQuestionsOverview from "@/hooks/useQuestionsOverview";
+import useResizeObserver from "@/hooks/useResizeObserver";
 import AppButton from "./AppButton";
 import {
   DragHandleHorizontalIcon,
@@ -40,6 +41,9 @@ const QuestionsOverview: React.FC<Props> = ({
 
   useEffect(() => setShow(isAdding || isEditing), [isEditing, isAdding]);
 
+  const header = useRef<HTMLDivElement | null>(null);
+  const { height } = useResizeObserver(header);
+
   const handleOnDragEnd = (list: any) => {
     // TODO Handle updating orderNumber here and not in hanldeOnEditSave
     const newList = list.map((item, i) => ({ ...item, orderNumber: i }));
@@ -51,13 +55,15 @@ const QuestionsOverview: React.FC<Props> = ({
   }
 
   return !show ? (
-    <AppCard>
-      <>
+    <AppCard className="h-full">
+      <div ref={header}>
         <h1 className="text-xl">Questions Overview</h1>
         <hr className="my-2" />
         <AppButton className="w-full" onClick={addQuestion}>
           Add question
         </AppButton>
+      </div>
+      <div className={`h-[calc(100%_-_${height}px)]`}>
         <DragAndDrop onDragEnd={handleOnDragEnd} list={questions}>
           {questions?.map((question, i) => {
             return (
@@ -93,7 +99,7 @@ const QuestionsOverview: React.FC<Props> = ({
             );
           })}
         </DragAndDrop>
-      </>
+      </div>
     </AppCard>
   ) : (
     <></>

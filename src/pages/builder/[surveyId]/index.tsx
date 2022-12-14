@@ -26,52 +26,40 @@ const BuilderPage = () => {
   const [currentOrderNumber, setCurrentOrderNumber] = useState(0);
   const { questions } = useQuestion(surveyId as string);
 
-  const publishMutation = trpc.survey.publish.useMutation({
-    onSuccess(input) {
-      //utils.invalidateQueries(["questionOption.getAllByQuestionId"]);
-    },
-  });
-
   if (!surveyId) {
     return <></>;
   }
 
   return (
-    <div>
-      <MainNavBar />
-      <BuilderNavBar />
-      <div className="mx-auto container">
-        <div className="flex justify-between h-screen">
-          <div className="w-1/3 my-2 mr-2">
-            <AppButton
-              className="w-full"
-              onClick={() => publishMutation.mutate({ id: surveyId as string })}
-            >
-              publish
-            </AppButton>
-            <QuestionsOverview
-              surveyId={surveyId}
-              scrollToQuestion={(orderNumber: number) =>
-                setCurrentOrderNumber(orderNumber)
-              }
-            />
-            <Builder surveyId={surveyId} questionId="question-0-0" />
-          </div>
-          <div className="flex flex-col w-1/2 overflow-y-scroll no-scrollbar ">
-            <div className={`p-3 `}>
-              {questions.length > 0 ? (
-                questions.map((question) => (
-                  <BuilderSectionContent
-                    key={question.id}
-                    isCurrent={currentOrderNumber === question.orderNumber}
-                    questionId={question.id}
-                    {...question}
-                  />
-                ))
-              ) : (
-                <div className=" my-5 p-3 bg-slate-50">No content</div>
-              )}
-            </div>
+    <div className="flex flex-col h-full">
+      <div className="grow-0 shrink basis-auto">
+        <MainNavBar />
+        <BuilderNavBar />
+      </div>
+      <div className="grow shrink basis-auto flex justify-around h-[calc(100vh_-_91px)]">
+        <div className="w-1/3 max-w-sm my-2 mr-2">
+          <QuestionsOverview
+            surveyId={surveyId}
+            scrollToQuestion={(orderNumber: number) =>
+              setCurrentOrderNumber(orderNumber)
+            }
+          />
+          <Builder surveyId={surveyId} questionId="question-0-0" />
+        </div>
+        <div className="flex flex-col w-1/2 overflow-y-scroll no-scrollbar">
+          <div className={`p-3 `}>
+            {questions.length > 0 ? (
+              questions.map((question) => (
+                <BuilderSectionContent
+                  key={question.id}
+                  isCurrent={currentOrderNumber === question.orderNumber}
+                  questionId={question.id}
+                  {...question}
+                />
+              ))
+            ) : (
+              <div className=" my-5 p-3 bg-slate-50">No content</div>
+            )}
           </div>
         </div>
       </div>
