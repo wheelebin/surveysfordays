@@ -32,14 +32,16 @@ const DragAndDrop: React.FC<Props> = ({ children, list, onDragEnd }) => {
 
   return (
     <DragDropContext onDragEnd={handleOnDragEnd}>
-      <Droppable droppableId="aDroppableId">
-        {(provided, snapshot) => (
-          <div {...provided.droppableProps} ref={provided.innerRef}>
-            {children}
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
+      <div className="h-full overflow-y-scroll no-scrollbar">
+        <Droppable droppableId="aDroppableId">
+          {(provided, snapshot) => (
+            <div {...provided.droppableProps} ref={provided.innerRef}>
+              {children}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </div>
     </DragDropContext>
   );
 };
