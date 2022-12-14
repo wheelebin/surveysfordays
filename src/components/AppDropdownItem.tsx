@@ -2,7 +2,7 @@ import React from "react";
 import * as Dropdown from "@radix-ui/react-dropdown-menu";
 
 type AppDropdownItemProps = {
-  icon: JSX.Element;
+  icon?: JSX.Element;
   label: string;
   onClick: () => void;
 };
@@ -10,7 +10,7 @@ type AppDropdownItemProps = {
 const AppDropdownItem = ({ icon, label, onClick }: AppDropdownItemProps) => {
   return (
     <Dropdown.Item onClick={onClick}>
-      <div className="flex items-center bg-white py-2 px-5">
+      <div className="flex items-center bg-white py-2 px-5 cursor-pointer">
         {icon}
         {label}
       </div>

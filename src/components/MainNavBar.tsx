@@ -1,11 +1,17 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useSession, signOut } from "next-auth/react";
+import useUser from "@/hooks/useUser";
+import { signOut } from "next-auth/react";
+import Avatar from "boring-avatars";
+import AccountDropDown from "./AccountDropDown";
+import AppDropdown from "./AppDropdown";
+import AppDropdownItem from "./AppDropdownItem";
 
 const MainNavBar = () => {
   const router = useRouter();
   const { surveyId } = router.query;
+  const { initials, user } = useUser();
 
   const navItems = [{ label: "Home", route: "/" }];
   const secondaryNavItems = [
@@ -48,12 +54,24 @@ const MainNavBar = () => {
           ) : undefined}
         </div>
         <div>
-          <div
-            className="cursor-pointer py-1 px-1 w-full"
-            onClick={() => signOut()}
+          <AppDropdown
+            trigger={
+              <div className="rounded-md overflow-hidden relative flex items-center justify-center">
+                <span className="absolute text-white font-bold">
+                  {initials}
+                </span>
+                <Avatar
+                  size={40}
+                  square={true}
+                  name={user?.id}
+                  variant="marble"
+                  colors={["#295270", "#524175", "#2b0948"]}
+                ></Avatar>
+              </div>
+            }
           >
-            Logout
-          </div>
+            <AppDropdownItem label="Logout" onClick={() => signOut()} />
+          </AppDropdown>
         </div>
       </div>
     </div>

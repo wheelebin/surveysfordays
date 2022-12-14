@@ -3,16 +3,17 @@ import * as Dropdown from "@radix-ui/react-dropdown-menu";
 import { DropdownMenuIcon } from "@radix-ui/react-icons";
 
 type AppDropdownProps = {
+  trigger?: React.ReactNode;
   children: React.ReactNode;
 };
 
-const AppDropdown = ({ children }: AppDropdownProps) => {
+const AppDropdown = ({ trigger, children }: AppDropdownProps) => {
   return (
     <Dropdown.Root>
       <Dropdown.Trigger>
-        <DropdownMenuIcon />
+        {trigger ? trigger : <DropdownMenuIcon />}
       </Dropdown.Trigger>
-      <Dropdown.Content className="bg-white shadow">
+      <Dropdown.Content className="bg-white shadow mt-2">
         {children}
       </Dropdown.Content>
     </Dropdown.Root>

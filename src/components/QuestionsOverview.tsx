@@ -63,7 +63,7 @@ const QuestionsOverview: React.FC<Props> = ({
           Add question
         </AppButton>
       </div>
-      <div className={`h-[calc(100%_-_${height}px)]`}>
+      <div className={`h-[calc(100%-${height}px)]`}>
         <DragAndDrop onDragEnd={handleOnDragEnd} list={questions}>
           {questions?.map((question, i) => {
             return (
