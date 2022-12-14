@@ -2,6 +2,8 @@ import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { trpc } from "@/utils/trpc";
+import { EyeIcon } from "@heroicons/react/20/solid";
+import AppButton from "@/components/AppButton";
 
 const AppNavBar = () => {
   const router = useRouter();
@@ -30,22 +32,16 @@ const AppNavBar = () => {
     <div className="border-bottom bg-white border-slate-200 text-black text-sm">
       <div className="container mx-auto flex justify-between items-center pt-1">
         <div className="flex items-center">
-          {navItems.map(({ label, route, pathName }) => (
-            <Link key={label} href={route}>
-              <div className="cursor-pointer py-2 px-1 w-full ">{label}</div>
-              {router.pathname === pathName ? (
-                <div className="w-full h-px bg-black"></div>
-              ) : undefined}
-            </Link>
-          ))}
-        </div>
-        <div className="">
-          <div
-            className="cursor-pointer py-2 px-1 w-full"
+          <AppButton className="ma-0 mr-2">
+            <EyeIcon className="w-4 h-4 mr-1" />
+            Preview
+          </AppButton>
+          <AppButton
+            className="ma-0 mr-2"
             onClick={() => publishMutation.mutate({ id: surveyId as string })}
           >
             Publish
-          </div>
+          </AppButton>
         </div>
       </div>
     </div>
