@@ -1,11 +1,12 @@
-import { trpc } from "@/utils/trpc";
 import { Question } from "@prisma/client";
 import { useBuilderStore } from "@/stores/builder";
-import useQuestion from "./useQuestion";
+import questionApi from "@/api/question";
 
 const useQuestionsOverview = (surveyId: string) => {
-  const { questions, editQuestionsOrder, deleteQuestion } =
-    useQuestion(surveyId);
+  const editQuestionOrderMutation = questionApi.useEditOrder();
+  const deleteQuestionMutation = questionApi.useDelete();
+
+  const { data: questions } = questionApi.useGetAllBySurveyId(surveyId);
 
   const addQuestion = async () => {
     if (!questions) {
@@ -32,8 +33,8 @@ const useQuestionsOverview = (surveyId: string) => {
     handleOnEdit,
     addQuestion,
     updateQuestionOrder: (updatedQuestions: Question[]) =>
-      editQuestionsOrder(updatedQuestions),
-    deleteQuestion: (id: string) => deleteQuestion(id),
+      editQuestionOrderMutation.mutate(updatedQuestions),
+    deleteQuestion: (id: string) => deleteQuestionMutation.mutate({ id }),
   };
 };
 

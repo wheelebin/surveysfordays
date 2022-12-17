@@ -1,4 +1,4 @@
-import React, { useState, useSyncExternalStore } from "react";
+import React, { useState } from "react";
 import AppRadioGroup from "./AppRadioGroup";
 import AppCheckbox from "./AppCheckbox";
 import AppTextField from "./AppTextField";

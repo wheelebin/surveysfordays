@@ -17,8 +17,7 @@ type Props = {
 
 const Builder: React.FC<Props> = ({ surveyId, children }) => {
   const [show, setShow] = useState<boolean>(false);
-  const { handleOnAdd, content, isAdding, isEditing, clear } =
-    useBuilder(surveyId);
+  const { handleOnAdd, content, isAdding, isEditing, clear } = useBuilder();
 
   useEffect(() => setShow(isAdding || isEditing), [isEditing, isAdding]);
 

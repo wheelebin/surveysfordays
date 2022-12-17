@@ -4,16 +4,13 @@ import { useRouter } from "next/router";
 import { trpc } from "@/utils/trpc";
 import { EyeIcon } from "@heroicons/react/20/solid";
 import AppButton from "@/components/AppButton";
+import surveyApi from "@/api/survey";
 
 const AppNavBar = () => {
   const router = useRouter();
   const { surveyId } = router.query;
 
-  const publishMutation = trpc.survey.publish.useMutation({
-    onSuccess(input) {
-      //utils.invalidateQueries(["questionOption.getAllByQuestionId"]);
-    },
-  });
+  const publishMutation = surveyApi.usePublish();
 
   const navItems = [
     {

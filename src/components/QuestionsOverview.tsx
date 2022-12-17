@@ -30,7 +30,7 @@ const QuestionsOverview: React.FC<Props> = ({
   surveyId,
 }) => {
   const [show, setShow] = useState<boolean>(false);
-  const { isAdding, isEditing } = useBuilder(surveyId);
+  const { isAdding, isEditing } = useBuilder();
   const {
     questions,
     addQuestion,

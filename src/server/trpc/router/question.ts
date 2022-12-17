@@ -14,7 +14,18 @@ export const questionRouter = router({
         type: z.string(),
         text: z.string().optional(),
         supportText: z.string().optional().nullable(),
-        orderNumber: z.number(),
+        orderNumber: z.number().optional(),
+        questionOptions: z
+          .array(
+            z.object({
+              type: z.string(),
+              label: z.string().optional(),
+              placeholder: z.string().optional(),
+              supportText: z.string().optional(),
+              orderNumber: z.number().optional(),
+            })
+          )
+          .optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -22,13 +33,30 @@ export const questionRouter = router({
         throw new TRPCError({ code: "UNAUTHORIZED" });
       }
 
-      const dummyData = {
+      const dummyQuestionData = {
         text: "Change me :)",
         supportText: "Some support text",
+        orderNumber: 0,
       };
 
+      const questionOptions = input.questionOptions?.map((questionOption) => ({
+        ...{
+          label: "Change me :)",
+          placeholder: "Some placeholder",
+          supportText: "Some support text for the input element",
+          orderNumber: 0,
+        },
+        ...questionOption,
+      }));
+
       return await ctx.prisma.question.create({
-        data: { ...dummyData, ...input, status: "DRAFT" },
+        data: {
+          ...dummyQuestionData,
+          ...input,
+          status: "DRAFT",
+          questionOptions: { createMany: { data: questionOptions || [] } },
+        },
+        include: { questionOptions: true },
       });
     }),
   editQuestion: protectedProcedure
@@ -158,6 +186,12 @@ export const questionRouter = router({
       }
       return await ctx.prisma.question.findMany({
         where: { surveyId: input.surveyId, status: "PUBLISH" },
+        include: {
+          questionOptions: {
+            orderBy: { orderNumber: "asc" },
+          },
+        },
+        orderBy: [{ orderNumber: "asc" }],
       });
     }),
 });

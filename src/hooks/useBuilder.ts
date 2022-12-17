@@ -1,8 +1,8 @@
-import { trpc } from "@/utils/trpc";
-import useQuestion from "./useQuestion";
 import { useBuilderStore } from "@/stores/builder";
+import questionApi from "@/api/question";
+import questionOptionApi from "@/api/questionOption";
 
-const useBuilder = (surveyId: string) => {
+const useBuilder = () => {
   const {
     isAdding,
     isEditing,
@@ -15,36 +15,31 @@ const useBuilder = (surveyId: string) => {
     clear,
   } = useBuilderStore();
 
-  const {
-    addQuestion,
-    editQuestion,
-    addQuestionOption,
-    editQuestionOption,
-    deleteQuestionOption,
-  } = useQuestion(surveyId);
-
+  const addQuestionMutation = questionApi.useAdd();
   const handleOnAdd = async (type: string) => {
     const { surveyId, orderNumber } = initialContent || {};
 
-    if (!surveyId || orderNumber === undefined) {
+    if (!surveyId) {
       return;
     }
 
-    const resp = await addQuestion(type, orderNumber);
+    const question = await addQuestionMutation.mutateAsync({
+      surveyId,
+      type,
+      orderNumber,
+    });
 
-    if (!resp) {
+    if (!question) {
       return;
     }
 
-    const { question, questionOptions } = resp;
-
-    if (question && questionOptions) {
-      initEditing(question, questionOptions);
-    }
+    initEditing(question, question.questionOptions);
   };
 
+  const deleteQuestionOptionMutation = questionOptionApi.useDelete();
   const handleOnDeleteOption = async (id: string) => {
-    const removedQuestionOption = await deleteQuestionOption(id);
+    const removedQuestionOption =
+      await deleteQuestionOptionMutation.mutateAsync({ id });
 
     if (removedQuestionOption) {
       setInputElements(
@@ -55,16 +50,19 @@ const useBuilder = (surveyId: string) => {
     }
   };
 
+  const editQuestionMutation = questionApi.useEdit();
+  const editQuestionOptionMutation = questionOptionApi.useEdit();
   const handleOnEditSave = () => {
     if (content) {
-      editQuestion(content);
+      editQuestionMutation.mutate(content);
     }
     if (inputElements) {
-      editQuestionOption(inputElements);
+      editQuestionOptionMutation.mutate(inputElements);
     }
     clear();
   };
 
+  const addQuestionOptionMutation = questionOptionApi.useAdd();
   const handleOnAddQuestionOption = async (questionOption: {
     questionId: string;
     type: string;
@@ -73,7 +71,7 @@ const useBuilder = (surveyId: string) => {
     supportText?: string;
     orderNumber: number;
   }) => {
-    return await addQuestionOption([questionOption]);
+    return await addQuestionOptionMutation.mutateAsync([questionOption]);
   };
 
   return {

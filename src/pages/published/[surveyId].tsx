@@ -1,5 +1,3 @@
-import usePublished from "@/hooks/usePublished";
-
 import BuilderSectionContent from "@/components/BuilderSectionContent";
 import AppButton from "@/components/AppButton";
 import { useEffect, useState } from "react";
@@ -7,9 +5,10 @@ import { useRouter } from "next/router";
 import { useSurveyStore } from "@/stores/survey";
 import { trpc } from "@/utils/trpc";
 import { ELEMENTS_WITH_PLACEHOLDER } from "@/constants/elements";
+import surveyApi from "@/api/survey";
+import questionApi from "@/api/question";
 
 const BuilderPage = () => {
-  const utils = trpc.useContext();
   const [surveyId, setSurveyId] = useState<string | undefined>(undefined);
   const router = useRouter();
   const { surveyId: surveyIdParam } = router.query;
@@ -23,9 +22,8 @@ const BuilderPage = () => {
     }[]
   >([]);
 
-  const { survey, questions } = usePublished({
-    surveyId: surveyId as string,
-  });
+  const { data: survey } = surveyApi.useGetPublished(surveyId as string);
+  const { data: questions } = questionApi.useGetAllBySurveyId(survey?.id, true);
 
   const submitMutation = trpc.submission.submit.useMutation();
 
@@ -81,7 +79,7 @@ const BuilderPage = () => {
         <div className="flex justify-between h-screen">
           <div className="flex flex-col w-1/2 overflow-y-scroll no-scrollbar ">
             <div className={`p-3 `}>
-              {questions.length > 0 ? (
+              {questions && questions.length > 0 ? (
                 questions.map((question) => (
                   <BuilderSectionContent
                     key={question.id}

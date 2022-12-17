@@ -3,15 +3,12 @@ import QuestionsOverview from "@/components/QuestionsOverview";
 import MainNavBar from "@/components/MainNavBar";
 import BuilderSectionContent from "@/components/BuilderSectionContent";
 import BuilderNavBar from "@/components/BuilderNavBar";
-import AppButton from "@/components/AppButton";
-import useQuestion from "@/hooks/useQuestion";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSurveyStore } from "@/stores/survey";
-import { trpc } from "@/utils/trpc";
+import questionApi from "@/api/question";
 
 const BuilderPage = () => {
-  const utils = trpc.useContext();
   const [surveyId, setSurveyId] = useState<string | undefined>(undefined);
   const router = useRouter();
   const { surveyId: surveyIdParam } = router.query;
@@ -24,9 +21,11 @@ const BuilderPage = () => {
   }, [surveyIdParam]);
 
   const [currentOrderNumber, setCurrentOrderNumber] = useState(0);
-  const { questions } = useQuestion(surveyId as string);
+  const { data: questions } = questionApi.useGetAllBySurveyId(
+    surveyId as string
+  );
 
-  if (!surveyId) {
+  if (!surveyId || !questions) {
     return <></>;
   }
 

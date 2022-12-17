@@ -1,9 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { trpc } from "@/utils/trpc";
 import { useBuilderStore, InputElement } from "@/stores/builder";
-import useQuestion from "./useQuestion";
-
-// TODO Finish this
+import questionOptionApi from "@/api/questionOption";
 
 const useElement = (
   contentId: string,
@@ -21,21 +19,9 @@ const useElement = (
   const [placeholder, setPlaceholder] = useState<string | undefined>(undefined);
   const [type, setType] = useState<string | undefined>("");
 
-  //const { deleteQuestion } = useQuestion(surveyId);
-
-  // TODO This could stay here, we could put it in useQuestion or create a new hook for QuestionOption
-
-  const { data } = (
+  const { data } = questionOptionApi.useGetAllByQuestionId(
+    contentId,
     isPublished
-      ? trpc.questionOption.getAllPublishedByQuestionId
-      : trpc.questionOption.getAllByQuestionId
-  ).useQuery(
-    {
-      questionId: contentId,
-    },
-    {
-      refetchOnWindowFocus: false,
-    }
   );
 
   useEffect(
