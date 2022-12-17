@@ -22,6 +22,7 @@
       "@/constants/*": ["src/constants/*"],
       "@/utils/*": ["src/utils/*"],
       "@/hooks/*": ["src/hooks/*"],
+      "@/api/*": ["src/api/*"],
       "@/stores/*": ["src/stores/*"]
     }
   },
