@@ -12,7 +12,7 @@ export const questionRouter = router({
       z.object({
         surveyId: z.string(),
         type: z.string(),
-        text: z.string(),
+        text: z.string().optional(),
         supportText: z.string().optional().nullable(),
         orderNumber: z.number(),
       })
@@ -21,9 +21,14 @@ export const questionRouter = router({
       if (!(await userCanAccessSurvey(input.surveyId, ctx.session.user.id))) {
         throw new TRPCError({ code: "UNAUTHORIZED" });
       }
-      console.log(input);
+
+      const dummyData = {
+        text: "Change me :)",
+        supportText: "Some support text",
+      };
+
       return await ctx.prisma.question.create({
-        data: { ...input, status: "DRAFT" },
+        data: { ...dummyData, ...input, status: "DRAFT" },
       });
     }),
   editQuestion: protectedProcedure

@@ -13,10 +13,10 @@ export const questionOptionRouter = router({
         z.object({
           questionId: z.string(),
           type: z.string(),
-          label: z.string(),
+          label: z.string().optional(),
           placeholder: z.string().optional(),
           supportText: z.string().optional(),
-          orderNumber: z.number(),
+          orderNumber: z.number().optional(),
         })
       )
     )
@@ -31,8 +31,16 @@ export const questionOptionRouter = router({
           ) {
             throw new TRPCError({ code: "UNAUTHORIZED" });
           }
+
+          const dummyData = {
+            label: "Change me :)",
+            placeholder: "Some placeholder",
+            supportText: "Some support text for the input element",
+            orderNumber: 0,
+          };
+
           return ctx.prisma.questionOption.create({
-            data: questionOption,
+            data: { ...dummyData, ...questionOption },
           });
         })
       );
