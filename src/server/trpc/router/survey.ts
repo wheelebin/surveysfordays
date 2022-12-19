@@ -62,8 +62,11 @@ export const surveyRouter = router({
         where: { userId: ctx.session.user.id },
         include: {
           Question: {
+            orderBy: { orderNumber: "asc" },
             include: {
-              questionOptions: true,
+              questionOptions: {
+                orderBy: { orderNumber: "asc" },
+              },
             },
           },
         },
