@@ -4,8 +4,8 @@ import AppButton from "@/components/AppButton";
 
 const LadingPage = () => {
   return (
-    <div className="w-screen h-screen flex flex-col">
-      <div className="mx-auto container grow-0 shrink basis-auto">
+    <div className="h-screen flex flex-col">
+      <div className="mx-auto container grow-0 shrink basis-auto px-5">
         <div className="flex justify-between items-center">
           <h3 className="text-xl font-bold">SurveysForDays</h3>
           <Link href="/api/auth/signin">
@@ -13,9 +13,9 @@ const LadingPage = () => {
           </Link>
         </div>
       </div>
-      <div className="mx-auto container grow shrink basis-auto">
-        <div className="mt-48 flex justify-between">
-          <article className="w-1/2 mt-20">
+      <div className="mx-auto container grow shrink basis-auto px-5 ">
+        <div className="mt-48 flex flex-col items-center justify-between lg:flex-row">
+          <article className="w-full lg:w-1/2 mt-20 flex flex-col items-center lg:flex-row lg:block">
             <h1 className="text-5xl">
               Create surveys, forms and questionaries fast and easy for free
             </h1>
@@ -29,16 +29,18 @@ const LadingPage = () => {
               </AppButton>
             </Link>
           </article>
-          <Image
-            src="/logo.png"
-            height={500}
-            width={500}
-            alt="Image of bear holding up a survey"
-          />
+          <div className="w-96 h-96 relative">
+            <Image
+              objectFit="contain"
+              src="/logo.png"
+              fill
+              alt="Image of bear holding up a survey"
+            />
+          </div>
         </div>
       </div>
       <div className="bg-black text-white py-10">
-        <div className="mx-auto container">
+        <div className="mx-auto container px-5">
           <span>Made by </span>
           <a href="https://github.com/wheelebin" className="text-green-200">
             @Wheelebin
