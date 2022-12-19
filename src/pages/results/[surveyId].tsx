@@ -11,9 +11,14 @@ const SubmissionPage = () => {
   const router = useRouter();
   const { surveyId: surveyIdParam } = router.query;
 
-  const { data } = trpc.submission.getAllBySurveyId.useQuery({
-    surveyId: surveyId as string,
-  });
+  const { data } = trpc.submission.getAllBySurveyId.useQuery(
+    {
+      surveyId: surveyId as string,
+    },
+    {
+      enabled: !!surveyId,
+    }
+  );
 
   useEffect(() => {
     if (typeof surveyIdParam === "string") {

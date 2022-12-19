@@ -21,10 +21,6 @@ A survey form builder
 
 ## Doing
 
-- Add complete screen to survey
-  - Should have a final submit button
-  - Once button is clicked a success thing comes up (Thank you for completeing...)
-
 ## Backlog Prio
 
 ## Backlog

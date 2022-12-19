@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSurveyStore } from "@/stores/survey";
 import surveyApi from "@/api/survey";
+import Survey from "@/components/Survey";
 
 const BuilderPage = () => {
   const [surveyId, setSurveyId] = useState<string | undefined>(undefined);
@@ -44,21 +45,10 @@ const BuilderPage = () => {
           />
           <Builder surveyId={survey.id} questionId="question-0-0" />
         </div>
-        <div className="flex flex-col w-1/2 overflow-y-scroll no-scrollbar">
-          <div className={`p-3 `}>
-            {survey.Question.length > 0 ? (
-              survey.Question.map((question) => (
-                <BuilderSectionContent
-                  key={question.id}
-                  isCurrent={currentOrderNumber === question.orderNumber}
-                  {...question}
-                />
-              ))
-            ) : (
-              <div className=" my-5 p-3 bg-slate-50">No content</div>
-            )}
-          </div>
-        </div>
+        <Survey
+          surveyId={surveyId as string}
+          currentOrderNumber={currentOrderNumber}
+        />
       </div>
     </div>
   );

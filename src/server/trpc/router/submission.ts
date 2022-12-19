@@ -69,6 +69,8 @@ export const submissionRouter = router({
         throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       }
 
+      console.log(questions);
+
       // TODO Take a look at this mess and improve it
 
       const transformedQuestions = questions.reduce((prev, curr) => {
