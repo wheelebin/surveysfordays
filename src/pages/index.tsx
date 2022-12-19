@@ -20,11 +20,11 @@ const Survey = () => {
   }, [status, session]);
 
   return (
-    <div>
+    <div className="bg-gray-100 h-screen">
       <MainNavBar />
       <div className="container mx-auto">
         <div className="flex justify-center mt-5">
-          <AppButton>Create survey</AppButton>
+          <AppButton primary>Create survey</AppButton>
         </div>
 
         <div className="flex flex-row">

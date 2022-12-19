@@ -81,7 +81,7 @@ const BuilderElementFormSelections: React.FC<Props> = ({ type }) => {
           </DragAndDropItem>
         ))}
       </DragAndDrop>
-      <AppButton className="w-full" onClick={handleOnEditSave}>
+      <AppButton className="w-full" primary onClick={handleOnEditSave}>
         Save
       </AppButton>
     </div>

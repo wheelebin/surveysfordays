@@ -23,6 +23,7 @@ const AppNavBar = () => {
             </AppButton>
           </Link>
           <AppButton
+            primary={true}
             className="ma-0 mr-2"
             onClick={() => publishMutation.mutate({ id: surveyId as string })}
           >

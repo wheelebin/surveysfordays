@@ -50,7 +50,7 @@ const BuilderElementFormInputs: React.FC = () => {
         onChange={(value) => handleOnChange("supportText", value)}
         value={inputElement?.supportText || ""}
       />
-      <AppButton className="w-full" onClick={handleOnEditSave}>
+      <AppButton className="w-full" primary onClick={handleOnEditSave}>
         Save
       </AppButton>
     </div>

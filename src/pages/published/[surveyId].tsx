@@ -37,7 +37,12 @@ const BuilderPage = () => {
     return <></>;
   }
 
-  const submitAnswer = (type: string, questionId: string, values: string[]) => {
+  const submitAnswer = (
+    type: string,
+    questionId: string,
+    values: string[],
+    orderNumber: number
+  ) => {
     const a = allAnswers.filter((answer) => {
       return answer.questionId !== questionId;
     });
@@ -50,6 +55,8 @@ const BuilderPage = () => {
       ...a,
       { questionId, questionOptionIds: !text ? values : [], text },
     ]);
+
+    setCurrentOrderNumber(orderNumber + 1);
 
     console.log(text, allAnswers);
   };
@@ -84,7 +91,12 @@ const BuilderPage = () => {
                     key={question.id}
                     isCurrent={currentOrderNumber === question.orderNumber}
                     onSubmit={(values) =>
-                      submitAnswer(question.type, question.id, values)
+                      submitAnswer(
+                        question.type,
+                        question.id,
+                        values,
+                        question.orderNumber
+                      )
                     }
                     {...question}
                   />

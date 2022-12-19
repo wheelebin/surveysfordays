@@ -28,12 +28,11 @@ const BuilderPage = () => {
   }
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-gray-100">
       <div className="grow-0 shrink basis-auto">
         <MainNavBar />
         <BuilderNavBar />
       </div>
-      <button>Get New</button>
       <div className="mx-auto container grow shrink basis-auto flex justify-between h-[calc(100vh_-_91px)]">
         <div className="w-1/3 max-w-sm my-2 mr-2">
           <QuestionsOverview

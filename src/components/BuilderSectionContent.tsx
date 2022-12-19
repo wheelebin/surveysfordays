@@ -47,7 +47,7 @@ const BuilderSectionContent = (props: Props) => {
     if (myRef && myRef.current && props.isCurrent) {
       myRef.current.scrollIntoView({
         behavior: "smooth",
-        block: "center",
+        block: "start",
         inline: "center",
       });
     }
@@ -92,11 +92,9 @@ const BuilderSectionContent = (props: Props) => {
     }
   };
 
-  console.log("BuilderSectionContent Render", props.id);
-
   return (
-    <div className="mb-5">
-      <AppCard isCurrent={props.isCurrent}>
+    <div className="h-screen" ref={myRef}>
+      <AppCard isCurrent={props.isCurrent} className="mt-64">
         <div className="relative">
           <div className="flex mb-4 flex-col">
             <h1 className="text-xl">{text}</h1>
@@ -104,8 +102,8 @@ const BuilderSectionContent = (props: Props) => {
           </div>
           <div className="">{renderElements()}</div>
         </div>
-        <div>
-          <AppButton className="w-full" onClick={submitAnswer}>
+        <div className="mt-10">
+          <AppButton className="w-full" primary onClick={submitAnswer}>
             Next
           </AppButton>
         </div>

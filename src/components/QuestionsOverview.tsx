@@ -51,7 +51,7 @@ const QuestionsOverview: React.FC<Props> = ({
       <div ref={header}>
         <h1 className="text-xl">Questions Overview</h1>
         <hr className="my-2" />
-        <AppButton className="w-full" onClick={addQuestion}>
+        <AppButton className="w-full" onClick={addQuestion} primary>
           Add question
         </AppButton>
       </div>
