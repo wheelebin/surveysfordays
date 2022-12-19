@@ -14,7 +14,7 @@ const LadingPage = () => {
         </div>
       </div>
       <div className="mx-auto container grow shrink basis-auto">
-        <div className="mt-48 flex relative">
+        <div className="mt-48 flex justify-between">
           <article className="w-1/2 mt-20">
             <h1 className="text-5xl">
               Create surveys, forms and questionaries fast and easy for free
@@ -24,7 +24,7 @@ const LadingPage = () => {
               that your audience actually want to answer without any cost.
             </p>
             <Link href="/api/auth/signin">
-              <AppButton primary className="py-5 px-8">
+              <AppButton primary className="mt-10 py-5 px-8">
                 Get started - It&apos;s free!
               </AppButton>
             </Link>
