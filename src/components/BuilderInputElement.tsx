@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import AppRadioGroup from "./AppRadioGroup";
-import AppCheckbox from "./AppCheckbox";
+import SurveyCheckbox from "./SurveyCheckbox";
 import AppTextField from "./AppTextField";
 
 type Props = {
@@ -45,7 +45,7 @@ const BuilderInputElement: React.FC<Props> = ({
       };
       return options ? (
         options.map((option) => (
-          <AppCheckbox
+          <SurveyCheckbox
             onChange={(isChecked) =>
               handleOnCheckedChange(option.id, isChecked)
             }
@@ -55,7 +55,7 @@ const BuilderInputElement: React.FC<Props> = ({
           />
         ))
       ) : (
-        <AppCheckbox value={value} label={label} />
+        <SurveyCheckbox value={value} label={label} />
       );
     }
 
