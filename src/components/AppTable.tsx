@@ -5,7 +5,7 @@ import { boolean, string } from "zod";
 
 const cellValueTag = (text: string) =>
   text ? (
-    <span className="bg-white border border-slate-200 p-1 rounded-md">
+    <span className="bg-green-200 mr-2 border border-slate-200 p-1 rounded-md">
       {text}
     </span>
   ) : (
@@ -31,7 +31,7 @@ const AppTable = ({ headerItems, contentItems }: Props) => {
               <AppTableHeader items={headerItems.map(({ text }) => text)} />
               <tbody className="divide-y divide-gray-200 ">
                 {contentItems.map((row, i) => (
-                  <tr className="bg-white hover:bg-gray-100" key={"row-" + i}>
+                  <tr className="bg-white hover:bg-gray-200" key={"row-" + i}>
                     <td className="px-6 py-4 bg-white">
                       <AppCheckbox />
                     </td>
