@@ -11,13 +11,7 @@ const Survey = () => {
   const router = useRouter();
   const { data: surveys } = surveyApi.useGetAll();
 
-  const { data: session, status } = useSession();
-
-  useEffect(() => {
-    if (status !== "loading" && !session) {
-      router.push("/api/auth/signin");
-    }
-  }, [status, session]);
+  const { data: session, status } = useSession({ required: true });
 
   return (
     <div className="bg-gray-100 h-screen">
