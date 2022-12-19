@@ -31,26 +31,16 @@ const useElement = (
 
   useEffect(
     () =>
-      useBuilderStore.subscribe(
-        ({ isEditing, content, inputElements }, prev) => {
-          const isBeingEdited = isEditing && contentId === content?.id;
-          const previousWasBeingEdited = prev.content?.id === contentId;
+      useBuilderStore.subscribe(({ isEditing, content, inputElements }) => {
+        const isBeingEdited = isEditing && contentId === content?.id;
 
-          if (isBeingEdited) {
-            setInputElements(inputElements);
-            setText(content?.text);
-            setType(content?.type);
-            setSupportText(content?.supportText);
-          }
-
-          if (!isBeingEdited && previousWasBeingEdited) {
-            setInputElements(questionOptions || []);
-            setText(questionText);
-            setType(questionType);
-            setSupportText(questionSupportText);
-          }
+        if (isBeingEdited) {
+          setInputElements(inputElements);
+          setText(content?.text);
+          setType(content?.type);
+          setSupportText(content?.supportText);
         }
-      ),
+      }),
     [
       contentId,
       questionOptions,
