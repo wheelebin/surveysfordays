@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import useUser from "@/hooks/useUser";
 import { signOut } from "next-auth/react";
 import Avatar from "boring-avatars";
-import AccountDropDown from "./AccountDropDown";
 import AppDropdown from "./AppDropdown";
 import AppDropdownItem from "./AppDropdownItem";
 
@@ -13,7 +12,7 @@ const MainNavBar = () => {
   const { surveyId } = router.query;
   const { initials, user } = useUser();
 
-  const navItems = [{ label: "Home", route: "/" }];
+  const navItems = [{ label: "Home", route: "/surveys" }];
   const secondaryNavItems = [
     {
       label: "Builder",
