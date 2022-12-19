@@ -1,15 +1,16 @@
 import Builder from "@/components/Builder";
 import QuestionsOverview from "@/components/QuestionsOverview";
 import MainNavBar from "@/components/MainNavBar";
-import BuilderSectionContent from "@/components/BuilderSectionContent";
 import BuilderNavBar from "@/components/BuilderNavBar";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSurveyStore } from "@/stores/survey";
+import { useSession } from "next-auth/react";
 import surveyApi from "@/api/survey";
 import Survey from "@/components/Survey";
 
 const BuilderPage = () => {
+  useSession({ required: true });
   const [surveyId, setSurveyId] = useState<string | undefined>(undefined);
   const router = useRouter();
   const { surveyId: surveyIdParam } = router.query;
