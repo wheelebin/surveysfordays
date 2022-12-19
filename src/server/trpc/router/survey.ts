@@ -116,8 +116,11 @@ export const surveyRouter = router({
         where: { parentId: input.id },
         include: {
           Question: {
+            orderBy: { orderNumber: "asc" },
             include: {
-              questionOptions: true,
+              questionOptions: {
+                orderBy: { orderNumber: "asc" },
+              },
             },
           },
         },

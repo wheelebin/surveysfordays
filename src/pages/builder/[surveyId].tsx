@@ -33,8 +33,8 @@ const BuilderPage = () => {
         <MainNavBar />
         <BuilderNavBar />
       </div>
-      <div className="mx-auto container grow shrink basis-auto flex justify-between h-[calc(100vh_-_91px)]">
-        <div className="w-1/3 max-w-sm my-2 mr-2">
+      <div className="pt-5 mx-auto container grow shrink basis-auto flex justify-between h-[calc(100vh_-_120px)]">
+        <div className="w-1/3 max-w-sm">
           <QuestionsOverview
             surveyId={survey.id}
             questions={survey.Question}

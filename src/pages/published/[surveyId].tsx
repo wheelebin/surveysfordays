@@ -76,15 +76,12 @@ const BuilderPage = () => {
     }
   };
 
-  // Add type or versionStatus or isPublished to the components-
-  // in order to switch to the getPublished* methods instead
-
   return (
     <div>
       <div className="mx-auto container">
-        <div className="flex justify-center h-screen">
-          <div className="flex flex-col  overflow-y-scroll no-scrollbar ">
-            <div className={`p-3 `}>
+        <div className="flex justify-center h-screen py-5">
+          <div className="flex flex-col overflow-y-scroll no-scrollbar w-1/2">
+            <div className="p-3">
               {survey && survey.Question.length > 0 ? (
                 survey.Question.map((question) => (
                   <BuilderSectionContent

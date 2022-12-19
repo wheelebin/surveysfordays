@@ -15,7 +15,7 @@ const AppCheckbox = ({ value, label, onChange }: AppCheckboxProps) => {
         onCheckedChange={onChange}
         className="rounded-sm h-6 w-6 flex justify-center items-center shadow border-slate-200 border"
       >
-        <Checkbox.Indicator className="w-3 h-3 bg-indigo-500"></Checkbox.Indicator>
+        <Checkbox.Indicator className="w-3 h-3 bg-green-200"></Checkbox.Indicator>
       </Checkbox.Root>
       <label className="ml-2">{label}</label>
     </div>

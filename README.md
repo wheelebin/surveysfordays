@@ -21,7 +21,9 @@ A survey form builder
 
 ## Doing
 
-- TODO Polish design
+- Add complete screen to survey
+  - Should have a final submit button
+  - Once button is clicked a success thing comes up (Thank you for completeing...)
 
 ## Backlog Prio
 
@@ -30,8 +32,3 @@ A survey form builder
 - TODO Extract ui components for survey builder into it's own repo & pkg
 - TODO Look into https://storybook.js.org/docs/react/writing-tests/interaction-testing
 - TODO Add skeleton loading to components that need it
-
-## Analyze
-
-- TODO Section could have it's own title and description which is visible in the preview
-  - And then the secion could still have multiple pieces of content and etc like planned if the user ops for it
