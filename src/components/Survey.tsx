@@ -11,6 +11,7 @@ type SurveyProps = {
   currentOrderNumber?: number;
   onOrderNumberChange?: (orderNumber: number) => void;
   canSubmit?: boolean;
+  isPublished?: boolean;
 };
 
 const Survey = ({
@@ -18,6 +19,7 @@ const Survey = ({
   currentOrderNumber,
   onOrderNumberChange,
   canSubmit,
+  isPublished,
 }: SurveyProps) => {
   const [hasBeenSubmitted, setHasBeenSubmitted] = useState<boolean>(false);
   const [currentOrderNumberInternal, setCurrentOrderNumberInternal] =
@@ -35,7 +37,9 @@ const Survey = ({
 
   const submitMutation = trpc.submission.submit.useMutation();
 
-  const { data: survey } = surveyApi.useGetPublished(surveyId as string);
+  const { data: survey } = isPublished
+    ? surveyApi.useGetPublished(surveyId as string)
+    : surveyApi.useGetById(surveyId as string);
 
   useEffect(() => {
     currentOrderNumber && setCurrentOrderNumberInternal(currentOrderNumber);
