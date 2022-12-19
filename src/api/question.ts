@@ -14,12 +14,21 @@ const useGetAllBySurveyId = (surveyId?: string, isPublished = false) => {
   );
 };
 
+const useGetById = (questionId: string) => {
+  return trpc.question.byId.useQuery(
+    { id: questionId },
+    { refetchOnWindowFocus: false, enabled: !!questionId }
+  );
+};
+
 const useDelete = () => {
   const utils = trpc.useContext();
 
   return trpc.question.delete.useMutation({
     onSuccess(input) {
+      utils.question.byId.invalidate({ id: input.id });
       utils.question.getAllBySurveyId.invalidate({ surveyId: input.surveyId });
+      utils.survey.byId.invalidate({ id: input.surveyId });
     },
   });
 };
@@ -28,7 +37,9 @@ const useEdit = () => {
   const utils = trpc.useContext();
   return trpc.question.editQuestion.useMutation({
     onSuccess(input) {
+      utils.question.byId.invalidate({ id: input.id });
       utils.question.getAllBySurveyId.invalidate({ surveyId: input.surveyId });
+      utils.survey.byId.invalidate({ id: input.surveyId });
     },
   });
 };
@@ -38,8 +49,13 @@ const useEditOrder = () => {
   return trpc.question.editQuestionsOrderNumber.useMutation({
     onSuccess(input) {
       const surveyId = input[0]?.surveyId;
-      if (surveyId) {
-        utils.question.getAllBySurveyId.invalidate({ surveyId: surveyId });
+      const questionId = input[0]?.id;
+      if (surveyId && questionId) {
+        utils.question.byId.invalidate({ id: questionId });
+        utils.question.getAllBySurveyId.invalidate({
+          surveyId: surveyId,
+        });
+        utils.survey.byId.invalidate({ id: surveyId });
       }
     },
   });
@@ -49,13 +65,16 @@ const useAdd = () => {
   const utils = trpc.useContext();
   return trpc.question.add.useMutation({
     onSuccess(input) {
+      utils.question.byId.invalidate({ id: input.id });
       utils.question.getAllBySurveyId.invalidate({ surveyId: input.surveyId });
+      utils.survey.byId.invalidate({ id: input.surveyId });
     },
   });
 };
 
 const questionApi = {
   useGetAllBySurveyId,
+  useGetById,
   useDelete,
   useEdit,
   useEditOrder,

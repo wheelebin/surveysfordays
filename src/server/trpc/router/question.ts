@@ -39,15 +39,25 @@ export const questionRouter = router({
         orderNumber: 0,
       };
 
-      const questionOptions = input.questionOptions?.map((questionOption) => ({
-        ...{
-          label: "Change me :)",
-          placeholder: "Some placeholder",
-          supportText: "Some support text for the input element",
-          orderNumber: 0,
-        },
-        ...questionOption,
-      }));
+      const questionOptions = input.questionOptions?.length
+        ? input.questionOptions?.map((questionOption) => ({
+            ...{
+              label: "Change me :)",
+              placeholder: "Some placeholder",
+              supportText: "Some support text for the input element",
+              orderNumber: 0,
+            },
+            ...questionOption,
+          }))
+        : [
+            {
+              label: "Change me :)",
+              placeholder: "Some placeholder",
+              supportText: "Some support text for the input element",
+              orderNumber: 0,
+              type: input.type,
+            },
+          ];
 
       return await ctx.prisma.question.create({
         data: {

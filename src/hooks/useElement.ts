@@ -9,7 +9,17 @@ const useElement = (
   questionType: string,
   questionText: string,
   orderNumber: number,
-  isPublished?: boolean,
+  status: string,
+  questionOptions: {
+    id: string;
+    type: string;
+    label: string;
+    placeholder: string | null;
+    supportText: string | null;
+    value: string;
+    orderNumber: number;
+    status: string;
+  }[],
   questionSupportText?: string | null
 ) => {
   const [inputElements, setInputElements] = useState<InputElement[]>([]);
@@ -18,11 +28,6 @@ const useElement = (
     useState<string | undefined | null>(undefined);
   const [placeholder, setPlaceholder] = useState<string | undefined>(undefined);
   const [type, setType] = useState<string | undefined>("");
-
-  const { data } = questionOptionApi.useGetAllByQuestionId(
-    contentId,
-    isPublished
-  );
 
   useEffect(
     () =>
@@ -39,18 +44,24 @@ const useElement = (
           }
 
           if (!isBeingEdited && previousWasBeingEdited) {
-            setInputElements(data || []);
+            setInputElements(questionOptions || []);
             setText(questionText);
             setType(questionType);
             setSupportText(questionSupportText);
           }
         }
       ),
-    [contentId, data, questionText, questionType, questionSupportText]
+    [
+      contentId,
+      questionOptions,
+      questionText,
+      questionType,
+      questionSupportText,
+    ]
   );
   useEffect(() => {
-    setInputElements(data || []);
-  }, [data]);
+    setInputElements(questionOptions || []);
+  }, [questionOptions]);
 
   useEffect(() => {
     setText(questionText);

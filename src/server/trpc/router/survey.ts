@@ -50,14 +50,24 @@ export const surveyRouter = router({
     .input(
       z.object({
         id: z.string(),
-        published: z.boolean(),
+        published: z.boolean().optional(),
       })
     )
     .query(async ({ ctx, input }) => {
-      const survey = await userCanAccessSurvey(input.id, ctx.session.user.id);
-      if (!survey) {
+      if (!(await userCanAccessSurvey(input.id, ctx.session.user.id))) {
         throw new TRPCError({ code: "UNAUTHORIZED" });
       }
+
+      const survey = ctx.prisma.survey.findFirst({
+        where: { userId: ctx.session.user.id },
+        include: {
+          Question: {
+            include: {
+              questionOptions: true,
+            },
+          },
+        },
+      });
 
       return survey;
     }),
@@ -101,6 +111,13 @@ export const surveyRouter = router({
 
       const survey = await ctx.prisma.survey.findUnique({
         where: { parentId: input.id },
+        include: {
+          Question: {
+            include: {
+              questionOptions: true,
+            },
+          },
+        },
       });
       if (!survey) {
         throw new TRPCError({

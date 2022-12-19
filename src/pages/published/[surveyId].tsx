@@ -23,7 +23,6 @@ const BuilderPage = () => {
   >([]);
 
   const { data: survey } = surveyApi.useGetPublished(surveyId as string);
-  const { data: questions } = questionApi.useGetAllBySurveyId(survey?.id, true);
 
   const submitMutation = trpc.submission.submit.useMutation();
 
@@ -79,13 +78,11 @@ const BuilderPage = () => {
         <div className="flex justify-between h-screen">
           <div className="flex flex-col w-1/2 overflow-y-scroll no-scrollbar ">
             <div className={`p-3 `}>
-              {questions && questions.length > 0 ? (
-                questions.map((question) => (
+              {survey && survey.Question.length > 0 ? (
+                survey.Question.map((question) => (
                   <BuilderSectionContent
                     key={question.id}
                     isCurrent={currentOrderNumber === question.orderNumber}
-                    questionId={question.id}
-                    isPublished={question.status === "PUBLISH"}
                     onSubmit={(values) =>
                       submitAnswer(question.type, question.id, values)
                     }

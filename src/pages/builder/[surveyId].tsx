@@ -6,7 +6,7 @@ import BuilderNavBar from "@/components/BuilderNavBar";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSurveyStore } from "@/stores/survey";
-import questionApi from "@/api/question";
+import surveyApi from "@/api/survey";
 
 const BuilderPage = () => {
   const [surveyId, setSurveyId] = useState<string | undefined>(undefined);
@@ -21,11 +21,9 @@ const BuilderPage = () => {
   }, [surveyIdParam]);
 
   const [currentOrderNumber, setCurrentOrderNumber] = useState(0);
-  const { data: questions } = questionApi.useGetAllBySurveyId(
-    surveyId as string
-  );
+  const { data: survey } = surveyApi.useGetById(surveyId as string);
 
-  if (!surveyId || !questions) {
+  if (!survey) {
     return <></>;
   }
 
@@ -35,24 +33,25 @@ const BuilderPage = () => {
         <MainNavBar />
         <BuilderNavBar />
       </div>
+      <button>Get New</button>
       <div className="mx-auto container grow shrink basis-auto flex justify-between h-[calc(100vh_-_91px)]">
         <div className="w-1/3 max-w-sm my-2 mr-2">
           <QuestionsOverview
-            surveyId={surveyId}
+            surveyId={survey.id}
+            questions={survey.Question}
             scrollToQuestion={(orderNumber: number) =>
               setCurrentOrderNumber(orderNumber)
             }
           />
-          <Builder surveyId={surveyId} questionId="question-0-0" />
+          <Builder surveyId={survey.id} questionId="question-0-0" />
         </div>
         <div className="flex flex-col w-1/2 overflow-y-scroll no-scrollbar">
           <div className={`p-3 `}>
-            {questions.length > 0 ? (
-              questions.map((question) => (
+            {survey.Question.length > 0 ? (
+              survey.Question.map((question) => (
                 <BuilderSectionContent
                   key={question.id}
                   isCurrent={currentOrderNumber === question.orderNumber}
-                  questionId={question.id}
                   {...question}
                 />
               ))

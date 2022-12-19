@@ -1,12 +1,10 @@
-import { Question } from "@prisma/client";
+import type { Question } from "../types/question";
 import { useBuilderStore } from "@/stores/builder";
 import questionApi from "@/api/question";
 
-const useQuestionsOverview = (surveyId: string) => {
+const useQuestionsOverview = (surveyId: string, questions: Question[]) => {
   const editQuestionOrderMutation = questionApi.useEditOrder();
   const deleteQuestionMutation = questionApi.useDelete();
-
-  const { data: questions } = questionApi.useGetAllBySurveyId(surveyId);
 
   const addQuestion = async () => {
     if (!questions) {

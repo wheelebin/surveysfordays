@@ -8,14 +8,24 @@ import useElement from "@/hooks/useElement";
 import { ELEMENTS_WITH_ADD_MULTIPLE } from "@/constants/elements";
 
 type Props = {
-  questionId: string;
+  id: string;
   type: string;
   surveyId: string;
   text: string;
   supportText?: string | null;
   orderNumber: number;
   isCurrent: boolean;
-  isPublished?: boolean;
+  status: string;
+  questionOptions: {
+    id: string;
+    type: string;
+    label: string;
+    placeholder: string | null;
+    supportText: string | null;
+    value: string;
+    orderNumber: number;
+    status: string;
+  }[];
   onSubmit?: (values: string[]) => void;
 };
 
@@ -23,12 +33,13 @@ const BuilderSectionContent = (props: Props) => {
   const [answers, setAnswers] = useState<string[]>([]);
   const myRef = useRef<HTMLDivElement | null>(null);
   const { inputElements, text, supportText, type } = useElement(
-    props.questionId,
+    props.id,
     props.surveyId,
     props.type,
     props.text,
     props.orderNumber,
-    props.isPublished,
+    props.status,
+    props.questionOptions,
     props.supportText
   );
 
@@ -80,6 +91,8 @@ const BuilderSectionContent = (props: Props) => {
       console.log(answers);
     }
   };
+
+  console.log("BuilderSectionContent Render", props.id);
 
   return (
     <div className="mb-5">

@@ -13,31 +13,23 @@ import DragAndDropItem from "./DragAndDropItem";
 import AppCard from "./AppCard";
 import AppDropdown from "./AppDropdown";
 import AppDropdownItem from "./AppDropdownItem";
-
-// TODO Will create a BuilderImageForm, BuilderTextForm and etc
-// and switch the builder form type out depending on the current elementType
+import type { Question } from "../types/question";
 
 type Props = {
-  children?: React.ReactNode;
-  questionId?: string;
   surveyId: string;
+  questions: Question[];
   scrollToQuestion: (orderNumber: number) => void;
 };
 
 const QuestionsOverview: React.FC<Props> = ({
-  children,
   scrollToQuestion,
   surveyId,
+  questions,
 }) => {
   const [show, setShow] = useState<boolean>(false);
   const { isAdding, isEditing } = useBuilder();
-  const {
-    questions,
-    addQuestion,
-    deleteQuestion,
-    updateQuestionOrder,
-    handleOnEdit,
-  } = useQuestionsOverview(surveyId);
+  const { addQuestion, deleteQuestion, updateQuestionOrder, handleOnEdit } =
+    useQuestionsOverview(surveyId, questions);
 
   useEffect(() => setShow(isAdding || isEditing), [isEditing, isAdding]);
 

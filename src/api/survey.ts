@@ -6,6 +6,16 @@ const useGetAll = () => {
   });
 };
 
+const useGetById = (surveyId: string) => {
+  return trpc.survey.byId.useQuery(
+    { id: surveyId },
+    {
+      refetchOnWindowFocus: false,
+      enabled: !!surveyId,
+    }
+  );
+};
+
 const useGetPublished = (parentId: string) => {
   return trpc.survey.getPublishedSurveyById.useQuery(
     { id: parentId },
@@ -44,6 +54,7 @@ const surveyApi = {
   useGetAll,
   useDelete,
   useGetPublished,
+  useGetById,
   usePublish,
   useAdd,
 };
