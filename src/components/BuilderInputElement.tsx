@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import AppRadioGroup from "./AppRadioGroup";
+import SurveyRadioGroup from "./SurveyRadioGroup";
 import SurveyCheckbox from "./SurveyCheckbox";
 import AppTextField from "./AppTextField";
 
@@ -24,11 +24,19 @@ const BuilderInputElement: React.FC<Props> = ({
   onChange,
 }) => {
   const [valueInternal, setValueInternal] = useState<string[]>([]);
-  // TODO Label in here is only for on an input element level, actual question text is in BuilderSectionContent
+
+  const handleOnCheckedChange = (id: string, isChecked: boolean) => {
+    const value = isChecked
+      ? [...valueInternal, id]
+      : valueInternal.filter((value) => value !== id);
+    setValueInternal(value);
+    onChange && onChange(value);
+  };
+
   const getElement = () => {
     if (type === "RADIO") {
       return (
-        <AppRadioGroup
+        <SurveyRadioGroup
           onChange={(value: string) => onChange && onChange([value])}
           radioItems={options}
         />
@@ -36,13 +44,6 @@ const BuilderInputElement: React.FC<Props> = ({
     }
 
     if (type === "CHECKBOX") {
-      const handleOnCheckedChange = (id: string, isChecked: boolean) => {
-        const value = isChecked
-          ? [...valueInternal, id]
-          : valueInternal.filter((value) => value !== id);
-        setValueInternal(value);
-        onChange && onChange(value);
-      };
       return options ? (
         options.map((option) => (
           <SurveyCheckbox

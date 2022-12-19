@@ -22,7 +22,7 @@ const SurveyCheckbox = ({ value, label, onChange }: SurveyCheckboxProps) => {
       className="flex w-full"
     >
       <div
-        className={`flex my-2 shadow hover:shadow-md p-5 cursor-pointer w-full ${
+        className={`flex mt-4 shadow hover:shadow-md p-5 cursor-pointer w-full ${
           isChecked ? "bg-green-200" : "bg-green-100"
         }`}
       >
