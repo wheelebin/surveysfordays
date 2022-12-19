@@ -30,7 +30,7 @@ const SubmissionPage = () => {
   // in order to switch to the getPublished* methods instead
 
   return (
-    <div>
+    <div className="bg-gray-100 h-screen">
       <MainNavBar />
       <div className="mx-auto container">
         <AppTable headerItems={data.header} contentItems={data.data} />

@@ -77,7 +77,7 @@ const BuilderPage = () => {
   };
 
   return (
-    <div>
+    <div className="h-screen bg-gray-100">
       <div className="mx-auto container">
         <div className="flex justify-center h-screen py-5">
           <div className="flex flex-col overflow-y-scroll no-scrollbar w-1/2">
