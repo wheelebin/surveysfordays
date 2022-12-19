@@ -2,13 +2,10 @@ import AppButton from "@/components/AppButton";
 import MainNavBar from "@/components/MainNavBar";
 import AppCard from "@/components/AppCard";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
 import surveyApi from "@/api/survey";
 
 const Survey = () => {
   const { data: surveys } = surveyApi.useGetAll();
-
-  useSession({ required: true });
 
   return (
     <div className="bg-gray-100 h-screen">
@@ -35,5 +32,7 @@ const Survey = () => {
     </div>
   );
 };
+
+Survey.auth = true;
 
 export default Survey;

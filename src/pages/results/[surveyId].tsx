@@ -5,10 +5,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSurveyStore } from "@/stores/survey";
 import { trpc } from "@/utils/trpc";
-import { useSession } from "next-auth/react";
 
 const SubmissionPage = () => {
-  useSession({ required: true });
   const [surveyId, setSurveyId] = useState<string | undefined>(undefined);
   const router = useRouter();
   const { surveyId: surveyIdParam } = router.query;
@@ -45,5 +43,7 @@ const SubmissionPage = () => {
     </div>
   );
 };
+
+SubmissionPage.auth = true;
 
 export default SubmissionPage;
