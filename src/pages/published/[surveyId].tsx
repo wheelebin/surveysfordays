@@ -75,8 +75,8 @@ const BuilderPage = () => {
   return (
     <div>
       <div className="mx-auto container">
-        <div className="flex justify-between h-screen">
-          <div className="flex flex-col w-1/2 overflow-y-scroll no-scrollbar ">
+        <div className="flex justify-center h-screen">
+          <div className="flex flex-col  overflow-y-scroll no-scrollbar ">
             <div className={`p-3 `}>
               {survey && survey.Question.length > 0 ? (
                 survey.Question.map((question) => (
