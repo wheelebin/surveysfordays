@@ -1,31 +1,24 @@
-A survey form builder
+# SurveysForDays
 
-# Ideas
+I wanted to learn more about NextJs by building a project, I got a little carried away and this is the result of that.
 
-- Create table to hold published versions of surveys
+### With this survey form builder you can:
 
-  - json row for holding the structure
-  - is active for keeping track of which revision is published
-  - revision number for keeping track of revisions
+1. Create a survey
+2. Build out the questions
+3. Publish the survey (Allowing it to be viewed by unauthenticated users who can complete the survey)
+4. See the results of the completed surveys by users
 
-- On publish get tables and convert into JSON
-- insert into said table with correct revision number
-
-- If I delete a survey remove all published revisions
-
-- If I disable a survey set currentActive revision to inactive
-
-- Append revision table ID to answer table so when user completes survey a we keep track of which revision
+I haven't made any steps towards making this production ready or optimizing anything, it's simply just a side project.
 
 # Good ol' To Do
 
 ## Doing
 
-- Look into https://www.radix-ui.com/docs/primitives/components/scroll-area
+- Add feedback to actions in application (On save, publish and etc..)
 
 ## Backlog Prio
 
-- Add feedback to actions in application (On save, publish and etc..)
 - Add logic for survey
 
 ## Backlog
