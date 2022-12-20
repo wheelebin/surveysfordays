@@ -11,8 +11,6 @@ export const surveyRouter = router({
         name: z.string(),
         title: z.string(),
         description: z.string(),
-        startsAt: z.date(),
-        endsAt: z.date(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -59,7 +57,7 @@ export const surveyRouter = router({
       }
 
       const survey = ctx.prisma.survey.findFirst({
-        where: { userId: ctx.session.user.id },
+        where: { userId: ctx.session.user.id, id: input.id },
         include: {
           Question: {
             orderBy: { orderNumber: "asc" },

@@ -36,7 +36,8 @@ const useDelete = () => {
 
   return trpc.survey.delete.useMutation({
     onSuccess(input) {
-      utils.question.getAllBySurveyId.invalidate({ surveyId: input.id });
+      utils.survey.byId.invalidate({ id: input.id });
+      utils.survey.getAll.invalidate();
     },
   });
 };
@@ -45,7 +46,8 @@ const useAdd = () => {
   const utils = trpc.useContext();
   return trpc.survey.add.useMutation({
     onSuccess(input) {
-      utils.question.getAllBySurveyId.invalidate({ surveyId: input.id });
+      utils.survey.byId.invalidate({ id: input.id });
+      utils.survey.getAll.invalidate();
     },
   });
 };

@@ -124,7 +124,9 @@ const Survey = ({
               />
             ))
           ) : (
-            <div className=" my-5 p-3 bg-slate-50">No content</div>
+            <div className=" my-5 p-3">
+              <h1 className="text-2xl text-center text-gray-800">No content</h1>
+            </div>
           )}
 
           {canSubmit && (
