@@ -65,55 +65,63 @@ export const submissionRouter = router({
         },
       });
 
+      const submissions = await ctx.prisma.submission.findMany({
+        where: { survey: { parentId: input.surveyId } },
+        include: {
+          Answer: {
+            include: {
+              question: true,
+              Answer_QuestionOption: {
+                include: { questionOption: true },
+              },
+            },
+          },
+        },
+      });
+
       if (!questions) {
         throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       }
 
-      console.log(questions);
-
-      // TODO Take a look at this mess and improve it
-
-      const transformedQuestions = questions.reduce((prev, curr) => {
-        curr.Answer.forEach((answer) => {
-          prev[answer.submissionId] = {
-            ...prev[answer.submissionId],
-            [answer.questionId]: answer.text
-              ? [answer.text]
-              : answer.Answer_QuestionOption.map((a) => {
-                  return a.questionOption.label;
-                }),
-          };
-        });
-
-        return prev;
-      }, {}) as {
-        [key: string]: {
-          [key: string]: string | undefined;
-        };
-      };
-
-      const fullyPopulatedQuestions = Object.entries(transformedQuestions).map(
-        ([_, value]) => {
-          questions.forEach((question) => {
-            if (value[question.id] === undefined) {
-              value[question.id] = undefined;
-            }
-          });
-          return value;
-        }
-      );
-
       const header = questions.map((question) => ({
         text: question.text,
         id: question.id,
-      })) as { text: string; id: string }[];
+      }));
 
-      const dataRows = fullyPopulatedQuestions.map((question) =>
-        header.map((header) => {
-          return question[header.id];
-        })
-      ) as [string][];
+      const data = submissions.map((item) => {
+        return {
+          submissionId: item.id,
+          answers: questions.map((question) => {
+            const answer = item.Answer.find(
+              (answer) => answer.questionId === question.id
+            );
 
-      return { header, data: dataRows };
+            const answerText = answer?.text
+              ? [{ label: answer.text }]
+              : undefined;
+
+            const answerValues = !!answer?.Answer_QuestionOption.length
+              ? answer?.Answer_QuestionOption.map((option) => ({
+                  label: option.questionOption.label,
+                }))
+              : undefined;
+
+            return {
+              questionId: question.id,
+              values: answerText || answerValues || [{ label: undefined }],
+            };
+          }),
+        };
+      }) as {
+        submissionId: string;
+        answers: {
+          questionId: string;
+          values: {
+            label: string | undefined;
+          }[];
+        }[];
+      }[];
+
+      return { header, data };
     }),
 });

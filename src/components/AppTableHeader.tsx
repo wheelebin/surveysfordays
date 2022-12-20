@@ -8,7 +8,6 @@ type Props = {
 const AppTableHeader = ({ items }: Props) => {
   return (
     <thead className="relative bg-white">
-      <div className="absolute w-full h-full bg-white -z-10"></div>
       <tr>
         <th
           scope="col"

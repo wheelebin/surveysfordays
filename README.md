@@ -25,7 +25,6 @@ A survey form builder
 
 ## Backlog Prio
 
-- TODO Fix results
 - Add feedback to actions in application (On save, publish and etc..)
 
 ## Backlog
