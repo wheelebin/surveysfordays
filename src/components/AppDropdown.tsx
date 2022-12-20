@@ -1,6 +1,6 @@
 import React from "react";
 import * as Dropdown from "@radix-ui/react-dropdown-menu";
-import { DropdownMenuIcon } from "@radix-ui/react-icons";
+import { DotsVerticalIcon } from "@radix-ui/react-icons";
 
 type AppDropdownProps = {
   trigger?: React.ReactNode;
@@ -11,7 +11,7 @@ const AppDropdown = ({ trigger, children }: AppDropdownProps) => {
   return (
     <Dropdown.Root>
       <Dropdown.Trigger>
-        {trigger ? trigger : <DropdownMenuIcon />}
+        {trigger ? trigger : <DotsVerticalIcon />}
       </Dropdown.Trigger>
       <Dropdown.Content className="bg-white shadow mt-2">
         {children}
