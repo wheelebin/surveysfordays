@@ -6,11 +6,14 @@ import { signOut } from "next-auth/react";
 import Avatar from "boring-avatars";
 import AppDropdown from "./AppDropdown";
 import AppDropdownItem from "./AppDropdownItem";
+import surveyApi from "@/api/survey";
 
 const MainNavBar = () => {
   const router = useRouter();
   const { surveyId } = router.query;
   const { initials, user } = useUser();
+
+  const { data: survey } = surveyApi.useGetById(surveyId as string);
 
   const navItems = [{ label: "Home", route: "/surveys" }];
   const secondaryNavItems = [
@@ -37,7 +40,9 @@ const MainNavBar = () => {
           ))}
           {surveyId ? (
             <div className="ml-10 flex">
-              <div className="text-xs font-thin py-1">{surveyId} / </div>
+              <div className="text-xs font-thin py-1">
+                {survey?.name ? survey.name : surveyId} /{" "}
+              </div>
 
               {secondaryNavItems.map(({ label, route, pathName }) => (
                 <Link key={route} href={route}>
