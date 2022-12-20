@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { EyeIcon } from "@heroicons/react/20/solid";
 import AppButton from "@/components/AppButton";
 import surveyApi from "@/api/survey";
 import * as Dialog from "@radix-ui/react-dialog";
+import { useToastStore } from "@/stores/toast";
 
 const DialogComponent = ({
   trigger,
@@ -39,6 +39,13 @@ const AppNavBar = () => {
   const { surveyId } = router.query;
 
   const publishMutation = surveyApi.usePublish();
+  const hanldeOnPublish = () => {
+    publishMutation.mutate({ id: surveyId as string });
+    useToastStore.getState().open({
+      title: `${surveyId} has been published`,
+      description: "Click on preview to view it!",
+    });
+  };
 
   return (
     <div className="border-bottom bg-white border-slate-200 text-black text-sm">
@@ -60,7 +67,7 @@ const AppNavBar = () => {
           <AppButton
             primary={true}
             className="ma-0 mr-2"
-            onClick={() => publishMutation.mutate({ id: surveyId as string })}
+            onClick={hanldeOnPublish}
           >
             Publish
           </AppButton>

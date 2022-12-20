@@ -21,6 +21,8 @@ A survey form builder
 
 ## Doing
 
+- Look into https://www.radix-ui.com/docs/primitives/components/scroll-area
+
 ## Backlog Prio
 
 - TODO Fix results

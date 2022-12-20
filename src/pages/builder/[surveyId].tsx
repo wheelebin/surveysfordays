@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { useSurveyStore } from "@/stores/survey";
 import surveyApi from "@/api/survey";
 import Survey from "@/components/Survey";
+import AppToast from "@/components/AppToast";
 
 const BuilderPage = () => {
   const [surveyId, setSurveyId] = useState<string | undefined>(undefined);
