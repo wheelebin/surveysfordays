@@ -27,7 +27,6 @@ A survey form builder
 
 - TODO Fix results
 - Add feedback to actions in application (On save, publish and etc..)
-- Create home/landing page
 
 ## Backlog
 

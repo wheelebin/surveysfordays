@@ -23,7 +23,7 @@ const SurveyRadioGroupItem = ({
         <div className="h-6 w-6 flex justify-center items-center rounded-full shadow border-green-300 border bg-white">
           <RadioGroup.Indicator className="w-3 h-3 bg-green-200 rounded-full"></RadioGroup.Indicator>
         </div>
-        <label className="ml-2">{label}</label>
+        <label className="ml-2 font-bold text-gray-800">{label}</label>
       </div>
     </RadioGroup.Item>
   );
