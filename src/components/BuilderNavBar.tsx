@@ -49,7 +49,7 @@ const AppNavBar = () => {
 
   return (
     <div className="border-bottom bg-white border-slate-200 text-black text-sm">
-      <div className="container mx-auto flex justify-between items-center pt-1">
+      <div className="container mx-auto flex justify-between items-center pt-1 px-10">
         <div className="flex items-center">
           <DialogComponent
             trigger={

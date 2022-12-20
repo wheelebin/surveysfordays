@@ -28,7 +28,7 @@ const MainNavBar = () => {
 
   return (
     <div className="border bg-white border-slate-200 text-black">
-      <div className="container mx-auto flex justify-between items-center py-2">
+      <div className="container mx-auto flex justify-between items-center py-2 px-10">
         <div className="flex items-center">
           {navItems.map(({ label, route }) => (
             <Link key={label} href={route}>

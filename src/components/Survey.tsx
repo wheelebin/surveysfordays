@@ -13,6 +13,7 @@ type SurveyProps = {
   canSubmit?: boolean;
   isPublished?: boolean;
   isTransparent?: boolean;
+  className?: string;
 };
 
 const Survey = ({
@@ -22,6 +23,7 @@ const Survey = ({
   canSubmit,
   isPublished,
   isTransparent,
+  className,
 }: SurveyProps) => {
   const [hasBeenSubmitted, setHasBeenSubmitted] = useState<boolean>(false);
   const [currentOrderNumberInternal, setCurrentOrderNumberInternal] =
@@ -99,9 +101,11 @@ const Survey = ({
   }
 
   return (
-    <div className="flex flex-col w-1/2 overflow-y-scroll no-scrollbar">
+    <div
+      className={`flex flex-col w-1/2 overflow-y-scroll no-scrollbar ${className}`}
+    >
       {!hasBeenSubmitted ? (
-        <div className={`p-3 `}>
+        <div>
           {survey.Question.length > 0 ? (
             survey.Question.map((question) => (
               <BuilderSectionContent

@@ -28,17 +28,16 @@ const SubmissionPage = () => {
   }, [surveyIdParam]);
 
   if (!data) {
-    return <>s</>;
+    return <></>;
   }
 
-  // Add type or versionStatus or isPublished to the components-
-  // in order to switch to the getPublished* methods instead
-
   return (
-    <div className="bg-gray-100 h-screen">
+    <div className="h-screen">
       <MainNavBar />
       <div className="mx-auto container">
-        <AppTable headerItems={data.header} contentItems={data.data} />
+        <div className="px-10">
+          <AppTable headerItems={data.header} contentItems={data.data} />
+        </div>
       </div>
     </div>
   );

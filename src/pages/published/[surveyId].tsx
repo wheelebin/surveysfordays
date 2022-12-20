@@ -20,7 +20,7 @@ const BuilderPage = () => {
   }
 
   return (
-    <div className="h-screen bg-gray-100">
+    <div className="h-screen ">
       <div className="mx-auto container">
         <div className="flex justify-center h-screen py-5">
           <Survey

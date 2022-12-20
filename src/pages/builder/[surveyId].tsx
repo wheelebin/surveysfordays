@@ -7,7 +7,6 @@ import { useRouter } from "next/router";
 import { useSurveyStore } from "@/stores/survey";
 import surveyApi from "@/api/survey";
 import Survey from "@/components/Survey";
-import AppToast from "@/components/AppToast";
 
 const BuilderPage = () => {
   const [surveyId, setSurveyId] = useState<string | undefined>(undefined);
@@ -29,13 +28,13 @@ const BuilderPage = () => {
   }
 
   return (
-    <div className="flex flex-col h-full bg-gray-100">
+    <div className="flex flex-col h-full">
       <div className="grow-0 shrink basis-auto">
         <MainNavBar />
         <BuilderNavBar />
       </div>
       <div className="pt-5 mx-auto container grow shrink basis-auto flex justify-between h-[calc(100vh_-_120px)]">
-        <div className="w-1/3 max-w-sm">
+        <div className="w-1/3 max-w-sm pl-10">
           <QuestionsOverview
             surveyId={survey.id}
             questions={survey.Question}
@@ -46,6 +45,7 @@ const BuilderPage = () => {
           <Builder surveyId={survey.id} questionId="question-0-0" />
         </div>
         <Survey
+          className="pr-10"
           surveyId={surveyId as string}
           currentOrderNumber={currentOrderNumber}
         />

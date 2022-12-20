@@ -8,14 +8,14 @@ const Survey = () => {
   const { data: surveys } = surveyApi.useGetAll();
 
   return (
-    <div className="bg-gray-100 h-screen">
+    <div className="h-screen">
       <MainNavBar />
       <div className="container mx-auto">
         <div className="flex justify-center mt-5">
           <AppButton primary>Create survey</AppButton>
         </div>
 
-        <div className="flex flex-row">
+        <div className="flex flex-row px-10">
           {surveys &&
             surveys.map((survey, i) => (
               <Link key={survey.id} href={`/builder/${survey.id}`}>
