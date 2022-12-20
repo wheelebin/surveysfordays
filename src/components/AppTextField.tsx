@@ -6,6 +6,7 @@ type AppTextFieldProps = {
   onChange?: (value: string) => void;
   placeholder?: string;
   supportText?: string;
+  className?: string;
 };
 
 const AppTextField = ({
@@ -13,9 +14,10 @@ const AppTextField = ({
   value,
   onChange,
   placeholder,
+  className,
 }: AppTextFieldProps) => {
   return (
-    <div className="flex flex-col">
+    <div className={`flex flex-col ${className}`}>
       <label>{label}</label>
       <input
         placeholder={placeholder}
