@@ -23,7 +23,7 @@ const SurveyCheckbox = ({ value, label, onChange }: SurveyCheckboxProps) => {
     >
       <div
         className={`flex mt-4 shadow hover:shadow-md p-5 cursor-pointer w-full ${
-          isChecked ? "bg-green-200" : "bg-green-100"
+          isChecked ? "bg-green-100" : "bg-green-100/30"
         }`}
       >
         <div className="rounded-sm h-6 w-6 flex justify-center items-center border-green-300 border bg-white ">

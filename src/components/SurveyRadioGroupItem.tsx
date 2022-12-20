@@ -16,7 +16,7 @@ const SurveyRadioGroupItem = ({
     <RadioGroup.Item
       value={value ? value : ""}
       className={`flex mt-4 shadow hover:shadow-md p-5 cursor-pointer w-full ${
-        isChecked ? "bg-green-200" : "bg-green-100"
+        isChecked ? "bg-green-100" : "bg-green-100/30"
       }`}
     >
       <div className="flex my-2">

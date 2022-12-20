@@ -16,6 +16,7 @@ type Props = {
   orderNumber: number;
   isCurrent: boolean;
   status: string;
+  isTransparent?: boolean;
   questionOptions: {
     id: string;
     type: string;
@@ -94,7 +95,12 @@ const BuilderSectionContent = (props: Props) => {
 
   return (
     <div className="h-screen" ref={myRef}>
-      <AppCard isCurrent={props.isCurrent} className="mt-64">
+      <AppCard
+        isCurrent={props.isCurrent}
+        className={`mt-64  ${
+          props.isTransparent && "shadow-none bg-transparent"
+        }`}
+      >
         <div className="relative">
           <div className="flex mb-4 flex-col">
             <h1 className="text-xl">{text}</h1>

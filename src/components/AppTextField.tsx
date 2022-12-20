@@ -19,7 +19,7 @@ const AppTextField = ({
       <label>{label}</label>
       <input
         placeholder={placeholder}
-        className="rounded-sm bg-gray-100 focus-visible:outline-transparent focus-visible:border-indigo-500 focus-visible:border-b-2 p-1"
+        className="bg-transparent border-b-2 border-black outline-none  p-1"
         onChange={(e) => onChange && onChange(e.target.value)}
         value={value}
         type="text"

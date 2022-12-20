@@ -12,6 +12,7 @@ type SurveyProps = {
   onOrderNumberChange?: (orderNumber: number) => void;
   canSubmit?: boolean;
   isPublished?: boolean;
+  isTransparent?: boolean;
 };
 
 const Survey = ({
@@ -20,6 +21,7 @@ const Survey = ({
   onOrderNumberChange,
   canSubmit,
   isPublished,
+  isTransparent,
 }: SurveyProps) => {
   const [hasBeenSubmitted, setHasBeenSubmitted] = useState<boolean>(false);
   const [currentOrderNumberInternal, setCurrentOrderNumberInternal] =
@@ -105,6 +107,7 @@ const Survey = ({
               <BuilderSectionContent
                 key={question.id}
                 isCurrent={currentOrderNumberInternal === question.orderNumber}
+                isTransparent={isTransparent}
                 onSubmit={(values) =>
                   submitAnswer(
                     question.type,

@@ -23,7 +23,12 @@ const BuilderPage = () => {
     <div className="h-screen bg-gray-100">
       <div className="mx-auto container">
         <div className="flex justify-center h-screen py-5">
-          <Survey surveyId={surveyId as string} canSubmit isPublished />
+          <Survey
+            surveyId={surveyId as string}
+            canSubmit
+            isPublished
+            isTransparent
+          />
         </div>
       </div>
     </div>
