@@ -39,8 +39,8 @@ const AppNavBar = () => {
   const { surveyId } = router.query;
 
   const publishMutation = surveyApi.usePublish();
-  const hanldeOnPublish = () => {
-    publishMutation.mutate({ id: surveyId as string });
+  const hanldeOnPublish = async () => {
+    await publishMutation.mutateAsync({ id: surveyId as string });
     useToastStore.getState().open({
       title: `${surveyId} has been published`,
       description: "Click on preview to view it!",
