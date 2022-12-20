@@ -19,10 +19,11 @@ I haven't made any steps towards making this production ready or optimizing anyt
 
 ## Backlog Prio
 
-- Add logic for survey
+- Implement SSR for published survey
 
 ## Backlog
 
 - TODO Extract ui components for survey builder into it's own repo & pkg
 - TODO Look into https://storybook.js.org/docs/react/writing-tests/interaction-testing
 - TODO Add skeleton loading to components that need it
+- Add logic for survey
