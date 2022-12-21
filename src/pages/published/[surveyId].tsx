@@ -1,19 +1,9 @@
 import Survey from "@/components/Survey";
-import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useSurveyStore } from "@/stores/survey";
 
 const BuilderPage = () => {
-  const [surveyId, setSurveyId] = useState<string | undefined>(undefined);
   const router = useRouter();
-  const { surveyId: surveyIdParam } = router.query;
-
-  useEffect(() => {
-    if (typeof surveyIdParam === "string") {
-      setSurveyId(surveyIdParam);
-      useSurveyStore.getState().setCurrentSurveyId(surveyIdParam);
-    }
-  }, [surveyIdParam]);
+  const { surveyId } = router.query;
 
   if (!surveyId) {
     return <></>;
@@ -34,5 +24,11 @@ const BuilderPage = () => {
     </div>
   );
 };
+
+export async function getServerSideProps() {
+  const res = await fetch(`https://.../data`);
+  const data = await res.json();
+  return { props: { data } };
+}
 
 export default BuilderPage;

@@ -2,23 +2,14 @@ import Builder from "@/components/Builder";
 import QuestionsOverview from "@/components/QuestionsOverview";
 import MainNavBar from "@/components/MainNavBar";
 import BuilderNavBar from "@/components/BuilderNavBar";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
-import { useSurveyStore } from "@/stores/survey";
 import surveyApi from "@/api/survey";
 import Survey from "@/components/Survey";
 
 const BuilderPage = () => {
-  const [surveyId, setSurveyId] = useState<string | undefined>(undefined);
   const router = useRouter();
-  const { surveyId: surveyIdParam } = router.query;
-
-  useEffect(() => {
-    if (typeof surveyIdParam === "string") {
-      setSurveyId(surveyIdParam);
-      useSurveyStore.getState().setCurrentSurveyId(surveyIdParam);
-    }
-  }, [surveyIdParam]);
+  const { surveyId } = router.query;
 
   const [currentOrderNumber, setCurrentOrderNumber] = useState(0);
   const { data: survey } = surveyApi.useGetById(surveyId as string);

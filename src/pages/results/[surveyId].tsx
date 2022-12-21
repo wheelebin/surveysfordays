@@ -1,15 +1,12 @@
 import MainNavBar from "@/components/MainNavBar";
 
 import AppTable from "@/components/AppTable";
-import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useSurveyStore } from "@/stores/survey";
 import { trpc } from "@/utils/trpc";
 
 const SubmissionPage = () => {
-  const [surveyId, setSurveyId] = useState<string | undefined>(undefined);
   const router = useRouter();
-  const { surveyId: surveyIdParam } = router.query;
+  const { surveyId } = router.query;
 
   const { data } = trpc.submission.getAllBySurveyId.useQuery(
     {
@@ -19,13 +16,6 @@ const SubmissionPage = () => {
       enabled: !!surveyId,
     }
   );
-
-  useEffect(() => {
-    if (typeof surveyIdParam === "string") {
-      setSurveyId(surveyIdParam);
-      useSurveyStore.getState().setCurrentSurveyId(surveyIdParam);
-    }
-  }, [surveyIdParam]);
 
   if (!data) {
     return <></>;
