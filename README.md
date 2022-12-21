@@ -19,6 +19,8 @@ I haven't made any steps towards making this production ready or optimizing anyt
 
 ## Backlog Prio
 
+- Change component names to make more sense & reflect certain changes made recently
+
 ## Backlog
 
 - TODO Extract ui components for survey builder into it's own repo & pkg
