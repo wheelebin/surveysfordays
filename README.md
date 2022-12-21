@@ -19,8 +19,6 @@ I haven't made any steps towards making this production ready or optimizing anyt
 
 ## Backlog Prio
 
-- Implement SSR for published survey
-
 ## Backlog
 
 - TODO Extract ui components for survey builder into it's own repo & pkg
