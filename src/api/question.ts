@@ -33,6 +33,18 @@ const useDelete = () => {
   });
 };
 
+const useGenerateQuestions = () => {
+  const utils = trpc.useContext();
+  return trpc.question.generateQuestionsForSurveyId.useMutation({
+    onSuccess(input) {
+      const surveyId = input[0]?.surveyId;
+      if (surveyId) {
+        utils.survey.byId.invalidate({ id: surveyId });
+      }
+    },
+  });
+};
+
 const useEdit = () => {
   const utils = trpc.useContext();
   return trpc.question.editQuestion.useMutation({
@@ -79,6 +91,7 @@ const questionApi = {
   useEdit,
   useEditOrder,
   useAdd,
+  useGenerateQuestions,
 };
 
 export default questionApi;

@@ -76,7 +76,12 @@ const Survey = () => {
             surveys.map((survey, i) => (
               <div key={survey.id} className="w-1/4 p-5">
                 <AppCard>
-                  <div className="w-full mt-2 font-semibold">{survey.name}</div>
+                  <div className="mb-5 mt-2 ">
+                    <p className="w-full font-semibold">{survey.name}</p>
+                    <p className="w-full font-regular text-gray-600">
+                      {survey.description}
+                    </p>
+                  </div>
                   <div className="flex justify-between">
                     <Link href={`/builder/${survey.id}`}>
                       <AppButton primary>Go to</AppButton>

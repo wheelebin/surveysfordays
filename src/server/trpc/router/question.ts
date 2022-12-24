@@ -5,8 +5,61 @@ import {
   userCanAccessQuestion,
   userCanAccessSurvey,
 } from "src/lib/userCanAccess";
+import { runPrompt } from "src/lib/questionsCreator";
 
 export const questionRouter = router({
+  generateQuestionsForSurveyId: protectedProcedure
+    .input(
+      z.object({
+        surveyId: z.string(),
+        description: z.string(),
+        numberOfQuestions: z.number(),
+        tags: z.array(z.string()),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const questionExamples = await runPrompt(
+        input.numberOfQuestions,
+        input.description,
+        input.tags
+      );
+
+      if (!questionExamples) {
+        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+      }
+
+      const questions = questionExamples.map(({ question, options }, i) => ({
+        question: {
+          surveyId: input.surveyId,
+          type: "RADIO",
+          text: question,
+          supportText: "Add some support text here",
+          orderNumber: i,
+        },
+        options,
+      }));
+
+      const newQuestions = await Promise.all(
+        questions.map(async (question) =>
+          ctx.prisma.question.create({
+            data: {
+              ...question.question,
+              questionOptions: {
+                createMany: {
+                  data: question.options.map((option, i) => ({
+                    type: "RADIO",
+                    label: option,
+                    orderNumber: i,
+                  })),
+                },
+              },
+            },
+          })
+        )
+      );
+
+      return newQuestions;
+    }),
   add: protectedProcedure
     .input(
       z.object({

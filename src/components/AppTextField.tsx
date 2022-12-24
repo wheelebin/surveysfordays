@@ -15,6 +15,7 @@ const AppTextField = ({
   onChange,
   placeholder,
   className,
+  supportText,
 }: AppTextFieldProps) => {
   return (
     <div className={`flex flex-col ${className}`}>
@@ -26,6 +27,7 @@ const AppTextField = ({
         value={value}
         type="text"
       />
+      <span className="text-gray-600">{supportText}</span>
     </div>
   );
 };
