@@ -5,7 +5,7 @@ import {
   userCanAccessQuestion,
   userCanAccessSurvey,
 } from "src/lib/userCanAccess";
-import { runPrompt } from "src/lib/questionsCreator";
+import axios from "axios";
 
 export const questionRouter = router({
   generateQuestionsForSurveyId: protectedProcedure
@@ -18,17 +18,19 @@ export const questionRouter = router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const questionExamples = await runPrompt(
-        input.numberOfQuestions,
-        input.description,
-        input.tags
-      );
+      const resp = await axios.post("localhost:3001/questions", {
+        description: input.description,
+        amount: input.numberOfQuestions,
+        tags: input.tags,
+      });
 
-      if (!questionExamples) {
+      console.log(resp);
+
+      if (!resp) {
         throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       }
 
-      const questions = questionExamples.map(({ question, options }, i) => ({
+      const questions = resp.data.map(({ question, options }, i) => ({
         question: {
           surveyId: input.surveyId,
           type: "RADIO",
